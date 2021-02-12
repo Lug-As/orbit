@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Bloger from '../views/Bloger.vue'
 
 Vue.use(VueRouter)
 
@@ -8,8 +7,13 @@ const routes = [
 	{
 		path: '/accounts/:id',
 		name: 'Bloger',
-		component: Bloger,
+		component: () => import('../views/Bloger'),
 	},
+	{
+		path: '*',
+		name: '404',
+		component: () => import('../views/NotFound'),
+	}
 ]
 
 export default new VueRouter({

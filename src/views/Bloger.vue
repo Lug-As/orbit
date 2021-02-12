@@ -163,11 +163,15 @@ export default {
 			return this.$store.getters.loading
 		},
 		id() {
-			return parseInt(this.$route.params.id)
-		}
+			return this.$route.params.id
+		},
 	},
 	mounted() {
 		this.$store.dispatch('loadBloger', this.id)
+			.catch(e => {
+				let route = this.$router.match({name: '404'})
+				this.$router.history.updateRoute(route)
+			})
 	},
 	methods: {
 		slashedList(rawList, key = 'name') {

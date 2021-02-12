@@ -5,10 +5,9 @@ const Accounts = '/accounts'
 
 export default {
 	async fetchBloger(id) {
-		return axios.get(ApiUrl + Accounts + '/' + parseInt(id))
+		return axios.get(ApiUrl + Accounts + '/' + encodeURI(id))
 	},
-	fetchBlogers(page = 1, params = {}) {
-		const response = axios.get(ApiUrl + Accounts)
-		console.log(response)
+	async fetchBlogers(page = 1, params = {}) {
+		return axios.get(ApiUrl + Accounts + '?page=' + encodeURI(page))
 	},
 }
