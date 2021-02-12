@@ -19,38 +19,50 @@ export const I = {
 			}
 		})
 
-		let massage = document.querySelector('.bloger__massage'),
-			body = document.querySelector('body')
+		const massage = document.querySelector('.bloger__massage'),
+			body = document.querySelector('body'),
+			bloger_btn = document.querySelector('.bloger__button'),
+			massage_row = document.querySelector('.bloger__massage-row'),
+			close = document.querySelector('.bloger__massage-close'),
+			btn_brd = document.querySelector('.bloger__button-border')
 
-		document.querySelector('.bloger__button').addEventListener('click', event => {
-			if (event.target) {
-				openMenu()
-			}
-		})
+		if (bloger_btn) {
+			bloger_btn.addEventListener('click', event => {
+				if (event.target) {
+					openMenu()
+				}
+			})
+		}
+		if (massage_row) {
+			massage_row.addEventListener('click', event => {
+				event.stopPropagation()
+			})
+		}
+		if (massage) {
+			massage.addEventListener('click', event => {
+				if (event.target) {
+					closeMenu()
+				}
+			})
+		}
 
-		document.querySelector('.bloger__massage-row').addEventListener('click', event => {
-			event.stopPropagation()
-		})
+		if (btn_brd) {
+			btn_brd.addEventListener('click', event => {
+				let areaText = document.querySelector('.bloger__text-area')
+				if (areaText.value == '') {
+				} else {
+					closeMenu()
+				}
+			})
+		}
 
-		massage.addEventListener('click', event => {
-			if (event.target) {
-				closeMenu()
-			}
-		})
-
-		document.querySelector('.bloger__button-border').addEventListener('click', event => {
-			let areaText = document.querySelector('.bloger__text-area')
-			if (areaText.value == '') {
-			} else {
-				closeMenu()
-			}
-		})
-
-		document.querySelector('.bloger__massage-close').addEventListener('click', event => {
-			if (event.target) {
-				closeMenu()
-			}
-		})
+		if (close) {
+			close.addEventListener('click', event => {
+				if (event.target) {
+					closeMenu()
+				}
+			})
+		}
 
 		function openMenu() {
 			body.style.overflowY = 'hidden'

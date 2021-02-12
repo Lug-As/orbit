@@ -6,6 +6,8 @@ import './assets/css/main.css'
 
 Vue.config.productionTip = false
 
+Vue.component('pagination', require('laravel-vue-pagination'));
+
 new Vue({
 	router,
 	store,
