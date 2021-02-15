@@ -208,6 +208,13 @@
 									</div>
 								</div>
 							</div>
+							<div class="accounts-pagination">
+								<pagination
+									:data="accountsPagination"
+									:limit="2"
+									@pagination-change-page="changePage"
+								/>
+							</div>
 						</div>
 					</template>
 					<h3 v-else>Пусто</h3>
@@ -233,11 +240,31 @@ export default {
 		loading() {
 			return this.$store.getters.loading
 		},
+		accountsPagination() {
+			return this.$store.getters.accountsPagination
+		},
+		page() {
+			let page = this.$route.query.page ? Math.abs(parseInt(this.$route.query.page)) : 1
+			page = page !== 0 ? page : 1
+			return page
+		},
 	},
 	methods: {
+		changePage(page = 1) {
+			if (page !== this.page) {
+				this.$router.push({
+					name: this.$route.name,
+					query: {
+						...this.$route.query,
+						page,
+					},
+				})
+				this.loadAccounts()
+			}
+		},
 		priceRange(types) {
 			if (types.length === 0) return 'Договорная'
-			if (types.length === 1) return 'От ' + types[0].price + '₽'
+			if (types.length === 1) return types[0].price + '₽'
 			let maxPrice = 0
 			types.forEach(type => {
 				if (type.price > maxPrice) {
@@ -250,11 +277,19 @@ export default {
 					minPrice = type.price
 				}
 			})
+			if (minPrice === maxPrice) {
+				return minPrice + '₽'
+			}
 			return 'От ' + minPrice + '₽ до ' + maxPrice + '₽'
+		},
+		loadAccounts() {
+			this.$store.dispatch('loadAccounts', {
+				page: this.page,
+			})
 		},
 	},
 	mounted() {
-		this.$store.dispatch('loadAccounts')
+		this.loadAccounts()
 	},
 }
 </script>

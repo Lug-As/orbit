@@ -1,5 +1,5 @@
 import tokenService from '@/auth/tokenService'
-import user from '@/api/user'
+import userService from '@/api/userService'
 
 class User {
 	id
@@ -50,15 +50,15 @@ export default {
 		async loadUser({commit}) {
 			const token = tokenService.getToken()
 			if (token) {
-				const response = await user.fetchUser(token)
+				const response = await userService.fetchUser(token)
 					.catch(err => {
 						if (err.response && err.response.status && err.response.status === 401) {
 							tokenService.clearToken()
 						}
 					})
 				commit('setUser', User.createFromApiData(response.data.data))
-				return token
 			}
+			return token
 		},
 	},
 }

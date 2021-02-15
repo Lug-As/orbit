@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import axios from 'axios'
-import PaginationCmp from 'laravel-vue-pagination'
 import router from './router'
 import store from './store'
 import App from './App.vue'
+import PaginationCmp from './components/pagination/Pagination'
 import roundNumber from './filters/roundNumber'
 import slashedList from './filters/slashedList'
 import {ApiBaseUrl} from './api/info'
@@ -20,7 +20,9 @@ new Vue({
 	beforeCreate() {
 		this.$store.dispatch('loadUser')
 			.then(token => {
-				axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+				if (token) {
+					axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+				}
 			})
 	},
 	router,

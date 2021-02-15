@@ -1,4 +1,4 @@
-import accounts from '@/api/accounts'
+import accountsService from '@/api/accountsService'
 
 class Account {
 	id
@@ -53,12 +53,16 @@ class Account {
 export default {
 	state: {
 		accounts: [],
+		accountsPagination: {},
 		currentAccount: {},
 		loading: true,
 	},
 	getters: {
 		accounts(state) {
 			return state.accounts
+		},
+		accountsPagination(state) {
+			return state.accountsPagination
 		},
 		currentAccount(state) {
 			return state.currentAccount
@@ -70,6 +74,9 @@ export default {
 	mutations: {
 		setCurrentAccount(state, payload) {
 			state.currentAccount = payload
+		},
+		setAccountsPagination(state, payload) {
+			state.accountsPagination = payload
 		},
 		destroyCurrentAccount(state) {
 			state.currentAccount = {}
@@ -88,7 +95,7 @@ export default {
 		async loadAccount({commit}, id) {
 			commit('startLoading')
 			try {
-				const response = await accounts.fetchAccount(id)
+				const response = await accountsService.fetchAccount(id)
 				const result = response.data.data
 				commit('setCurrentAccount', Account.createFromApiData(result))
 			} catch (e) {
@@ -97,18 +104,19 @@ export default {
 				commit('stopLoading')
 			}
 		},
-		async loadAccounts({commit}, payload = {
+		async loadAccounts({commit, state}, payload = {
 			page: 1,
 			params: {},
 		}) {
 			commit('startLoading')
 			try {
-				const response = await accounts.fetchAccounts(payload.page, payload.params),
-					result = response.data.data
-				if (Array.isArray(result)) {
-					const accountsList = result.map(item => {
+				const response = await accountsService.fetchAccounts(payload.page, payload.params),
+					result = response.data
+				if (Array.isArray(result.data)) {
+					const accountsList = result.data.map(item => {
 						return Account.createFromShortApiData(item)
 					})
+					commit('setAccountsPagination', result)
 					commit('setAccounts', accountsList)
 				}
 			} catch (e) {
