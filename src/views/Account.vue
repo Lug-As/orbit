@@ -4,14 +4,12 @@
 			<div v-if="loading" class="preload-container">
 				<preloader/>
 			</div>
-			<template v-else-if="bloger">
+			<template v-else-if="account">
 				<div class="bloger__row">
 					<div class="bloger__row-img">
 						<div class="bloger__img">
-							<img src="../assets/img/АИ.webp" :alt="mainImgAlt">
-							<!--      ^^ bloger.image ^^      -->
+							<img :src="account.image" :alt="account.title">
 						</div>
-						<!-- /.bloger__img -->
 						<div class="bloger__img-small">
 							<div class="bloger__img-link">
 								<picture>
@@ -30,62 +28,52 @@
 							</div>
 						</div>
 					</div>
-					<!-- /.bloger__img -->
 					<div class="bloger__body">
 						<div class="bloger__body-row">
 							<div class="bloger__row-title">
 								<h2 class="bloger__title-h2">
-									{{ bloger.username }}
+									{{ account.username }}
 								</h2>
-								<!-- /.bloger__title-h2 -->
 								<div class="bloger__title-text border-body">
-									<h3 class="bloger__title-nickname">{{ bloger.title }}</h3>
+									<h3 class="bloger__title-nickname">{{ account.title }}</h3>
 									<a class="bloger__title-link" :href="reference">Перейти в ток-ток
 										аккаунт</a>
 								</div>
-								<!-- /.bloger__title-nickname -->
 							</div>
-							<!-- /.bloger__body-title -->
 							<div class="bloger__body-statistics border-body">
 								<p class="bloger__statistics-text">
-									{{ bloger.followers | round }} подписчиков / {{ bloger.likes | round }} лайков.
+									{{ account.followers | round }} подписчиков / {{ account.likes | round }} лайков.
 								</p>
 							</div>
-							<!-- /.bloger__body-statistics -->
 							<div class="bloger__body-theme border-body">
 								<h3 class="bloger__body-title">Тема канала: </h3>
-								<p class="bloger__body-text"> {{ slashedList(bloger.topics) }}</p>
+								<p class="bloger__body-text"> {{ account.topics | slashedList }}</p>
 							</div>
-							<!-- /.bloger__body-theme -->
 							<div class="bloger__body-view border-body">
 								<h3 class="bloger__body-title">Вид / Цена рекламы:</h3>
 								<ul class="bloger__view-ul">
-									<li class="bloger__ul-li bloger__body-text"
-										 v-for="(type, idx) in bloger.ad_types"
-										 :key="idx"
+									<li v-for="type in account.ad_types"
+										 :key="type.id"
+										 class="bloger__ul-li bloger__body-text"
 									>
-										{{ type.name }} - от {{ Math.floor(type.price / 100) * 100 }} ₽;
+										{{ type.name }} - от {{ type.price }} ₽;
 									</li>
 								</ul>
 							</div>
-							<!-- /.bloger__body-theme -->
 							<div class="bloger__body-about border-body">
 								<h3 class="bloger__body-title">О себе: </h3>
-								<p class="bloger__body-text text-padding">{{ bloger.about }}</p>
+								<p class="bloger__body-text text-padding">{{ account.about }}</p>
 							</div>
-							<!-- /.bloger__body-theme -->
 							<div class="bloger__body-age border-body">
 								<h3 class="bloger__body-title">Возрастные категории аудитории:</h3>
 								<p class="bloger__body-text">
-									{{ slashedList(bloger.ages, 'range') }}
+									{{ account.ages | slashedList('range') }}
 								</p>
 							</div>
-							<!-- /.bloger__body-theme -->
 							<div class="bloger__body-place border-body">
 								<h3 class="bloger__body-title">Субъект РФ: </h3>
-								<p class="bloger__body-text">{{ bloger.region }}, {{ bloger.country }}.</p>
+								<p class="bloger__body-text">{{ account.region }}, {{ account.country }}.</p>
 							</div>
-							<!-- /.bloger__body-theme -->
 							<div class="bloger__body-button">
 								<button class="bloger__button button-grand-black big">Предложить работу</button>
 								<button class="bloger__button-black button-grand-transparent">Перейти в ток-ток аккаунт</button>
@@ -96,15 +84,10 @@
 									<p class="bloger__button-text">Чтобы делать предложения, подтверди
 										свой почтовый ящик.</p>
 								</div>
-								<!-- /.bloger__button-confirmation -->
 							</div>
-							<!-- /.bloger__body-theme -->
 						</div>
-						<!-- /.bloger__row -->
 					</div>
-					<!-- /.bloger__body -->
 				</div>
-				<!-- /.bloger__row -->
 				<div class="bloger__massage">
 					<div class="bloger__massage-row">
 						<span class="bloger__massage-close">&times;</span>
@@ -116,85 +99,53 @@
 								пользователей. <span class="bloger__alert-span">Будьте корректны!</span>
 							</h2>
 						</div>
-						<!-- /.bloger__massage-alert -->
 						<form class="bloger__massage-comment">
 							<div class="bloger__massage-title">
 								<h2 class="bloger__title-text">Оставь комментарий по поводу задачи</h2>
 							</div>
-							<!-- /.bloger__massage-title -->
 							<div class="bloger__comment-text">
 								<textarea required class="bloger__text-area" name="" id="" cols="30" rows="10"></textarea>
 							</div>
-							<!-- /.bloger__comment-text -->
 							<div class="bloger__comment-button">
 								<button class="bloger__button-border">Предложить выполнение задачи</button>
 							</div>
-							<!-- /.bloger__comment-button -->
 						</form>
-						<!-- /.bloger__massage-comment -->
 					</div>
-					<!-- /.bloger__massage-row -->
 				</div>
-				<!-- /.bloger__massage -->
 			</template>
 			<h3 v-else>Пусто</h3>
 		</div>
 	</section>
-	<!-- /.bloger -->
 </template>
 
 <script>
 import Preloader from '@/components/Preloader'
 
 export default {
-	name: 'Bloger',
+	name: 'Account',
 	components: {Preloader},
 	computed: {
-		reference() {
-			return 'https://www.tiktok.com/' + this.bloger.title
-		},
-		mainImgAlt() {
-			return this.bloger.title + ' - ' + this.bloger.username
-		},
-		bloger() {
-			return this.$store.getters.currentBloger
+		account() {
+			return this.$store.getters.currentAccount
 		},
 		loading() {
 			return this.$store.getters.loading
+		},
+		reference() {
+			return 'https://www.tiktok.com/' + this.account.title
 		},
 		id() {
 			return this.$route.params.id
 		},
 	},
 	mounted() {
-		this.$store.dispatch('loadBloger', this.id)
+		this.$store.dispatch('loadAccount', this.id)
 			.catch(e => {
-				let route = this.$router.match({name: '404'})
-				this.$router.history.updateRoute(route)
+				if (e.response && e.response.status && e.response.status === 404) {
+					let route = this.$router.match({name: '404'})
+					this.$router.history.updateRoute(route)
+				}
 			})
-	},
-	methods: {
-		slashedList(rawList, key = 'name') {
-			if (!rawList) return ''
-			const separator = ' / ',
-				list = []
-			rawList.forEach(function (item) {
-				list.push(item[key])
-			})
-			return list.join(separator)
-		},
-	},
-	filters: {
-		round(num) {
-			num = parseInt(num)
-			const bitness = num.toString().length
-			if (bitness > 6) {
-				num = (num / 1000000).toFixed(1) + 'M'
-			} else if (bitness > 3) {
-				num = (num / 1000).toFixed(1) + 'K'
-			}
-			return num
-		},
 	},
 }
 </script>
@@ -203,5 +154,10 @@ export default {
 .preload-container {
 	height: 400px;
 	display: flex;
+}
+
+.bloger__img img {
+	object-fit: cover;
+	object-position: 50% 25%;
 }
 </style>

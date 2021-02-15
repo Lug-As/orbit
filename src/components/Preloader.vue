@@ -22,7 +22,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
 $spinkit-size: 6em !default;
 $spinkit-spinner-color: #337ab7 !default;
 
