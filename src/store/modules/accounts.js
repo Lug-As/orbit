@@ -71,6 +71,9 @@ export default {
 		setCurrentAccount(state, payload) {
 			state.currentAccount = payload
 		},
+		destroyCurrentAccount(state) {
+			state.currentAccount = {}
+		},
 		setAccounts(state, payload) {
 			state.accounts = payload
 		},
@@ -86,7 +89,6 @@ export default {
 			commit('startLoading')
 			try {
 				const response = await accounts.fetchAccount(id)
-				console.log(123)
 				const result = response.data.data
 				commit('setCurrentAccount', Account.createFromApiData(result))
 			} catch (e) {

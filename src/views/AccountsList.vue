@@ -165,9 +165,12 @@
 									</div>
 									<div class="main__offer-text">
 										<div class="main__offer-title">
-											<h2 class="main__offer-title-text">
-												{{ account.username }}
-											</h2>
+											<router-link
+												:to="{name: 'Account', params: { id: account.id }}"
+												custom v-slot="{ navigate }"
+											>
+												<h2 @click="navigate" class="main__offer-title-text">{{ account.username }}</h2>
+											</router-link>
 										</div>
 										<div class="main__offer-info">
 											<div class="main__offer-info-item">
@@ -262,6 +265,10 @@ export default {
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
+	}
+
+	&-title-text {
+		cursor: pointer;
 	}
 
 	&-body {

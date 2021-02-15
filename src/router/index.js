@@ -18,11 +18,23 @@ const routes = [
 		path: '*',
 		name: '404',
 		component: () => import('../views/NotFound'),
-	}
+	},
 ]
 
 export default new VueRouter({
 	mode: 'history',
 	base: process.env.BASE_URL,
+	scrollBehavior(to, from, savedPosition) {
+		if (to.hash) {
+			return {
+				selector: to.hash,
+				behavior: 'smooth',
+			}
+		}
+		if (savedPosition) {
+			return savedPosition
+		}
+		return {x: 0, y: 0}
+	},
 	routes,
 })

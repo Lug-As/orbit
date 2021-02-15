@@ -147,6 +147,9 @@ export default {
 				}
 			})
 	},
+	beforeDestroy() {
+		this.$store.commit('destroyCurrentAccount')
+	},
 }
 </script>
 

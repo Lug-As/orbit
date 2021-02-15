@@ -1,13 +1,13 @@
 import axios from 'axios'
-import {ApiUrl} from './apiInfo'
 
-const AccountsPath = '/accounts'
+const AccountsPath = 'accounts'
 
 export default {
 	async fetchAccount(id) {
-		return axios.get(ApiUrl + AccountsPath + '/' + encodeURI(id))
+		return axios.get( AccountsPath + '/' + encodeURI(id))
 	},
 	async fetchAccounts(page = 1, params = {}) {
-		return axios.get(ApiUrl + AccountsPath + '?page=' + encodeURI(page))
+		return axios.get( AccountsPath + '?page=' + encodeURI(String(parseInt(page))))
 	},
 }
+
