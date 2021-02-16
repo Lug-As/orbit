@@ -10,41 +10,42 @@
 									<source srcset="../assets/img/filter.webp" type="image/webp">
 									<img src="../assets/img/filter.png" alt=""></picture>
 							</div>
-							<div class="main__title-text">
-								Фильтр
-							</div>
+							<div class="main__title-text">Фильтр</div>
 						</div>
 						<div class="main__filters-row">
 							<div class="main__body-filters">
+								<!--								<div class="main__body-details">-->
+								<!--									<h2 class="main__filters-summary">Цена</h2>-->
+								<!--									<div class="main__details-row">-->
+								<!--										<div class="main__details-from-to">-->
+								<!--											<div class="main__details-from">-->
+								<!--												<p class="main__details-text">от</p>-->
+								<!--												<div class="main__details-input">-->
+								<!--													<input v-model="value[0]" type="number" class="main__details-input-small">-->
+								<!--												</div>-->
+								<!--											</div>-->
+								<!--											<div class="main__details-to">-->
+								<!--												<p class="main__details-text">до</p>-->
+								<!--												<div class="main__details-input">-->
+								<!--													<input v-model="value[1]" type="number" class="main__details-input-small">-->
+								<!--												</div>-->
+								<!--											</div>-->
+								<!--										</div>-->
+								<!--										<div class="main__details-range">-->
+								<!--											<double-range v-model="value"/>-->
+								<!--										</div>-->
+								<!--									</div>-->
+								<!--								</div>-->
 								<div class="main__body-details">
-									<h2 class="main__filters-summary">Цена</h2>
-									<div class="main__details-row">
-										<div class="main__details-from-to">
-											<div class="main__details-from">
-												<p class="main__details-text">от</p>
-												<div class="main__details-input">
-													<input type="tel" class="main__details-input-small">
-												</div>
-											</div>
-											<div class="slider" style="width: 100px; height: 14px;">
-												<vue-slider/>
-											</div>
-											<div class="main__details-to">
-												<p class="main__details-text">до</p>
-												<div class="main__details-input">
-													<input type="tel" class="main__details-input-small">
-												</div>
-											</div>
-										</div>
-										<div class="main__details-range">
-											<input type="range" class="main__details-input-range">
-										</div>
-									</div>
-								</div>
-								<div class="main__body-details ">
 									<h2 class="main__filters-summary">Тема канала</h2>
 									<div class="main__details-row">
-										<input type="text" class="main__details-input-big">
+										<v-select
+											label="name"
+											:options="topics"
+											:reduce="name => name.id"
+											multiple
+											class="main__vue-select"
+										/>
 										<small class="main__details-small">
 											Например: Еда / Отдых / Путешествия
 										</small>
@@ -53,7 +54,13 @@
 								<div class="main__body-details">
 									<h2 class="main__filters-summary">Виды рекламы</h2>
 									<div class="main__details-row">
-										<input type="text" class="main__details-input-big">
+										<v-select
+											label="name"
+											:options="types"
+											:reduce="name => name.id"
+											multiple
+											class="main__vue-select"
+										/>
 									</div>
 								</div>
 								<div class="main__body-details">
@@ -229,15 +236,15 @@
 
 <script>
 import Preloader from '@/components/Preloader'
-import VueSlider from 'vue-slider-component'
-import 'vue-slider-component/theme/default.css'
+import DoubleRange from '@/components/DoubleRange'
 
 export default {
 	name: 'AccountsList',
 	data: () => ({
 		value: [0, 50],
+		// vvv: null,
 	}),
-	components: {Preloader, VueSlider},
+	components: {DoubleRange, Preloader},
 	computed: {
 		/**
 		 * @return {Array.<Account>}
@@ -255,6 +262,12 @@ export default {
 			let page = this.$route.query.page ? Math.abs(parseInt(this.$route.query.page)) : 1
 			page = page !== 0 ? page : 1
 			return page
+		},
+		topics() {
+			return this.$store.getters.topics
+		},
+		types() {
+			return this.$store.getters.types
 		},
 	},
 	methods: {
@@ -298,34 +311,62 @@ export default {
 	},
 	mounted() {
 		this.loadAccounts()
+		this.$store.dispatch('loadTopics')
+		this.$store.dispatch('loadTypes')
 	},
 }
 </script>
 
 <style lang="scss" scoped>
-.main__offer {
-	&-title-text, &-info-text {
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-
-	&-title-text {
-		cursor: pointer;
-	}
-
-	&-body {
-		@media (min-width: 768px) {
-			width: 50%;
+.main {
+	&__offer {
+		&-title-text, &-info-text {
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
 		}
-		@media (min-width: 1000px) {
-			width: 33%;
+
+		&-title-text {
+			cursor: pointer;
+		}
+
+		&-body {
+			@media (min-width: 768px) {
+				width: 50%;
+			}
+			@media (min-width: 1000px) {
+				width: 33%;
+			}
+		}
+
+		&-img-item {
+			object-fit: cover;
+			object-position: 50% 25%;
 		}
 	}
 
-	&-img-item {
-		object-fit: cover;
-		object-position: 50% 25%;
+	&__body-details {
+		overflow: inherit;
+	}
+}
+</style>
+<style lang="scss">
+.main {
+	&__vue-select {
+		& .vs__search::placeholder,
+		& .vs__dropdown-toggle,
+		& .vs__dropdown-menu {
+			border: 1px solid #061a62;
+			border-radius: 15px;
+			padding: 2px 5px 6px;
+			font-size: 14px;
+		}
+
+		& .vs__dropdown-option--selected {
+			background-color: lighten(#5897fb, 30);
+			color: inherit;
+			cursor: default;
+		}
 	}
 }
 </style>
