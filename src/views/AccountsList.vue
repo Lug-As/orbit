@@ -26,6 +26,9 @@
 													<input type="tel" class="main__details-input-small">
 												</div>
 											</div>
+											<div class="slider" style="width: 100px; height: 14px;">
+												<vue-slider/>
+											</div>
 											<div class="main__details-to">
 												<p class="main__details-text">до</p>
 												<div class="main__details-input">
@@ -226,10 +229,15 @@
 
 <script>
 import Preloader from '@/components/Preloader'
+import VueSlider from 'vue-slider-component'
+import 'vue-slider-component/theme/default.css'
 
 export default {
 	name: 'AccountsList',
-	components: {Preloader},
+	data: () => ({
+		value: [0, 50],
+	}),
+	components: {Preloader, VueSlider},
 	computed: {
 		/**
 		 * @return {Array.<Account>}
