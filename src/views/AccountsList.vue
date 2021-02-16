@@ -117,7 +117,13 @@
 								<div class="main__body-details">
 									<h2 class="main__filters-summary">Возрастные категории</h2>
 									<div class="main__details-row">
-										<input type="text" class="main__details-input-big">
+										<v-select
+											label="name"
+											:options="ages"
+											:reduce="name => name.id"
+											multiple
+											class="main__vue-select"
+										/>
 									</div>
 								</div>
 							</div>
@@ -242,7 +248,6 @@ export default {
 	name: 'AccountsList',
 	data: () => ({
 		value: [0, 50],
-		// vvv: null,
 	}),
 	components: {DoubleRange, Preloader},
 	computed: {
@@ -268,6 +273,9 @@ export default {
 		},
 		types() {
 			return this.$store.getters.types
+		},
+		ages() {
+			return this.$store.getters.ages
 		},
 	},
 	methods: {
@@ -313,6 +321,7 @@ export default {
 		this.loadAccounts()
 		this.$store.dispatch('loadTopics')
 		this.$store.dispatch('loadTypes')
+		this.$store.dispatch('loadAges')
 	},
 }
 </script>
