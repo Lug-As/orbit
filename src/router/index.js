@@ -11,7 +11,7 @@ const routes = [
 	},
 	{
 		path: '/accounts',
-		name: 'AccountList',
+		name: 'AccountsList',
 		component: () => import('../views/AccountsList'),
 	},
 	{

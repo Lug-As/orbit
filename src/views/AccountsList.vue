@@ -41,9 +41,11 @@
 									<div class="main__details-row">
 										<v-select
 											label="name"
+											v-model="filterOpts.topic"
 											:options="topics"
 											:reduce="name => name.id"
 											multiple
+											@input="filter($event, 'topic')"
 											class="main__vue-select"
 										/>
 										<small class="main__details-small">
@@ -56,10 +58,12 @@
 									<div class="main__details-row">
 										<v-select
 											label="name"
+											v-model="filterOpts.type"
 											:options="types"
 											:reduce="name => name.id"
 											multiple
 											class="main__vue-select"
+											@input="filter($event, 'type')"
 										/>
 									</div>
 								</div>
@@ -119,10 +123,12 @@
 									<div class="main__details-row">
 										<v-select
 											label="name"
+											v-model="filterOpts.age"
 											:options="ages"
 											:reduce="name => name.id"
 											multiple
 											class="main__vue-select"
+											@input="filter($event, 'age')"
 										/>
 									</div>
 								</div>
@@ -247,7 +253,13 @@ import DoubleRange from '@/components/DoubleRange'
 export default {
 	name: 'AccountsList',
 	data: () => ({
-		value: [0, 50],
+		// value: [0, 50],
+		filterOpts: {
+			topic: [],
+			age: [],
+			type: [],
+			region: [],
+		},
 	}),
 	components: {DoubleRange, Preloader},
 	computed: {
@@ -263,11 +275,6 @@ export default {
 		accountsPagination() {
 			return this.$store.getters.accountsPagination
 		},
-		page() {
-			let page = this.$route.query.page ? Math.abs(parseInt(this.$route.query.page)) : 1
-			page = page !== 0 ? page : 1
-			return page
-		},
 		topics() {
 			return this.$store.getters.topics
 		},
@@ -277,19 +284,44 @@ export default {
 		ages() {
 			return this.$store.getters.ages
 		},
+		allowedFilterTypes() {
+			return ['topic', 'type', 'age', 'region']
+		},
+		page() {
+			let page = this.$route.query.page ? Math.abs(parseInt(this.$route.query.page)) : 1
+			page = page !== 0 ? page : 1
+			return page
+		},
+		selectedFilters() {
+			return Object.keys(this.$route.query)
+				.filter(key => this.allowedFilterTypes.includes(key))
+				.reduce((obj, key) => {
+					let rawItem = this.$route.query[key]
+					if (rawItem.includes(',')) {
+						rawItem = rawItem.split(',').map(item => parseInt(item))
+					} else {
+						rawItem = [parseInt(rawItem)]
+					}
+					obj[key] = rawItem.filter(item => Number.isInteger(item))
+					return obj
+				}, {})
+		},
 	},
 	methods: {
 		changePage(page = 1) {
 			if (page !== this.page) {
-				this.$router.push({
-					name: this.$route.name,
-					query: {
-						...this.$route.query,
-						page,
-					},
-				})
-				this.loadAccounts()
+				this.reloadPage({page})
 			}
+		},
+		reloadPage(addQuery) {
+			this.$router.push({
+				name: this.$route.name,
+				query: {
+					...this.$route.query,
+					...addQuery,
+				},
+			})
+			this.loadAccounts()
 		},
 		priceRange(types) {
 			if (types.length === 0) return 'Договорная'
@@ -312,16 +344,32 @@ export default {
 			return 'От ' + minPrice + '₽ до ' + maxPrice + '₽'
 		},
 		loadAccounts() {
-			this.$store.dispatch('loadAccounts', {
+			return this.$store.dispatch('loadAccounts', {
 				page: this.page,
+				params: {
+					...this.selectedFilters,
+				},
 			})
+		},
+		filter(val, filterType) {
+			if (this.allowedFilterTypes.includes(filterType)) {
+				this.reloadPage({
+					[filterType]: val.join(','),
+				})
+			}
 		},
 	},
 	mounted() {
 		this.loadAccounts()
 		this.$store.dispatch('loadTopics')
-		this.$store.dispatch('loadTypes')
-		this.$store.dispatch('loadAges')
+			.then(() => (this.$store.dispatch('loadTypes')))
+			.then(() => (this.$store.dispatch('loadAges')))
+			.then(() => {
+				this.filterOpts = {
+					...this.filterOpts,
+					...this.selectedFilters,
+				}
+			})
 	},
 }
 </script>

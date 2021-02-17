@@ -4,10 +4,20 @@ const AccountsPath = 'accounts'
 
 export default {
 	async fetchAccount(id) {
-		return axios.get( AccountsPath + '/' + encodeURI(id))
+		return axios.get(AccountsPath + '/' + encodeURI(id))
 	},
 	async fetchAccounts(page = 1, params = {}) {
-		return axios.get( AccountsPath + '?page=' + encodeURI(String(parseInt(page))))
+		for (let key in params) {
+			if (Array.isArray(params[key])) {
+				params[key] = params[key].join(',')
+			}
+		}
+		return axios.get(AccountsPath, {
+			params: {
+				...params,
+				page: encodeURI(String(parseInt(page))),
+			},
+		})
 	},
 }
 
