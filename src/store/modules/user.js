@@ -49,7 +49,7 @@ export default {
 	actions: {
 		async loadUser({commit}) {
 			const token = tokenService.getToken()
-			if (token) {
+			if (token !== null) {
 				const response = await userService.fetchUser(token)
 					.catch(err => {
 						if (err.response && err.response.status && err.response.status === 401) {

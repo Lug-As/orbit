@@ -11,6 +11,12 @@
 									<img src="../assets/img/filter.png" alt=""></picture>
 							</div>
 							<div class="main__title-text">Фильтр</div>
+							<a
+								v-if="wasFiltered"
+								@click.prevent="clearFilters"
+								href="#"
+								class="reset-filters-link"
+							>Сбросить все</a>
 						</div>
 						<div class="main__filters-row">
 							<div class="main__body-filters">
@@ -167,10 +173,8 @@
 							</div>
 						</div>
 					</div>
-					<div v-if="loading" class="preload-container">
-						<preloader/>
-					</div>
-					<template v-else-if="accounts">
+					<preloader v-if="loading"/>
+					<template v-else-if="accounts.length">
 						<div class="main__offers-row">
 							<div class="main__body-offers">
 								<div
@@ -239,7 +243,9 @@
 							</div>
 						</div>
 					</template>
-					<h3 v-else>Пусто</h3>
+					<template v-else>
+						<p class="empty-result-text">По вашему запросу ничего не найдено</p>
+					</template>
 				</div>
 			</div>
 		</div>
@@ -253,7 +259,6 @@ import DoubleRange from '@/components/DoubleRange'
 export default {
 	name: 'AccountsList',
 	data: () => ({
-		// value: [0, 50],
 		filterOpts: {
 			topic: [],
 			age: [],
@@ -289,8 +294,29 @@ export default {
 		},
 		page() {
 			let page = this.$route.query.page ? Math.abs(parseInt(this.$route.query.page)) : 1
-			page = page !== 0 ? page : 1
+			if (page === 0 || !Number.isInteger(page)) {
+				page = 1
+			}
 			return page
+		},
+		wasFiltered() {
+			if (this.filterOpts.age && this.filterOpts.age.length) return true
+			if (this.filterOpts.topic && this.filterOpts.topic.length) return true
+			if (this.filterOpts.type && this.filterOpts.type.length) return true
+			return !!(this.filterOpts.region && this.filterOpts.region.length)
+
+		},
+	},
+	methods: {
+		changePage(page = 1) {
+			if (page !== this.page) {
+				this.reloadPage({page})
+				window.scrollTo({
+					top: 0,
+					left: 0,
+					behavior: 'smooth',
+				})
+			}
 		},
 		selectedFilters() {
 			return Object.keys(this.$route.query)
@@ -306,22 +332,22 @@ export default {
 					return obj
 				}, {})
 		},
-	},
-	methods: {
-		changePage(page = 1) {
-			if (page !== this.page) {
-				this.reloadPage({page})
+		reloadPage(addQuery, savePrevQuery = true) {
+			let query
+			if (savePrevQuery) {
+				query = this.$route.query
+			} else {
+				query = {}
 			}
-		},
-		reloadPage(addQuery) {
-			this.$router.push({
+			return this.$router.push({
 				name: this.$route.name,
 				query: {
-					...this.$route.query,
+					...query,
 					...addQuery,
 				},
 			})
-			this.loadAccounts()
+				.then(() => this.loadAccounts())
+				.then(() => this.freshFilterOpts())
 		},
 		priceRange(types) {
 			if (types.length === 0) return 'Договорная'
@@ -346,17 +372,22 @@ export default {
 		loadAccounts() {
 			return this.$store.dispatch('loadAccounts', {
 				page: this.page,
-				params: {
-					...this.selectedFilters,
-				},
+				params: this.selectedFilters(),
 			})
 		},
 		filter(val, filterType) {
 			if (this.allowedFilterTypes.includes(filterType)) {
 				this.reloadPage({
 					[filterType]: val.join(','),
+					page: 1,
 				})
 			}
+		},
+		clearFilters() {
+			this.reloadPage({}, false)
+		},
+		freshFilterOpts() {
+			this.filterOpts = this.selectedFilters()
 		},
 	},
 	mounted() {
@@ -364,12 +395,7 @@ export default {
 		this.$store.dispatch('loadTopics')
 			.then(() => (this.$store.dispatch('loadTypes')))
 			.then(() => (this.$store.dispatch('loadAges')))
-			.then(() => {
-				this.filterOpts = {
-					...this.filterOpts,
-					...this.selectedFilters,
-				}
-			})
+			.then(() => (this.freshFilterOpts()))
 	},
 }
 </script>
@@ -406,7 +432,19 @@ export default {
 		overflow: inherit;
 	}
 }
+
+.empty-result-text {
+	margin: 50px 0;
+	text-align: center;
+}
+
+.reset-filters-link {
+	margin-left: 15px;
+	line-height: 30px;
+	font-size: 14px;
+}
 </style>
+
 <style lang="scss">
 .main {
 	&__vue-select {

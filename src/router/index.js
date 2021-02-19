@@ -25,6 +25,9 @@ export default new VueRouter({
 	mode: 'history',
 	base: process.env.BASE_URL,
 	scrollBehavior(to, from, savedPosition) {
+		if (to.name === from.name) {
+			return false
+		}
 		if (to.hash) {
 			return {
 				selector: to.hash,

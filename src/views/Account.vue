@@ -1,9 +1,7 @@
 <template>
 	<section class="bloger">
 		<div class="container">
-			<div v-if="loading" class="preload-container">
-				<preloader/>
-			</div>
+			<preloader v-if="loading"/>
 			<template v-else-if="account">
 				<div class="bloger__row">
 					<div class="bloger__row-img">
@@ -154,11 +152,6 @@ export default {
 </script>
 
 <style scoped>
-.preload-container {
-	height: 400px;
-	display: flex;
-}
-
 .bloger__img img {
 	object-fit: cover;
 	object-position: 50% 25%;

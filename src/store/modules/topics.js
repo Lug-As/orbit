@@ -30,8 +30,9 @@ export default {
 	},
 	actions: {
 		async loadTopics({commit}) {
-			const response = await topicsService.fetchTopics()
-			const topicsList = response.data.data.map(item => {
+			let topicsList = await topicsService.getTopics()
+			console.log(topicsList)
+			topicsList = topicsList.map(item => {
 				return Topic.createFromApiData(item)
 			})
 			commit('setTopics', topicsList)
