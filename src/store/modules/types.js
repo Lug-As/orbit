@@ -30,8 +30,8 @@ export default {
 	},
 	actions: {
 		async loadTypes({commit}) {
-			const response = await typesService.fetchTypes()
-			const typesList = response.data.data.map(item => {
+			let typesList = await typesService.getTypes()
+			typesList = typesList.map(item => {
 				return Type.createFromApiData(item)
 			})
 			commit('setTypes', typesList)

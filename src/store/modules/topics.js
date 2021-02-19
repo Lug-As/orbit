@@ -31,7 +31,6 @@ export default {
 	actions: {
 		async loadTopics({commit}) {
 			let topicsList = await topicsService.getTopics()
-			console.log(topicsList)
 			topicsList = topicsList.map(item => {
 				return Topic.createFromApiData(item)
 			})

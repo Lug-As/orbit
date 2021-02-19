@@ -30,8 +30,8 @@ export default {
 	},
 	actions: {
 		async loadAges({commit}) {
-			const response = await agesService.fetchAges()
-			const agesList = response.data.data.map(item => {
+			let agesList = await agesService.getAges()
+			agesList = agesList.map(item => {
 				return Age.createFromApiData(item)
 			})
 			commit('setAges', agesList)
