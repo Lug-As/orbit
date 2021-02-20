@@ -20,28 +20,35 @@
 						</div>
 						<div class="main__filters-row">
 							<div class="main__body-filters">
-								<!--								<div class="main__body-details">-->
-								<!--									<h2 class="main__filters-summary">Цена</h2>-->
-								<!--									<div class="main__details-row">-->
-								<!--										<div class="main__details-from-to">-->
-								<!--											<div class="main__details-from">-->
-								<!--												<p class="main__details-text">от</p>-->
-								<!--												<div class="main__details-input">-->
-								<!--													<input v-model="value[0]" type="number" class="main__details-input-small">-->
-								<!--												</div>-->
-								<!--											</div>-->
-								<!--											<div class="main__details-to">-->
-								<!--												<p class="main__details-text">до</p>-->
-								<!--												<div class="main__details-input">-->
-								<!--													<input v-model="value[1]" type="number" class="main__details-input-small">-->
-								<!--												</div>-->
-								<!--											</div>-->
-								<!--										</div>-->
-								<!--										<div class="main__details-range">-->
-								<!--											<double-range v-model="value"/>-->
-								<!--										</div>-->
-								<!--									</div>-->
-								<!--								</div>-->
+								<div class="main__body-details">
+									<h2 class="main__filters-summary">Цена</h2>
+									<div class="main__details-row">
+										<div class="main__details-from-to">
+											<div class="main__details-from">
+												<p class="main__details-text">от</p>
+												<div class="main__details-input">
+													<input
+														v-model.lazy="filterOpts.price_from"
+														@change="filter($event, 'price_from')"
+														@keydown="resolveInputKeys"
+														class="main__details-input-small"
+													>
+												</div>
+											</div>
+											<div class="main__details-to">
+												<p class="main__details-text">до</p>
+												<div class="main__details-input">
+													<input
+														v-model.lazy="filterOpts.price_to"
+														@change="filter($event, 'price_to')"
+														@keydown="resolveInputKeys"
+														class="main__details-input-small"
+													>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
 								<div class="main__body-details">
 									<h2 class="main__filters-summary">Тема канала</h2>
 									<div class="main__details-row">
@@ -141,7 +148,7 @@
 											:reduce="name => name.id"
 											multiple
 											class="main__vue-select"
-											@change="filter($event, 'age')"
+											@input="filter($event, 'age')"
 										/>
 									</div>
 								</div>
@@ -268,7 +275,6 @@
 
 <script>
 import Preloader from '@/components/Preloader'
-import DoubleRange from '@/components/DoubleRange'
 
 export default {
 	name: 'AccountsList',
@@ -282,6 +288,8 @@ export default {
 			followers_to: null,
 			likes_from: null,
 			likes_to: null,
+			price_from: null,
+			price_to: null,
 		},
 	}),
 	computed: {
@@ -456,7 +464,7 @@ export default {
 			.then(() => (this.$store.dispatch('loadAges')))
 			.then(() => (this.freshFilterOpts()))
 	},
-	components: {DoubleRange, Preloader},
+	components: {Preloader},
 }
 </script>
 
@@ -502,6 +510,11 @@ export default {
 	margin-left: 15px;
 	line-height: 30px;
 	font-size: 14px;
+	transition: color .2s;
+
+	&:hover {
+		color: lighten(#007bff, 17);
+	}
 }
 </style>
 
