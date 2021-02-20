@@ -14,8 +14,8 @@
 							<a
 								v-if="wasFiltered"
 								@click.prevent="clearFilters"
-								href="#"
 								class="reset-filters-link"
+								href="#"
 							>Сбросить все</a>
 						</div>
 						<div class="main__filters-row">
@@ -80,18 +80,25 @@
 											<div class="main__details-from">
 												<p class="main__details-text">от</p>
 												<div class="main__details-input">
-													<input type="tel" class="main__details-input-small">
+													<input
+														v-model.lazy="filterOpts.followers_from"
+														@change="filter($event, 'followers_from')"
+														@keydown="resolveInputKeys"
+														class="main__details-input-small"
+													>
 												</div>
 											</div>
 											<div class="main__details-to">
 												<p class="main__details-text">до</p>
 												<div class="main__details-input">
-													<input type="tel" class="main__details-input-small">
+													<input
+														v-model.lazy="filterOpts.followers_to"
+														@change="filter($event, 'followers_to')"
+														@keydown="resolveInputKeys"
+														class="main__details-input-small"
+													>
 												</div>
 											</div>
-										</div>
-										<div class="main__details-range">
-											<input type="range" class="main__details-input-range">
 										</div>
 									</div>
 								</div>
@@ -102,26 +109,26 @@
 											<div class="main__details-from">
 												<p class="main__details-text">от</p>
 												<div class="main__details-input">
-													<input type="tel" class="main__details-input-small">
+													<input
+														v-model.lazy="filterOpts.likes_from"
+														@change="filter($event, 'likes_from')"
+														@keydown="resolveInputKeys"
+														class="main__details-input-small"
+													>
 												</div>
 											</div>
 											<div class="main__details-to">
 												<p class="main__details-text">до</p>
 												<div class="main__details-input">
-													<input type="tel" class="main__details-input-small">
+													<input
+														v-model.lazy="filterOpts.likes_to"
+														@change="filter($event, 'likes_to')"
+														@keydown="resolveInputKeys"
+														class="main__details-input-small"
+													>
 												</div>
 											</div>
 										</div>
-										<div class="main__details-range">
-											<input type="range" class="main__details-input-range">
-										</div>
-									</div>
-								</div>
-								<div class="main__body-details">
-									<h2 class="main__filters-summary">Страна</h2>
-									<div class="main__details-row">
-										<input type="text" class="main__details-input-big">
-										<input type="text" class="main__details-input-big">
 									</div>
 								</div>
 								<div class="main__body-details">
@@ -134,8 +141,15 @@
 											:reduce="name => name.id"
 											multiple
 											class="main__vue-select"
-											@input="filter($event, 'age')"
+											@change="filter($event, 'age')"
 										/>
+									</div>
+								</div>
+								<div class="main__body-details">
+									<h2 class="main__filters-summary">Страна</h2>
+									<div class="main__details-row">
+										<input type="text" class="main__details-input-big">
+										<input type="text" class="main__details-input-big">
 									</div>
 								</div>
 							</div>
@@ -227,8 +241,8 @@
 									</div>
 									<div class="main__offer-button-item">
 										<router-link :to="{name: 'Account', params: { id: account.id }}">
-											<button
-												class="main__offer-button button-grand-black">Подробнее
+											<button class="main__offer-button button-grand-black">
+												Подробнее
 											</button>
 										</router-link>
 									</div>
@@ -260,17 +274,17 @@ export default {
 	name: 'AccountsList',
 	data: () => ({
 		filterOpts: {
-			topic: [],
-			age: [],
-			type: [],
-			region: [],
+			topic: null,
+			age: null,
+			type: null,
+			region: null,
+			followers_from: null,
+			followers_to: null,
+			likes_from: null,
+			likes_to: null,
 		},
 	}),
-	components: {DoubleRange, Preloader},
 	computed: {
-		/**
-		 * @return {Array.<Account>}
-		 */
 		accounts() {
 			return this.$store.getters.accounts
 		},
@@ -290,55 +304,75 @@ export default {
 			return this.$store.getters.ages
 		},
 		allowedFilterTypes() {
-			return ['topic', 'type', 'age', 'region']
+			return Object.keys(this.filterOpts)
 		},
 		page() {
-			let page = this.$route.query.page ? Math.abs(parseInt(this.$route.query.page)) : 1
+			let page
+			if (this.$route.query['page']) {
+				page = Math.abs(parseInt(this.$route.query['page']))
+				if (page === 1) {
+					this.clearQueryParam('page')
+				}
+			} else {
+				page = 1
+			}
 			if (page === 0 || !Number.isInteger(page)) {
 				page = 1
 			}
 			return page
 		},
 		wasFiltered() {
-			if (this.filterOpts.age && this.filterOpts.age.length) return true
-			if (this.filterOpts.topic && this.filterOpts.topic.length) return true
-			if (this.filterOpts.type && this.filterOpts.type.length) return true
-			return !!(this.filterOpts.region && this.filterOpts.region.length)
-
-		},
-	},
-	methods: {
-		changePage(page = 1) {
-			if (page !== this.page) {
-				this.reloadPage({page})
-				window.scrollTo({
-					top: 0,
-					left: 0,
-					behavior: 'smooth',
-				})
-			}
+			let was = false
+			this.allowedFilterTypes.forEach((key) => {
+				let opt = this.filterOpts[key]
+				if (opt !== null && (Array.isArray(opt) && opt.length)) {
+					return was = true
+				}
+			})
+			return was
 		},
 		selectedFilters() {
 			return Object.keys(this.$route.query)
 				.filter(key => this.allowedFilterTypes.includes(key))
 				.reduce((obj, key) => {
 					let rawItem = this.$route.query[key]
-					if (rawItem.includes(',')) {
-						rawItem = rawItem.split(',').map(item => parseInt(item))
+					if (rawItem) {
+						if (rawItem.includes(',')) {
+							rawItem = rawItem.split(',').map(item => parseInt(item))
+						} else if (rawItem) {
+							rawItem = [parseInt(rawItem)]
+						}
+						obj[key] = rawItem.filter(item => Number.isInteger(item))
 					} else {
-						rawItem = [parseInt(rawItem)]
+						this.clearQueryParam(key)
 					}
-					obj[key] = rawItem.filter(item => Number.isInteger(item))
 					return obj
 				}, {})
 		},
-		reloadPage(addQuery, savePrevQuery = true) {
-			let query
-			if (savePrevQuery) {
-				query = this.$route.query
-			} else {
-				query = {}
+	},
+	methods: {
+		changePage(page = 1) {
+			if (page !== this.page) {
+				this.reloadPage({page})
+				this.scrollToTop()
 			}
+		},
+		scrollToTop() {
+			window.scrollTo({
+				top: 0,
+				left: 0,
+				behavior: 'smooth',
+			})
+		},
+		clearQueryParam(key) {
+			if (this.$route.query[key] !== undefined) {
+				let query = Object.assign({}, this.$route.query)
+				delete query[key]
+				this.$router.replace({query})
+			}
+		},
+		reloadPage(addQuery, savePrevQuery = true) {
+			const query = savePrevQuery ? this.$route.query : {}
 			return this.$router.push({
 				name: this.$route.name,
 				query: {
@@ -372,22 +406,47 @@ export default {
 		loadAccounts() {
 			return this.$store.dispatch('loadAccounts', {
 				page: this.page,
-				params: this.selectedFilters(),
+				params: {...this.selectedFilters},
 			})
 		},
-		filter(val, filterType) {
+		filter(ev, filterType) {
 			if (this.allowedFilterTypes.includes(filterType)) {
+				let query
+				if (Array.isArray(ev)) {
+					query = ev.join(',')
+				} else {
+					query = parseInt(ev.target.value)
+					if (!Number.isInteger(query)) {
+						query = undefined
+					}
+				}
 				this.reloadPage({
-					[filterType]: val.join(','),
+					[filterType]: query,
 					page: 1,
 				})
+			}
+		},
+		resolveInputKeys(ev) {
+			if (![8, 46, 37, 38, 39, 40, 116].includes(ev.keyCode)) {
+				const key = ev.key
+				if (!Number.isInteger(parseInt(key))) {
+					ev.returnValue = false
+					if (ev.preventDefault) ev.preventDefault()
+				}
 			}
 		},
 		clearFilters() {
 			this.reloadPage({}, false)
 		},
 		freshFilterOpts() {
-			this.filterOpts = this.selectedFilters()
+			const selected = this.selectedFilters
+			Object.keys(this.filterOpts).forEach(key => {
+				if (selected[key] !== undefined) {
+					this.filterOpts[key] = selected[key]
+				} else {
+					this.filterOpts[key] = null
+				}
+			})
 		},
 	},
 	mounted() {
@@ -397,6 +456,7 @@ export default {
 			.then(() => (this.$store.dispatch('loadAges')))
 			.then(() => (this.freshFilterOpts()))
 	},
+	components: {DoubleRange, Preloader},
 }
 </script>
 

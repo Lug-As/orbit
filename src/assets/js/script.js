@@ -21,7 +21,7 @@ export const I = {
 
 		const massage = document.querySelector('.bloger__massage'),
 			body = document.querySelector('body'),
-			bloger_btn = document.querySelector('.bloger__button'),
+			bloger_btn = document.querySelector('.button__open-massage'),
 			massage_row = document.querySelector('.bloger__massage-row'),
 			close = document.querySelector('.bloger__massage-close'),
 			btn_brd = document.querySelector('.bloger__button-border')
