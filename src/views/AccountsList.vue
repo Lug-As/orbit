@@ -177,17 +177,13 @@
 							</div>
 							<div class="main__offers-sort">
 								<div class="main__offer-sort-title">Сортировать:</div>
-								<div class="main__offer-sort-choice">
-									<div class="main__offer-sort-select">
-										<p class="main__offer-sort-option selected">по цене</p>
-									</div>
-									<div class="main__offer-sort-list" style="display: none;">
-										<p class="main__offer-sort-option">По количеству подписчиков</p>
-										<p class="main__offer-sort-option">По количеству лайков</p>
-										<p class="main__offer-sort-option">По возрастанию</p>
-										<p class="main__offer-sort-option">По убыванию</p>
-									</div>
-								</div>
+								<v-select
+									v-model="sortOpt"
+									:options="sortOptions"
+									:reduce="label => label.key"
+									class="main__sort-vue-select"
+									@input="sort"
+								/>
 							</div>
 							<div class="main__offers-search">
 								<input type="text" placeholder="Введите ник блогера">
@@ -291,6 +287,9 @@ export default {
 			price_from: null,
 			price_to: null,
 		},
+		sortOpt: null,
+		defSortOpt: 4,
+		oldSortOpt: null,
 	}),
 	computed: {
 		accounts() {
@@ -313,6 +312,42 @@ export default {
 		},
 		allowedFilterTypes() {
 			return Object.keys(this.filterOpts)
+		},
+		allowedSortTypes() {
+			return this.sortOptions.map(opt => opt.type).filter(i => i !== undefined)
+		},
+		sortOptions() {
+			let opts = [
+				{
+					key: 0,
+					label: 'По количеству подписчиков',
+					type: 'followers',
+				},
+				{
+					key: 1,
+					label: 'По количеству лайков',
+					type: 'likes',
+				},
+				{
+					key: 4,
+					label: 'Новые',
+				},
+			]
+			if (this.filterOpts.type && this.filterOpts.type.length === 1) {
+				opts = opts.concat([
+					{
+						key: 2,
+						label: 'По возрастанию цены',
+						type: 'price',
+						dir: 'asc',
+					},
+					{
+						key: 3,
+						label: 'По убыванию цены',
+						type: 'price',
+					}])
+			}
+			return opts
 		},
 		page() {
 			let page
@@ -357,6 +392,21 @@ export default {
 					return obj
 				}, {})
 		},
+		selectedSort() {
+			const param = this.$route.query['sort']
+			const dir = this.$route.query['dir']
+			if (this.allowedSortTypes.includes(param)) {
+				const sortObj = this.getSortObjectByType(param, dir)
+				const out = {
+					sort: param,
+				}
+				if (sortObj.dir) {
+					out.dir = sortObj.dir
+				}
+				return out
+			}
+			return {}
+		},
 	},
 	methods: {
 		changePage(page = 1) {
@@ -389,7 +439,7 @@ export default {
 				},
 			})
 				.then(() => this.loadAccounts())
-				.then(() => this.freshFilterOpts())
+				.then(() => this.freshOpts())
 		},
 		priceRange(types) {
 			if (types.length === 0) return 'Договорная'
@@ -414,13 +464,45 @@ export default {
 		loadAccounts() {
 			return this.$store.dispatch('loadAccounts', {
 				page: this.page,
-				params: {...this.selectedFilters},
+				params: {
+					...this.selectedFilters,
+					...this.selectedSort,
+				},
+			})
+		},
+		sort(sortKey) {
+			if (sortKey === null) {
+				return this.sort(this.sortOpt = this.defSortOpt)
+			}
+			if ((this.oldSortOpt !== null && this.oldSortOpt !== this.sortOpt) || this.sortOpt !== this.defSortOpt) {
+				const sortObj = this.getSortObjectByKey(sortKey)
+				this.reloadPage({
+					sort: sortObj.type,
+					dir: sortObj.dir,
+				})
+			}
+			this.oldSortOpt = this.sortOpt
+		},
+		getSortObjectByKey(sortKey) {
+			return this.sortOptions.find(opt => opt.key === sortKey)
+		},
+		getSortObjectByType(type, dir) {
+			return this.sortOptions.find(opt => {
+				let find = opt.type === type
+				find = dir ? find && opt.dir : find && !opt.dir
+				return find
 			})
 		},
 		filter(ev, filterType) {
 			if (this.allowedFilterTypes.includes(filterType)) {
-				let query
+				let query, addData
 				if (Array.isArray(ev)) {
+					if (filterType === 'type' && (this.sortOpt === 2 || this.sortOpt === 3)) {
+						addData = {
+							sort: undefined,
+							dir: undefined,
+						}
+					}
 					query = ev.join(',')
 				} else {
 					query = parseInt(ev.target.value)
@@ -431,11 +513,13 @@ export default {
 				this.reloadPage({
 					[filterType]: query,
 					page: 1,
+					...addData,
 				})
 			}
 		},
 		resolveInputKeys(ev) {
-			if (![8, 46, 37, 38, 39, 40, 116].includes(ev.keyCode)) {
+			const allowedKeyCodes = [8, 46, 37, 38, 39, 40, 116]
+			if (!allowedKeyCodes.includes(ev.keyCode)) {
 				const key = ev.key
 				if (!Number.isInteger(parseInt(key))) {
 					ev.returnValue = false
@@ -445,6 +529,10 @@ export default {
 		},
 		clearFilters() {
 			this.reloadPage({}, false)
+		},
+		freshOpts() {
+			this.freshFilterOpts()
+			this.freshSortOpt()
 		},
 		freshFilterOpts() {
 			const selected = this.selectedFilters
@@ -456,13 +544,21 @@ export default {
 				}
 			})
 		},
+		freshSortOpt() {
+			let val = this.defSortOpt
+			if (Object.keys(this.selectedSort).length) {
+				const sortObj = this.getSortObjectByType(this.selectedSort.sort, this.selectedSort.dir)
+				val = sortObj.key
+			}
+			this.sortOpt = val
+		},
 	},
 	mounted() {
 		this.loadAccounts()
 		this.$store.dispatch('loadTopics')
-			.then(() => (this.$store.dispatch('loadTypes')))
-			.then(() => (this.$store.dispatch('loadAges')))
-			.then(() => (this.freshFilterOpts()))
+			.then(() => this.$store.dispatch('loadTypes'))
+			.then(() => this.$store.dispatch('loadAges'))
+			.then(() => this.freshOpts())
 	},
 	components: {Preloader},
 }
@@ -535,6 +631,11 @@ export default {
 			color: inherit;
 			cursor: default;
 		}
+	}
+
+	&__sort-vue-select {
+		margin-left: 15px;
+		min-width: 300px;
 	}
 }
 </style>
