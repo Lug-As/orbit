@@ -56,7 +56,7 @@
 											label="name"
 											v-model="filterOpts.topic"
 											:options="topics"
-											:reduce="name => name.id"
+											:reduce="opt => opt.id"
 											multiple
 											@input="filter($event, 'topic')"
 											class="main__vue-select"
@@ -73,7 +73,7 @@
 											label="name"
 											v-model="filterOpts.type"
 											:options="types"
-											:reduce="name => name.id"
+											:reduce="opt => opt.id"
 											multiple
 											class="main__vue-select"
 											@input="filter($event, 'type')"
@@ -145,7 +145,7 @@
 											label="name"
 											v-model="filterOpts.age"
 											:options="ages"
-											:reduce="name => name.id"
+											:reduce="opt => opt.id"
 											multiple
 											class="main__vue-select"
 											@input="filter($event, 'age')"
@@ -153,10 +153,27 @@
 									</div>
 								</div>
 								<div class="main__body-details">
-									<h2 class="main__filters-summary">Страна</h2>
+									<h2 class="main__filters-summary">Регион</h2>
 									<div class="main__details-row">
-										<input type="text" class="main__details-input-big">
-										<input type="text" class="main__details-input-big">
+										<v-select
+											label="name"
+											v-model="filterOpts.region"
+											:options="regions"
+											:reduce="opt => opt.id"
+											:selectable="option => !option.hasOwnProperty('group')"
+											class="main__vue-select main__vue-select--region"
+											multiple
+											@input="filter($event, 'region')"
+										>
+											<template #option="{ group, name }">
+												<div v-if="group" class="group">
+													{{ group }}
+												</div>
+												<template v-else>
+													{{ name }}
+												</template>
+											</template>
+										</v-select>
 									</div>
 								</div>
 							</div>
@@ -183,6 +200,8 @@
 									:reduce="label => label.key"
 									class="main__sort-vue-select"
 									@input="sort"
+									:clearable="false"
+									:searchable="false"
 								/>
 							</div>
 							<div class="main__offers-search">
@@ -316,6 +335,9 @@ export default {
 		ages() {
 			return this.$store.getters.ages
 		},
+		regions() {
+			return this.$store.getters.regions
+		},
 		allowedFilterTypes() {
 			return Object.keys(this.filterOpts)
 		},
@@ -343,13 +365,13 @@ export default {
 				opts = opts.concat([
 					{
 						key: 2,
-						label: 'По возрастанию цены',
+						label: 'По возрастанию цены рекламы',
 						type: 'price',
 						dir: 'asc',
 					},
 					{
 						key: 3,
-						label: 'По убыванию цены',
+						label: 'По убыванию цены рекламы',
 						type: 'price',
 					}])
 			}
@@ -543,7 +565,7 @@ export default {
 			}
 		},
 		resolveInputKeys(ev) {
-			const allowedKeyCodes = [8, 46, 37, 38, 39, 40, 116]
+			const allowedKeyCodes = [8, 46, 37, 38, 39, 40, 116, 13]
 			if (!allowedKeyCodes.includes(ev.keyCode)) {
 				const key = ev.key
 				if (!Number.isInteger(parseInt(key))) {
@@ -587,6 +609,7 @@ export default {
 		this.$store.dispatch('loadTopics')
 			.then(() => this.$store.dispatch('loadTypes'))
 			.then(() => this.$store.dispatch('loadAges'))
+			.then(() => this.$store.dispatch('loadRegions'))
 			.then(() => this.freshOpts())
 	},
 	components: {Preloader},
@@ -610,7 +633,7 @@ export default {
 			font-size: 15px;
 			@media (min-width: 1366px) {
 				input {
-					padding-left: 10px;
+					padding-left: 8px;
 				}
 				width: 30%;
 			}
@@ -659,16 +682,43 @@ export default {
 		& .vs__search::placeholder,
 		& .vs__dropdown-toggle,
 		& .vs__dropdown-menu {
+			font-size: 14px;
+		}
+
+		& .vs__search::placeholder,
+		& .vs__dropdown-toggle {
 			border: 1px solid #061a62;
 			border-radius: 15px;
 			padding: 2px 5px 6px;
-			font-size: 14px;
+		}
+
+		& .vs__dropdown-option {
+			padding-left: 15px;
 		}
 
 		& .vs__dropdown-option--selected {
 			background-color: lighten(#5897fb, 30);
 			color: inherit;
 			cursor: default;
+		}
+
+		&--region {
+			& .vs__search::placeholder,
+			& .vs__dropdown-toggle,
+			& .vs__dropdown-menu {
+				font-size: 13px;
+			}
+
+			& .vs__dropdown-option--disabled {
+				background: #ededed;
+				color: black;
+				font-family: "Montserrat-Bold", sans-serif;
+				font-size: 14.5px;
+			}
+
+			& .vs__dropdown-option {
+				padding-left: 12px;
+			}
 		}
 	}
 

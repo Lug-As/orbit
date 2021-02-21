@@ -5,11 +5,12 @@ import user from './modules/user'
 import topics from './modules/topics'
 import types from './modules/types'
 import ages from './modules/ages'
+import regions from './modules/regions'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
 	modules: {
-		accounts, user, topics, types, ages,
+		accounts, user, topics, types, ages, regions,
 	},
 })
