@@ -186,7 +186,12 @@
 								/>
 							</div>
 							<div class="main__offers-search">
-								<input type="text" placeholder="Введите ник блогера">
+								<input
+									v-model.trim.lazy="searchQuery"
+									type="text"
+									placeholder="Введите ник или имя блогера"
+									@change="search"
+								>
 							</div>
 						</div>
 					</div>
@@ -290,6 +295,7 @@ export default {
 		sortOpt: null,
 		defSortOpt: 4,
 		oldSortOpt: null,
+		searchQuery: null,
 	}),
 	computed: {
 		accounts() {
@@ -407,6 +413,18 @@ export default {
 			}
 			return {}
 		},
+		paramQuery() {
+			return this.$route.query['q']
+		},
+		queryObject() {
+			const q = this.paramQuery
+			if (q) {
+				return {
+					q,
+				}
+			}
+			return {}
+		},
 	},
 	methods: {
 		changePage(page = 1) {
@@ -467,6 +485,7 @@ export default {
 				params: {
 					...this.selectedFilters,
 					...this.selectedSort,
+					...this.queryObject,
 				},
 			})
 		},
@@ -482,6 +501,12 @@ export default {
 				})
 			}
 			this.oldSortOpt = this.sortOpt
+		},
+		search(ev) {
+			const q = ev.target.value
+			this.reloadPage({
+				q,
+			})
 		},
 		getSortObjectByKey(sortKey) {
 			return this.sortOptions.find(opt => opt.key === sortKey)
@@ -533,6 +558,7 @@ export default {
 		freshOpts() {
 			this.freshFilterOpts()
 			this.freshSortOpt()
+			this.freshSearchQuery()
 		},
 		freshFilterOpts() {
 			const selected = this.selectedFilters
@@ -551,6 +577,9 @@ export default {
 				val = sortObj.key
 			}
 			this.sortOpt = val
+		},
+		freshSearchQuery() {
+			this.searchQuery = this.paramQuery
 		},
 	},
 	mounted() {
@@ -575,6 +604,16 @@ export default {
 
 		&-title-text {
 			cursor: pointer;
+		}
+
+		&s-search {
+			font-size: 15px;
+			@media (min-width: 1366px) {
+				input {
+					padding-left: 10px;
+				}
+				width: 30%;
+			}
 		}
 
 		&-body {
