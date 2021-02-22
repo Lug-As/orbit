@@ -24,8 +24,6 @@ class User {
 	}
 }
 
-// 1|IcJWtQMRA70FlbMdJgkKu96K5aztcNK1PXibBo66
-
 export default {
 	state: {
 		user: null,
@@ -54,6 +52,8 @@ export default {
 					.catch(err => {
 						if (err.response && err.response.status && err.response.status === 401) {
 							tokenService.clearToken()
+						} else {
+							throw err
 						}
 					})
 				commit('setUser', User.createFromApiData(response.data.data))

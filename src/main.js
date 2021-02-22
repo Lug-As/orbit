@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import axios from 'axios'
+import Vuelidate from 'vuelidate'
 import vSelect from 'vue-select'
 import router from './router'
 import store from './store'
@@ -13,10 +14,12 @@ import './assets/css/main.css'
 
 Vue.config.productionTip = false
 
+Vue.use(Vuelidate)
 Vue.component('v-select', vSelect)
 Vue.component('pagination', PaginationCmp)
 Vue.filter('round', roundNumber)
 Vue.filter('slashedList', slashedList)
+
 axios.defaults.baseURL = ApiBaseUrl
 
 new Vue({

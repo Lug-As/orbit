@@ -73,43 +73,80 @@
 								<p class="bloger__body-text">{{ account.region }}, {{ account.country }}.</p>
 							</div>
 							<div class="bloger__body-button">
-								<button class="bloger__button button-grand-black big">Предложить работу</button>
+								<button
+									class="bloger__button button-grand-black big"
+									:disabled="!verifyed"
+									@click="toggleMessage"
+								>
+									Предложить работу
+								</button>
 								<button class="bloger__button-black button-grand-transparent">Перейти в ток-ток аккаунт</button>
-								<div class="bloger__button-confirmation">
+								<div
+									v-if="!verifyed"
+									class="bloger__button-confirmation"
+								>
 									<picture>
 										<source srcset="../assets/img/Иллюстрация.webp" type="image/webp">
 										<img src="../assets/img/Иллюстрация.png" alt=""></picture>
-									<p class="bloger__button-text">Чтобы делать предложения, подтверди
-										свой почтовый ящик.</p>
+									<p class="bloger__button-text">
+										<template
+											v-if="!user"
+										>
+											Чтобы делать предложения, войди или зарегистрируйся.
+										</template>
+										<template
+											v-else-if="!verifyed"
+										>
+											Чтобы делать предложения, подтверди свой почтовый ящик.
+										</template>
+									</p>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="bloger__massage">
-					<div class="bloger__massage-row">
-						<span class="bloger__massage-close">&times;</span>
-						<div class="bloger__massage-alert">
-							<h2 class="bloger__alert-h2">
-								Все сообщения модерируются. За распространение
-								некорректных предложений, или предложений
-								неподходящих для нашего сервиса мы вправе отключать
-								пользователей. <span class="bloger__alert-span">Будьте корректны!</span>
-							</h2>
+				<transition name="fade">
+					<div
+						v-if="showMessage"
+						class="bloger__massage"
+						@click.self="toggleMessage(false)"
+					>
+						<div class="bloger__massage-row">
+							<span
+								class="bloger__massage-close"
+								@click="toggleMessage(false)"
+							>&times;</span>
+							<div class="bloger__massage-alert">
+								<h2 class="bloger__alert-h2">
+									Все сообщения модерируются. За распространение
+									некорректных предложений, или предложений
+									неподходящих для нашего сервиса мы вправе отключать
+									пользователей. <span class="bloger__alert-span">Будьте корректны!</span>
+								</h2>
+							</div>
+							<form class="bloger__massage-comment" @submit.prevent="sendOffer">
+								<div class="bloger__massage-title">
+									<h2 class="bloger__title-text">Оставь комментарий по поводу задачи</h2>
+								</div>
+								<div class="bloger__comment-text">
+									<textarea
+										v-model.trim="offerText"
+										class="bloger__text-area"
+									></textarea>
+									<span
+										:class="{
+											'red': !this.$v.offerText.maxLength,
+										}"
+									>{{ this.offerText.length }}/{{ this.$v.offerText.$params.maxLength.max }}</span>
+									<p v-if="errorMsg.length" class="red">{{ errorMsg }}</p>
+								</div>
+								<div class="bloger__comment-button">
+									<button class="bloger__button-border">Предложить выполнение задачи</button>
+								</div>
+							</form>
 						</div>
-						<form class="bloger__massage-comment">
-							<div class="bloger__massage-title">
-								<h2 class="bloger__title-text">Оставь комментарий по поводу задачи</h2>
-							</div>
-							<div class="bloger__comment-text">
-								<textarea required class="bloger__text-area" name="" id="" cols="30" rows="10"></textarea>
-							</div>
-							<div class="bloger__comment-button">
-								<button class="bloger__button-border">Предложить выполнение задачи</button>
-							</div>
-						</form>
 					</div>
-				</div>
+				</transition>
 			</template>
 			<h3 v-else>Пусто</h3>
 		</div>
@@ -118,10 +155,17 @@
 
 <script>
 import Preloader from '@/components/Preloader'
+import {required, maxLength} from 'vuelidate/lib/validators'
+import offerService from '@/api/offerService'
 
 export default {
 	name: 'Account',
 	components: {Preloader},
+	data: () => ({
+		showMessage: false,
+		offerText: '',
+		errorMsg: '',
+	}),
 	computed: {
 		account() {
 			return this.$store.getters.currentAccount
@@ -134,6 +178,56 @@ export default {
 		},
 		id() {
 			return this.$route.params.id
+		},
+		verifyed() {
+			if (this.user) {
+				return this.user.verifyed
+			}
+			return null
+		},
+		user() {
+			return this.$store.getters.user
+		},
+	},
+	methods: {
+		toggleMessage(force = null) {
+			if (force !== null) {
+				return this.showMessage = force
+			}
+			this.showMessage = !this.showMessage
+		},
+		sendOffer() {
+			if (this.validate()) {
+				const offer = {
+					text: this.offerText,
+					account_id: this.id,
+				}
+				offerService.sendOffer(offer)
+					.then(response => {
+						console.log(response)
+					})
+			}
+		},
+		validate() {
+			this.$v.$touch()
+			if (this.$v.$invalid) {
+				this.setErrors()
+				return false
+			}
+			return true
+		},
+		setErrors() {
+			if (!this.$v.offerText.required) {
+				this.errorMsg = 'Это поле обязательно для заполнения.'
+			} else if (!this.$v.offerText.maxLength) {
+				this.errorMsg = 'Текст предложения не должен превышать ' + this.$v.offerText.$params.maxLength.max + ' символов.'
+			}
+		},
+	},
+	validations: {
+		offerText: {
+			required,
+			maxLength: maxLength(2000),
 		},
 	},
 	mounted() {
@@ -151,9 +245,31 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .bloger__img img {
 	object-fit: cover;
 	object-position: 50% 25%;
+}
+
+.bloger__massage {
+	&-row {
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+}
+</style>
+
+<style lang="scss">
+.fade-enter-active, .fade-leave-active {
+	transition: opacity .4s;
+}
+
+.fade-enter, .fade-leave-to {
+	opacity: 0;
+}
+
+.red {
+	color: #ff0000;
 }
 </style>
