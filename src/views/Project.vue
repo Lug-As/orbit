@@ -71,67 +71,65 @@
 								<span class="offer__body-price-title-span">{{ project.budget }}₽</span>
 							</div>
 							<div class="offer__body-price-button">
-								<button class="button-grand-black big button__open-massage" disabled>
+								<button
+									class="button-grand-black big button__open-massage"
+									:disabled="!verifyed"
+									@click="callModal"
+								>
 									Предложить выполнение работы
 								</button>
 							</div>
-							<div class="offer__body-price-confirmation bloger__button-confirmation">
+							<div
+								v-if="!verifyed"
+								class="offer__body-price-confirmation bloger__button-confirmation"
+							>
 								<picture>
 									<source srcset="../assets/img/Иллюстрация.webp" type="image/webp">
-									<img src="../assets/img/Иллюстрация.png" alt=""></picture>
-								<p class="bloger__button-text">Чтобы делать предложения, подтверди
-									свой почтовый ящик.</p>
+									<img src="../assets/img/Иллюстрация.png" alt="">
+								</picture>
+								<p class="bloger__button-text">
+									<template
+										v-if="!user"
+									>
+										Чтобы оставлять отклики, войди или зарегистрируйся.
+									</template>
+									<template
+										v-else-if="!verifyed"
+									>
+										Чтобы оставлять отклики, подтверди свой почтовый ящик.
+									</template>
+								</p>
 							</div>
 						</div>
 					</div>
 				</div>
+				<message-modal
+					:open="showModal"
+					:notify="showNotify"
+					@close-modal="showModal = false"
+					@close-notify="showNotify = false"
+					@submit="sendResponse"
+					:notify-text="'Благодарим за отклик!<br> Рекламодатель уже оповещен вашим <br>предложением о работе!'"
+				/>
 			</template>
-			<transition name="fade">
-				<div class="bloger__massage" v-if="showModal">
-					<div class="bloger__massage-row">
-						<span class="bloger__massage-close">&times;</span>
-						<div class="bloger__massage-alert">
-							<h2 class="bloger__alert-h2">
-								Все сообщения модерируются. За распространение
-								некорректных предложений, или предложений
-								неподходящих для нашего сервиса мы вправе отключать
-								пользователей. <span class="bloger__alert-span">Будьте корректны!</span>
-							</h2>
-						</div>
-						<form class="bloger__massage-comment">
-							<div class="bloger__massage-title">
-								<h2 class="bloger__title-text">Оставь комментарий по поводу задачи</h2>
-							</div>
-							<div class="bloger__comment-text">
-								<textarea required class="bloger__text-area"></textarea>
-							</div>
-							<div class="bloger__comment-button">
-								<button class="bloger__button-border">Предложить выполнение задачи</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</transition>
 		</div>
 	</section>
 </template>
 
 <script>
 import Preloader from '@/components/Preloader'
+import MessageModal from '@/components/MessageModal'
 
 export default {
 	name: 'Project',
-	components: {Preloader},
+	components: {MessageModal, Preloader},
 	data: () => ({
 		showModal: false,
-		showThanks: false,
+		showNotify: false,
 		offerText: '',
 		errorMsg: '',
 	}),
 	computed: {
-		/**
-		 * @returns {Project}
-		 */
 		project() {
 			return this.$store.getters.currentProject
 		},
@@ -149,6 +147,18 @@ export default {
 		},
 		user() {
 			return this.$store.getters.user
+		},
+	},
+	methods: {
+		sendResponse(text) {
+			const response = {
+				project_id: this.id,
+				text,
+			}
+			this.showNotify = true
+		},
+		callModal() {
+			this.showModal = true
 		},
 	},
 	mounted() {

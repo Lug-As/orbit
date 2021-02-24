@@ -77,14 +77,17 @@
 								>
 									Предложить работу
 								</button>
-								<button class="bloger__button-black button-grand-transparent">Перейти в ток-ток аккаунт</button>
+								<a :href="reference" class="bloger__button-black button-grand-transparent">
+									Перейти в ток-ток аккаунт
+								</a>
 								<div
 									v-if="!verifyed"
 									class="bloger__button-confirmation"
 								>
 									<picture>
 										<source srcset="../assets/img/Иллюстрация.webp" type="image/webp">
-										<img src="../assets/img/Иллюстрация.png" alt=""></picture>
+										<img src="../assets/img/Иллюстрация.png" alt="">
+									</picture>
 									<p class="bloger__button-text">
 										<template
 											v-if="!user"
@@ -142,13 +145,18 @@ export default {
 		formatGallery() {
 			const out = []
 			if (this.account) {
+				const image_count = this.account.gallery.length + 1
+				const first_title = image_count > 1 ? '1/' + image_count : null
 				out.push({
+					title: first_title,
 					url: this.account.image,
 				})
 				Object.keys(this.account.gallery)
 					.forEach(key => {
 						let item = this.account.gallery[key]
+						let current_count = Number(key) + 2
 						out.push({
+							title: current_count + '/' + image_count,
 							url: item.src,
 						})
 					})

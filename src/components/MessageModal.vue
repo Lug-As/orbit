@@ -126,7 +126,6 @@ export default {
 				this.errorMsg = ''
 				this.$v.$reset()
 				this.closeModal()
-				// this.blinkThanks()
 			}
 		},
 		validate() {
