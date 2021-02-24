@@ -436,7 +436,11 @@ export default {
 			return {}
 		},
 		paramQuery() {
-			return this.$route.query['q']
+			const q = this.$route.query['q']
+			if (q === '') {
+				this.clearQueryParam('q')
+			}
+			return q
 		},
 		queryObject() {
 			const q = this.paramQuery
