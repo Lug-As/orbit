@@ -3,7 +3,6 @@ export const I = {
 	// Проверка на совместимость webp браузером
 	init() {
 		function testWebP(callback) {
-
 			const webP = new Image()
 			webP.onload = webP.onerror = function () {
 				callback(webP.height == 2)
@@ -18,84 +17,5 @@ export const I = {
 				document.querySelector('body').classList.add('no-webp')
 			}
 		})
-
-		const massage = document.querySelector('.bloger__massage'),
-			body = document.querySelector('body'),
-			bloger_btn = document.querySelector('.button__open-massage'),
-			massage_row = document.querySelector('.bloger__massage-row'),
-			close = document.querySelector('.bloger__massage-close'),
-			btn_brd = document.querySelector('.bloger__button-border')
-
-		if (bloger_btn) {
-			bloger_btn.addEventListener('click', event => {
-				if (event.target) {
-					openMenu()
-				}
-			})
-		}
-		if (massage_row) {
-			massage_row.addEventListener('click', event => {
-				event.stopPropagation()
-			})
-		}
-		if (massage) {
-			massage.addEventListener('click', event => {
-				if (event.target) {
-					closeMenu()
-				}
-			})
-		}
-
-		if (btn_brd) {
-			btn_brd.addEventListener('click', event => {
-				let areaText = document.querySelector('.bloger__text-area')
-				if (areaText.value == '') {
-				} else {
-					closeMenu()
-				}
-			})
-		}
-
-		if (close) {
-			close.addEventListener('click', event => {
-				if (event.target) {
-					closeMenu()
-				}
-			})
-		}
-
-		function openMenu() {
-			body.style.overflowY = 'hidden'
-			fadeIn(massage, 'flex')
-		}
-
-		function closeMenu() {
-			body.style.overflowY = 'scroll'
-			fadeOut(massage)
-		}
-
-		function fadeOut(el) {
-			el.style.opacity = 1;
-			(function fade() {
-				if ((el.style.opacity -= .1) < 0) {
-					el.style.display = 'none'
-				} else {
-					requestAnimationFrame(fade)
-				}
-			})()
-		}
-
-		// ** FADE IN FUNCTION **
-		function fadeIn(el, display) {
-			el.style.opacity = 0
-			el.style.display = display || 'block';
-			(function fade() {
-				let val = parseFloat(el.style.opacity)
-				if (!((val += .1) > 1)) {
-					el.style.opacity = val
-					requestAnimationFrame(fade)
-				}
-			})()
-		}
 	},
 }

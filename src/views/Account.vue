@@ -76,7 +76,7 @@
 								<button
 									class="bloger__button button-grand-black big"
 									:disabled="!verifyed"
-									@click="toggleMessage"
+									@click="toggleModal"
 								>
 									Предложить работу
 								</button>
@@ -107,14 +107,14 @@
 				</div>
 				<transition name="fade">
 					<div
-						v-if="showMessage"
+						v-if="showModal"
 						class="bloger__massage"
-						@click.self="toggleMessage(false)"
+						@click.self="toggleModal(false)"
 					>
 						<div class="bloger__massage-row">
 							<span
 								class="bloger__massage-close"
-								@click="toggleMessage(false)"
+								@click="toggleModal(false)"
 							>&times;</span>
 							<div class="bloger__massage-alert">
 								<h2 class="bloger__alert-h2">
@@ -147,6 +147,22 @@
 						</div>
 					</div>
 				</transition>
+				<transition name="fade">
+					<div class="profile__notifications" v-if="showThanks" @click="toggleThanks(false)">
+						<div class="profile__notifications-row">
+							<div class="profile__notifications-img">
+								<picture>
+									<source srcset="../assets/img/notific.webp" type="image/webp">
+									<img src="../assets/img/notific.png" alt=""></picture>
+							</div>
+							<div class="profile__notifications-text">
+								<p class="profile__notifications-text-p">
+									Благодарим за предложение!<br> Блогер уже оповещен вашим <br>личным предложением!
+								</p>
+							</div>
+						</div>
+					</div>
+				</transition>
 			</template>
 			<h3 v-else>Пусто</h3>
 		</div>
@@ -162,7 +178,8 @@ export default {
 	name: 'Account',
 	components: {Preloader},
 	data: () => ({
-		showMessage: false,
+		showModal: false,
+		showThanks: false,
 		offerText: '',
 		errorMsg: '',
 	}),
@@ -190,11 +207,23 @@ export default {
 		},
 	},
 	methods: {
-		toggleMessage(force = null) {
-			if (force !== null) {
-				return this.showMessage = force
+		toggleModal(force = null) {
+			if (typeof force === 'boolean') {
+				return this.showModal = force
 			}
-			this.showMessage = !this.showMessage
+			this.showModal = !this.showModal
+		},
+		toggleThanks(force = null) {
+			if (typeof force === 'boolean') {
+				return this.showThanks = force
+			}
+			this.showThanks = !this.showThanks
+		},
+		blinkThanks() {
+			this.toggleThanks(true)
+			setTimeout(() => {
+				this.toggleThanks(false)
+			}, 3000)
 		},
 		sendOffer() {
 			if (this.validate()) {
@@ -203,8 +232,14 @@ export default {
 					account_id: this.id,
 				}
 				offerService.sendOffer(offer)
-					.then(response => {
-						console.log(response)
+					.then(() => {
+						this.offerText = ''
+						this.$v.$reset()
+						this.toggleModal(false)
+						this.blinkThanks()
+					})
+					.catch(() => {
+						alert('Произошла ошибка отправки формы. Повторите позже.')
 					})
 			}
 		},
@@ -257,6 +292,10 @@ export default {
 		left: 50%;
 		transform: translate(-50%, -50%);
 	}
+}
+
+.profile__notifications {
+	cursor: pointer;
 }
 </style>
 
