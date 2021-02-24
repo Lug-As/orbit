@@ -6,23 +6,20 @@
 				<div class="bloger__row">
 					<div class="bloger__row-img">
 						<div class="bloger__img">
-							<img :src="account.image" :alt="account.title">
+							<img @click="index = 0" :src="account.image" :alt="account.title">
 						</div>
-						<div class="bloger__img-small">
-							<div class="bloger__img-link">
-								<picture>
-									<source srcset="../assets/img/АИ.webp" type="image/webp">
-									<img src="../assets/img/АИ.png" alt=""></picture>
-							</div>
-							<div class="bloger__img-link">
-								<picture>
-									<source srcset="../assets/img/АИ.webp" type="image/webp">
-									<img src="../assets/img/АИ.png" alt=""></picture>
-							</div>
-							<div class="bloger__img-link">
-								<picture>
-									<source srcset="../assets/img/АИ.webp" type="image/webp">
-									<img src="../assets/img/АИ.png" alt=""></picture>
+						<div class="bloger__img-small" v-if="formatGallery.length">
+							<div
+								v-for="i in 3"
+								:key="i"
+								v-if="formatGallery[i]"
+								@click="index = i"
+								class="bloger__img-link"
+							>
+								<img
+									:src="formatGallery[i].url"
+									:alt="account.title"
+								>
 							</div>
 						</div>
 					</div>
@@ -105,6 +102,12 @@
 						</div>
 					</div>
 				</div>
+				<light-gallery
+					:images="formatGallery"
+					:index="index"
+					:disable-scroll="true"
+					@close="index = null"
+				/>
 				<transition name="fade">
 					<div
 						v-if="showModal"
@@ -171,21 +174,39 @@
 
 <script>
 import Preloader from '@/components/Preloader'
+import {LightGallery} from 'vue-light-gallery'
 import {required, maxLength} from 'vuelidate/lib/validators'
 import offerService from '@/api/offerService'
 
 export default {
 	name: 'Account',
-	components: {Preloader},
+	components: {Preloader, LightGallery},
 	data: () => ({
 		showModal: false,
 		showThanks: false,
 		offerText: '',
 		errorMsg: '',
+		index: null,
 	}),
 	computed: {
 		account() {
 			return this.$store.getters.currentAccount
+		},
+		formatGallery() {
+			const out = []
+			if (this.account) {
+				out.push({
+					url: this.account.image,
+				})
+				Object.keys(this.account.gallery)
+					.forEach(key => {
+						let item = this.account.gallery[key]
+						out.push({
+							url: item.src,
+						})
+					})
+			}
+			return out
 		},
 		loading() {
 			return this.$store.getters.loading
@@ -281,7 +302,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.bloger__img img {
+.bloger__img img, .bloger__img-link img {
 	object-fit: cover;
 	object-position: 50% 25%;
 }
