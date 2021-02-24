@@ -11,6 +11,7 @@ import slashedList from './filters/slashedList'
 import {ApiBaseUrl} from './api/info'
 import 'vue-select/dist/vue-select.css'
 import './assets/css/main.css'
+import './assets/css/my.scss'
 
 Vue.config.productionTip = false
 

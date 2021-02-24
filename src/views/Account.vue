@@ -2,7 +2,7 @@
 	<section class="bloger">
 		<div class="container">
 			<preloader v-if="loading"/>
-			<template v-else-if="account">
+			<template v-else-if="(account && Object.keys(account).length !== 0)">
 				<div class="bloger__row">
 					<div class="bloger__row-img">
 						<div class="bloger__img">
@@ -73,7 +73,7 @@
 								<button
 									class="bloger__button button-grand-black big"
 									:disabled="!verifyed"
-									@click="toggleModal"
+									@click="callModal"
 								>
 									Предложить работу
 								</button>
@@ -108,64 +108,13 @@
 					:disable-scroll="true"
 					@close="index = null"
 				/>
-				<transition name="fade">
-					<div
-						v-if="showModal"
-						class="bloger__massage"
-						@click.self="toggleModal(false)"
-					>
-						<div class="bloger__massage-row">
-							<span
-								class="bloger__massage-close"
-								@click="toggleModal(false)"
-							>&times;</span>
-							<div class="bloger__massage-alert">
-								<h2 class="bloger__alert-h2">
-									Все сообщения модерируются. За распространение
-									некорректных предложений, или предложений
-									неподходящих для нашего сервиса мы вправе отключать
-									пользователей. <span class="bloger__alert-span">Будьте корректны!</span>
-								</h2>
-							</div>
-							<form class="bloger__massage-comment" @submit.prevent="sendOffer">
-								<div class="bloger__massage-title">
-									<h2 class="bloger__title-text">Оставь комментарий по поводу задачи</h2>
-								</div>
-								<div class="bloger__comment-text">
-									<textarea
-										v-model.trim="offerText"
-										class="bloger__text-area"
-									></textarea>
-									<span
-										:class="{
-											'red': !this.$v.offerText.maxLength,
-										}"
-									>{{ this.offerText.length }}/{{ this.$v.offerText.$params.maxLength.max }}</span>
-									<p v-if="errorMsg.length" class="red">{{ errorMsg }}</p>
-								</div>
-								<div class="bloger__comment-button">
-									<button class="bloger__button-border">Предложить выполнение задачи</button>
-								</div>
-							</form>
-						</div>
-					</div>
-				</transition>
-				<transition name="fade">
-					<div class="profile__notifications" v-if="showThanks" @click="toggleThanks(false)">
-						<div class="profile__notifications-row">
-							<div class="profile__notifications-img">
-								<picture>
-									<source srcset="../assets/img/notific.webp" type="image/webp">
-									<img src="../assets/img/notific.png" alt=""></picture>
-							</div>
-							<div class="profile__notifications-text">
-								<p class="profile__notifications-text-p">
-									Благодарим за предложение!<br> Блогер уже оповещен вашим <br>личным предложением!
-								</p>
-							</div>
-						</div>
-					</div>
-				</transition>
+				<message-modal
+					:open="showModal"
+					:notify="showNotify"
+					@close-modal="showModal = false"
+					@close-notify="showNotify = false"
+					@submit="sendOffer"
+				/>
 			</template>
 			<h3 v-else>Пусто</h3>
 		</div>
@@ -175,17 +124,15 @@
 <script>
 import Preloader from '@/components/Preloader'
 import {LightGallery} from 'vue-light-gallery'
-import {required, maxLength} from 'vuelidate/lib/validators'
 import offerService from '@/api/offerService'
+import MessageModal from '@/components/MessageModal'
 
 export default {
 	name: 'Account',
-	components: {Preloader, LightGallery},
+	components: {MessageModal, Preloader, LightGallery},
 	data: () => ({
 		showModal: false,
-		showThanks: false,
-		offerText: '',
-		errorMsg: '',
+		showNotify: false,
 		index: null,
 	}),
 	computed: {
@@ -211,9 +158,6 @@ export default {
 		loading() {
 			return this.$store.getters.loading
 		},
-		reference() {
-			return 'https://www.tiktok.com/' + this.account.title
-		},
 		id() {
 			return this.$route.params.id
 		},
@@ -226,64 +170,26 @@ export default {
 		user() {
 			return this.$store.getters.user
 		},
+		reference() {
+			return 'https://www.tiktok.com/' + this.account.title
+		},
 	},
 	methods: {
-		toggleModal(force = null) {
-			if (typeof force === 'boolean') {
-				return this.showModal = force
+		sendOffer(text) {
+			const offer = {
+				account_id: this.id,
+				text,
 			}
-			this.showModal = !this.showModal
+			offerService.sendOffer(offer)
+				.then(() => {
+					this.showNotify = true
+				})
+				.catch(() => {
+					alert('Произошла ошибка отправки формы. Повторите позже.')
+				})
 		},
-		toggleThanks(force = null) {
-			if (typeof force === 'boolean') {
-				return this.showThanks = force
-			}
-			this.showThanks = !this.showThanks
-		},
-		blinkThanks() {
-			this.toggleThanks(true)
-			setTimeout(() => {
-				this.toggleThanks(false)
-			}, 3000)
-		},
-		sendOffer() {
-			if (this.validate()) {
-				const offer = {
-					text: this.offerText,
-					account_id: this.id,
-				}
-				offerService.sendOffer(offer)
-					.then(() => {
-						this.offerText = ''
-						this.$v.$reset()
-						this.toggleModal(false)
-						this.blinkThanks()
-					})
-					.catch(() => {
-						alert('Произошла ошибка отправки формы. Повторите позже.')
-					})
-			}
-		},
-		validate() {
-			this.$v.$touch()
-			if (this.$v.$invalid) {
-				this.setErrors()
-				return false
-			}
-			return true
-		},
-		setErrors() {
-			if (!this.$v.offerText.required) {
-				this.errorMsg = 'Это поле обязательно для заполнения.'
-			} else if (!this.$v.offerText.maxLength) {
-				this.errorMsg = 'Текст предложения не должен превышать ' + this.$v.offerText.$params.maxLength.max + ' символов.'
-			}
-		},
-	},
-	validations: {
-		offerText: {
-			required,
-			maxLength: maxLength(2000),
+		callModal() {
+			this.showModal = true
 		},
 	},
 	mounted() {
@@ -305,31 +211,5 @@ export default {
 .bloger__img img, .bloger__img-link img {
 	object-fit: cover;
 	object-position: 50% 25%;
-}
-
-.bloger__massage {
-	&-row {
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-	}
-}
-
-.profile__notifications {
-	cursor: pointer;
-}
-</style>
-
-<style lang="scss">
-.fade-enter-active, .fade-leave-active {
-	transition: opacity .4s;
-}
-
-.fade-enter, .fade-leave-to {
-	opacity: 0;
-}
-
-.red {
-	color: #ff0000;
 }
 </style>

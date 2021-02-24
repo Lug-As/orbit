@@ -1,0 +1,23 @@
+.bloger__massage {
+	&-row {
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+}
+
+.fade-enter-active, .fade-leave-active {
+	transition: opacity .4s;
+}
+
+.fade-enter, .fade-leave-to {
+	opacity: 0;
+}
+
+.red {
+	color: #ff0000;
+}
+
+.profile__notifications {
+	cursor: pointer;
+}
