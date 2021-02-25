@@ -20,6 +20,7 @@
 						</h2>
 					</div>
 					<form class="bloger__massage-comment" @submit.prevent="handleForm">
+						<slot></slot>
 						<div class="bloger__massage-title">
 							<h2 class="bloger__title-text">Оставь комментарий по поводу задачи</h2>
 						</div>

@@ -65,22 +65,22 @@
 					<div class="offer__body-price">
 						<div class="offer__body-price-row">
 							<div class="offer__body-price-title">
-								<h2 class="offer__body-price-title-text">
-									Бюджет:
-								</h2>
-								<span class="offer__body-price-title-span">{{ project.budget }}₽</span>
+								<h2 class="offer__body-price-title-text">Бюджет:</h2>
+								<span class="offer__body-price-title-span">
+									{{ project.budget.toLocaleString() }}₽
+								</span>
 							</div>
 							<div class="offer__body-price-button">
 								<button
 									class="button-grand-black big button__open-massage"
-									:disabled="!verifyed"
+									:disabled="userAccounts === null || responses.length === userAccounts.length"
 									@click="callModal"
 								>
 									Предложить выполнение работы
 								</button>
 							</div>
 							<div
-								v-if="!verifyed"
+								v-if="userAccounts === null"
 								class="offer__body-price-confirmation bloger__button-confirmation"
 							>
 								<picture>
@@ -88,19 +88,20 @@
 									<img src="../assets/img/Иллюстрация.png" alt="">
 								</picture>
 								<p class="bloger__button-text">
-									<template
-										v-if="!user"
-									>
-										Чтобы оставлять отклики, войди или зарегистрируйся.
+									Чтобы оставлять отклики,
+									<template v-if="!user">
+										войди или зарегистрируйся.
 									</template>
-									<template
-										v-else-if="!verifyed"
-									>
-										Чтобы оставлять отклики, подтверди свой почтовый ящик.
+									<template v-else-if="!verifyed">
+										подтверди свой почтовый ящик.
+									</template>
+									<template v-else-if="userAccounts === null">
+										необходимо завести Тик-Ток аккаунт.
 									</template>
 								</p>
 							</div>
 						</div>
+						<p v-if="responses.length" v-html="responseString"></p>
 					</div>
 				</div>
 				<message-modal
@@ -110,7 +111,37 @@
 					@close-notify="showNotify = false"
 					@submit="sendResponse"
 					:notify-text="'Благодарим за отклик!<br> Рекламодатель уже оповещен вашим <br>предложением о работе!'"
-				/>
+				>
+					<p
+						v-if="userAccounts !== null && responses.length !== userAccounts.length"
+						class="response_one_account_text"
+					>
+						Вы делаете отклик на проект с Тик-Ток аккаунта
+						<strong v-if="noResponseUserAccounts.length === 1">
+							{{ noResponseUserAccounts[0].title }}
+						</strong>
+						<v-select
+							v-else
+							label="title"
+							v-model="account_id"
+							:options="noResponseUserAccounts"
+							:reduce="opt => opt.id"
+							:style="{
+								display: 'inline-block',
+								minWidth: '190px'
+							}"
+						>
+							<template #search="{attributes, events}">
+								<input
+									class="vs__search"
+									:required="account_id === null"
+									v-bind="attributes"
+									v-on="events"
+								/>
+							</template>
+						</v-select>
+					</p>
+				</message-modal>
 			</template>
 		</div>
 	</section>
@@ -130,13 +161,30 @@ export default {
 		offerText: '',
 		errorMsg: '',
 		account_id: null,
+		responses: [],
 	}),
 	computed: {
 		project() {
 			return this.$store.getters.currentProject
 		},
 		userAccounts() {
-			return this.$store.getters.userAccounts
+			const userAccounts = this.$store.getters.userAccounts
+			if (userAccounts) {
+				this.loadResponses(userAccounts)
+				if (userAccounts.length === 1) {
+					this.account_id = userAccounts[0].id
+				}
+			}
+			return userAccounts
+		},
+		noResponseUserAccounts() {
+			const result = this.userAccounts.filter(ac => {
+				return !this.responses.includes(ac.id)
+			})
+			if (result && result.length === 1) {
+				this.account_id = result[0].id
+			}
+			return result
 		},
 		loading() {
 			return this.$store.getters.projectLoading
@@ -153,6 +201,19 @@ export default {
 		user() {
 			return this.$store.getters.user
 		},
+		responseString() {
+			let str = 'Вы уже откликнулись на проект с '
+			if (this.responses.length === 1) {
+				str += 'аккаунта <strong>' + this.userAccounts.find(a => a.id === this.responses[0]).title + '</strong>'
+			} else {
+				str += 'аккаунтов: '
+				const parts = this.responses.map(response => {
+					return '<strong>' + this.userAccounts.find(a => a.id === response).title + '</strong>'
+				})
+				str += parts.join(', ')
+			}
+			return str
+		},
 	},
 	methods: {
 		sendResponse(text) {
@@ -161,8 +222,10 @@ export default {
 				account_id: this.account_id,
 				text,
 			}
+			this.account_id = null
 			responseService.sendResponse(response)
 				.then(() => {
+					this.responses.push(response.account_id)
 					this.showNotify = true
 				})
 				.catch(() => {
@@ -171,6 +234,16 @@ export default {
 		},
 		callModal() {
 			this.showModal = true
+		},
+		loadResponses(userAccounts) {
+			userAccounts.forEach(account => {
+				responseService.getProjectAccountResponse(this.id, account.id)
+					.then(response => {
+						if (typeof response.data.data === 'object' && Object.keys(response.data.data).length > 0) {
+							this.responses.push(account.id)
+						}
+					})
+			})
 		},
 	},
 	mounted() {
@@ -189,5 +262,7 @@ export default {
 </script>
 
 <style scoped>
-
+.response_one_account_text {
+	color: #061a62;
+}
 </style>

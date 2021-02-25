@@ -46,17 +46,22 @@ export default {
 	},
 	actions: {
 		async loadUser({commit}) {
-			const token = tokenService.getToken()
+			let token = tokenService.getToken()
 			if (token !== null) {
+				let set = true
 				const response = await userService.fetchUser(token)
 					.catch(err => {
+						set = false
 						if (err.response && err.response.status && err.response.status === 401) {
 							tokenService.clearToken()
+							token = null
 						} else {
 							throw err
 						}
 					})
-				commit('setUser', User.createFromApiData(response.data.data))
+				if (set) {
+					commit('setUser', User.createFromApiData(response.data.data))
+				}
 			}
 			return token
 		},

@@ -91,7 +91,6 @@ export default {
 				const result = response.data.data
 				commit('setCurrentProject', Project.createFromApiData(result))
 			} catch (e) {
-				console.error(e)
 				throw e
 			} finally {
 				commit('stopLoading')

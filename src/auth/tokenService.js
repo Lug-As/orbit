@@ -3,7 +3,7 @@ export default {
 	 * @returns {String|null} Token
 	 * */
 	getToken() {
-		return String(localStorage.getItem(this.tokenName)).trim()
+		return localStorage.getItem(this.tokenName)
 	},
 
 	/**
