@@ -3,14 +3,14 @@ export default {
 	 * @returns {String|null} Token
 	 * */
 	getToken() {
-		return localStorage.getItem(this.tokenName)
+		return String(localStorage.getItem(this.tokenName)).trim()
 	},
 
 	/**
 	 * @param {String} token
 	 * */
 	setToken(token) {
-		localStorage.setItem(this.tokenName, token)
+		localStorage.setItem(this.tokenName, String(token).trim())
 	},
 
 	clearToken() {

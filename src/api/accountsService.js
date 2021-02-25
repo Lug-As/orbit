@@ -19,5 +19,8 @@ export default {
 			},
 		})
 	},
+	async fetchUserAccounts() {
+		return axios.get(AccountsPath + '/own')
+	},
 }
 

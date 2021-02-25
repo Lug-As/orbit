@@ -119,6 +119,7 @@
 <script>
 import Preloader from '@/components/Preloader'
 import MessageModal from '@/components/MessageModal'
+import responseService from '@/api/responseService'
 
 export default {
 	name: 'Project',
@@ -128,10 +129,14 @@ export default {
 		showNotify: false,
 		offerText: '',
 		errorMsg: '',
+		account_id: null,
 	}),
 	computed: {
 		project() {
 			return this.$store.getters.currentProject
+		},
+		userAccounts() {
+			return this.$store.getters.userAccounts
 		},
 		loading() {
 			return this.$store.getters.projectLoading
@@ -153,9 +158,16 @@ export default {
 		sendResponse(text) {
 			const response = {
 				project_id: this.id,
+				account_id: this.account_id,
 				text,
 			}
-			this.showNotify = true
+			responseService.sendResponse(response)
+				.then(() => {
+					this.showNotify = true
+				})
+				.catch(() => {
+					alert('Произошла ошибка отправки формы. Повторите позже.')
+				})
 		},
 		callModal() {
 			this.showModal = true

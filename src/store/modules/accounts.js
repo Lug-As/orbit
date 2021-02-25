@@ -37,7 +37,7 @@ class Account {
 	static createFromApiData(apiData) {
 		return new this(
 			apiData.id, apiData.title, apiData.image, apiData.followers, apiData.likes, apiData.ad_types, apiData.topics,
-			apiData.user.name,apiData.about, apiData.ages, apiData.gallery, apiData.region.name,
+			apiData.user.name, apiData.about, apiData.ages, apiData.gallery, apiData.region.name,
 			apiData.region.country.name,
 		)
 	}
@@ -55,11 +55,15 @@ export default {
 		accounts: [],
 		accountsPagination: {},
 		currentAccount: {},
+		userAccounts: null,
 		loading: true,
 	},
 	getters: {
 		accounts(state) {
 			return state.accounts
+		},
+		userAccounts(state) {
+			return state.userAccounts
 		},
 		accountsPagination(state) {
 			return state.accountsPagination
@@ -84,6 +88,9 @@ export default {
 		setAccounts(state, payload) {
 			state.accounts = payload
 		},
+		setUserAccounts(state, payload) {
+			state.userAccounts = payload
+		},
 		startLoading(state) {
 			state.loading = true
 		},
@@ -104,7 +111,7 @@ export default {
 				commit('stopLoading')
 			}
 		},
-		async loadAccounts({commit, state}, payload = {
+		async loadAccounts({commit}, payload = {
 			page: 1,
 			params: {},
 		}) {
@@ -119,6 +126,26 @@ export default {
 					commit('setAccountsPagination', result)
 					commit('setAccounts', accountsList)
 				}
+			} catch (e) {
+				throw e
+			} finally {
+				commit('stopLoading')
+			}
+		},
+		async loadUserAccounts({commit, getters}) {
+			commit('startLoading')
+			try {
+				const response = await accountsService.fetchUserAccounts(),
+					result = response.data
+				const accountsList = result.data.map(item => {
+					return Account.createFromShortApiData({
+						...item,
+						user: {
+							name: getters.user.name,
+						},
+					})
+				})
+				commit('setUserAccounts', accountsList)
 			} catch (e) {
 				throw e
 			} finally {
