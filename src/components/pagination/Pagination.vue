@@ -19,7 +19,7 @@
 
 			<li class="pagination-item prev-nav" :class="{'disabled': !computed.prevPageUrl}"
 				 v-if="computed.prevPageUrl || showDisabled">
-				<a class="pagination-item-link" href="#" aria-label="Previous" :tabindex="!computed.prevPageUrl && -1"
+				<a class="pagination-item-link" :href="computed.prevPageUrl" aria-label="Previous" :tabindex="!computed.prevPageUrl && -1"
 					v-on="prevButtonEvents">
 					<slot name="prev-nav">
 						<span class="pagination-item-arrow">&lt;</span>
@@ -29,14 +29,14 @@
 
 			<li class="pagination-item page-nav" v-for="(page, key) in computed.pageRange" :key="key"
 				 :class="{ 'active': page === computed.currentPage, 'disabled': (page === '...') }">
-				<a class="pagination-item-link" href="#" v-on="pageButtonEvents(page)">
+				<a class="pagination-item-link" v-on="pageButtonEvents(page)">
 					{{ page }}
 				</a>
 			</li>
 
 			<li class="pagination-item next-nav" :class="{'disabled': !computed.nextPageUrl}"
 				 v-if="computed.nextPageUrl || showDisabled">
-				<a class="pagination-item-link" href="#" aria-label="Next" :tabindex="!computed.nextPageUrl && -1"
+				<a class="pagination-item-link" :href="computed.nextPageUrl" aria-label="Next" :tabindex="!computed.nextPageUrl && -1"
 					v-on="nextButtonEvents">
 					<slot name="next-nav">
 						<span class="pagination-item-arrow">&gt;</span>
@@ -140,6 +140,7 @@ $link_color: #161616;
 		&.disabled {
 			color: #BEBEBE;
 			cursor: default;
+			margin: 0;
 		}
 
 		&.prev-nav {
@@ -151,9 +152,16 @@ $link_color: #161616;
 		}
 
 		&.prev-nav, &.next-nav {
+			a {
+				width: 100%;
+				height: 100%;
+				display: inline-block;
+			}
+
 			@media (max-width: 999px) {
+				$round_size: 49px;
+
 				font-size: 16px;
-				$round_size: 52px;
 				height: $round_size;
 				width: $round_size;
 				background-color: #0FA4F2;

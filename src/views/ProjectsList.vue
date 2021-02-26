@@ -319,8 +319,8 @@ export default {
 	methods: {
 		changePage(page = 1) {
 			if (page !== this.page) {
-				this.reloadPage({page})
 				this.scrollToTop()
+				this.reloadPage({page})
 			}
 		},
 		clearFilters() {
