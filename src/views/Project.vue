@@ -27,9 +27,7 @@
 						</div>
 						<div class="offer__body-item" v-if="project.followers_from || project.followers_to">
 							<div class="offer__body-item-title">
-								<h2 class="offer__body-item-title-text">
-									Желаемая аудитория:
-								</h2>
+								<h2 class="offer__body-item-title-text">Желаемая аудитория:</h2>
 								<p class="offer__body-item-text">
 									<template v-if="project.followers_from">
 										от {{ project.followers_from }}
@@ -43,19 +41,15 @@
 						</div>
 						<div class="offer__body-item" v-if="project.region">
 							<div class="offer__body-item-title">
-								<h2 class="offer__body-item-title-text">
-									Регион:
-								</h2>
+								<h2 class="offer__body-item-title-text">Регион:</h2>
 								<p class="offer__body-item-text">
 									{{ project.region }}, {{ project.country }}.
 								</p>
 							</div>
 						</div>
-						<div class="offer__body-item">
+						<div class="offer__body-item" v-if="project.ad_types && project.ad_types.length">
 							<div class="offer__body-item-title">
-								<h2 class="offer__body-item-title-text">
-									Тип рекламы:
-								</h2>
+								<h2 class="offer__body-item-title-text">Тип рекламы:</h2>
 								<p class="offer__body-item-text">
 									{{ project.ad_types | slashedList }}
 								</p>
@@ -158,8 +152,6 @@ export default {
 	data: () => ({
 		showModal: false,
 		showNotify: false,
-		offerText: '',
-		errorMsg: '',
 		account_id: null,
 		responses: [],
 		responsesLoading: false,
@@ -180,13 +172,16 @@ export default {
 			return null
 		},
 		noResponseUserAccounts() {
-			const result = this.userAccounts.filter(ac => {
-				return !this.responses.includes(ac.id)
-			})
-			if (result && result.length === 1) {
-				this.account_id = result[0].id
+			if (this.userAccounts) {
+				const result = this.userAccounts.filter(ac => {
+					return !this.responses.includes(ac.id)
+				})
+				if (result && result.length === 1) {
+					this.account_id = result[0].id
+				}
+				return result
 			}
-			return result
+			return []
 		},
 		loading() {
 			return this.$store.getters.projectLoading
@@ -204,17 +199,20 @@ export default {
 			return this.$store.getters.user
 		},
 		responseString() {
-			let str = 'Вы уже откликнулись на проект с '
-			if (this.responses.length === 1) {
-				str += 'аккаунта <strong>' + this.userAccounts.find(a => a.id === this.responses[0]).title + '</strong>'
-			} else {
-				str += 'аккаунтов: '
-				const parts = this.responses.map(response => {
-					return '<strong>' + this.userAccounts.find(a => a.id === response).title + '</strong>'
-				})
-				str += parts.join(', ')
+			if (this.responses && this.responses.length) {
+				let str = 'Вы уже откликнулись на проект с '
+				if (this.responses.length === 1) {
+					str += 'аккаунта <strong>' + this.userAccounts.find(a => a.id === this.responses[0]).title + '</strong>'
+				} else {
+					str += 'аккаунтов: '
+					const parts = this.responses.map(response => {
+						return '<strong>' + this.userAccounts.find(a => a.id === response).title + '</strong>'
+					})
+					str += parts.join(', ')
+				}
+				return str
 			}
-			return str
+			return null
 		},
 	},
 	methods: {

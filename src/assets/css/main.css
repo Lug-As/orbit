@@ -1775,7 +1775,7 @@ template {
 
 .offers__proposal {
 	margin-left: 20px;
-	width: 80%;
+	width: 72%;
 }
 
 .offers__proposal-title {
@@ -4234,7 +4234,7 @@ button:disabled {
 	}
 
 	.offers__proposal-item-button-row {
-		border-top: 1px solid #bebebe;
+		/*border-top: 1px solid #bebebe;*/
 		display: -webkit-box;
 		display: -ms-flexbox;
 		display: flex;
@@ -4260,7 +4260,9 @@ button:disabled {
 	}
 
 	.offers__proposal-info-text {
+		width: 100%;
 		display: block;
+		border-bottom: 1px solid #bebebe;
 	}
 
 	.offers__info-text,

@@ -16,7 +16,9 @@
 								@click.prevent="clearFilters"
 								class="reset-filters-link"
 								href="#"
-							>Сбросить все</a>
+							>
+								Сбросить все
+							</a>
 						</div>
 						<div class="main__filters-row">
 							<div class="main__body-filters">
@@ -275,7 +277,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="accounts-pagination">
+							<div class="objects-pagination">
 								<pagination
 									:data="accountsPagination"
 									:limit="2"
@@ -656,79 +658,6 @@ export default {
 			object-fit: cover;
 			object-position: 50% 25%;
 		}
-	}
-
-	&__body-details {
-		overflow: inherit;
-	}
-}
-
-.empty-result-text {
-	margin: 50px 0;
-	text-align: center;
-}
-
-.reset-filters-link {
-	margin-left: 15px;
-	line-height: 30px;
-	font-size: 14px;
-	transition: color .2s;
-
-	&:hover {
-		color: lighten(#007bff, 17);
-	}
-}
-</style>
-
-<style lang="scss">
-.main {
-	&__vue-select {
-		& .vs__search::placeholder,
-		& .vs__dropdown-toggle,
-		& .vs__dropdown-menu {
-			font-size: 14px;
-		}
-
-		& .vs__search::placeholder,
-		& .vs__dropdown-toggle {
-			border: 1px solid #061a62;
-			border-radius: 15px;
-			padding: 2px 5px 6px;
-		}
-
-		& .vs__dropdown-option {
-			padding-left: 15px;
-		}
-
-		& .vs__dropdown-option--selected {
-			background-color: lighten(#5897fb, 30);
-			color: inherit;
-			cursor: default;
-		}
-
-		&--region {
-			& .vs__search::placeholder,
-			& .vs__dropdown-toggle,
-			& .vs__dropdown-menu {
-				font-size: 13px;
-			}
-
-			& .vs__dropdown-option--disabled {
-				background: #ededed;
-				color: black;
-				font-family: "Montserrat-Bold", sans-serif;
-				font-size: 14.5px;
-			}
-
-			& .vs__dropdown-option {
-				padding-left: 12px;
-			}
-		}
-	}
-
-	&__sort-vue-select {
-		margin-left: 15px;
-		min-width: 300px;
 	}
 }
 </style>

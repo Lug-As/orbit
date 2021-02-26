@@ -8,6 +8,7 @@ import App from './App.vue'
 import PaginationCmp from './components/pagination/Pagination'
 import roundNumber from './filters/roundNumber'
 import slashedList from './filters/slashedList'
+import cutText from './filters/cutText'
 import {ApiBaseUrl} from './api/info'
 import 'vue-select/dist/vue-select.css'
 import './assets/css/main.css'
@@ -19,6 +20,7 @@ Vue.use(Vuelidate)
 Vue.component('v-select', vSelect)
 Vue.component('pagination', PaginationCmp)
 Vue.filter('round', roundNumber)
+Vue.filter('cut', cutText)
 Vue.filter('slashedList', slashedList)
 
 axios.defaults.baseURL = ApiBaseUrl

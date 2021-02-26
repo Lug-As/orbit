@@ -11,9 +11,11 @@ class Project {
 	ad_types
 	followers_from
 	followers_to
+	responses_count
 
 	constructor(
-		id, name, text, budget, username, region, country, followers_from, followers_to, ad_types = null,
+		id, name, text, budget, username, region, country, followers_from, followers_to,
+		responses_count = null, ad_types = null,
 	) {
 		this.id = id
 		this.name = name
@@ -25,19 +27,21 @@ class Project {
 		this.followers_from = followers_from
 		this.followers_to = followers_to
 		this.ad_types = ad_types
+		this.responses_count = responses_count
 	}
 
 	static createFromApiData(apiData) {
 		return new this(
 			apiData.id, apiData.name, apiData.text, apiData.budget, apiData.user.name, apiData.region?.name,
-			apiData.region?.country.name, apiData.followers_from, apiData.followers_to, apiData.ad_types,
+			apiData.region?.country.name, apiData.followers_from, apiData.followers_to,
+			apiData.responses_count, apiData.ad_types,
 		)
 	}
 
 	static createFromShortApiData(apiData) {
 		return new this(
 			apiData.id, apiData.name, apiData.text, apiData.budget, apiData.user.name, apiData.region?.name,
-			apiData.region?.country.name, apiData.followers_from, apiData.followers_to,
+			apiData.region?.country.name, apiData.followers_from, apiData.followers_to, apiData.responses_count,
 		)
 	}
 }
@@ -76,16 +80,16 @@ export default {
 		setProjects(state, payload) {
 			state.projects = payload
 		},
-		startLoading(state) {
+		startProjectLoading(state) {
 			state.projectLoading = true
 		},
-		stopLoading(state) {
+		stopProjectLoading(state) {
 			state.projectLoading = false
 		},
 	},
 	actions: {
 		async loadProject({commit}, id) {
-			commit('startLoading')
+			commit('startProjectLoading')
 			try {
 				const response = await projectsService.fetchProject(id)
 				const result = response.data.data
@@ -93,14 +97,14 @@ export default {
 			} catch (e) {
 				throw e
 			} finally {
-				commit('stopLoading')
+				commit('stopProjectLoading')
 			}
 		},
 		async loadProjects({commit, state}, payload = {
 			page: 1,
 			params: {},
 		}) {
-			commit('startLoading')
+			commit('startProjectLoading')
 			try {
 				const response = await projectsService.fetchProjects(payload.page, payload.params),
 					result = response.data
@@ -114,7 +118,7 @@ export default {
 			} catch (e) {
 				throw e
 			} finally {
-				commit('stopLoading')
+				commit('stopProjectLoading')
 			}
 		},
 	},
