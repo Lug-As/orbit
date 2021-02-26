@@ -73,7 +73,7 @@
 							<div class="offer__body-price-button">
 								<button
 									class="button-grand-black big button__open-massage"
-									:disabled="userAccounts === null || responses.length === userAccounts.length"
+									:disabled="userAccounts === null || (responses.length === userAccounts.length) || responsesLoading"
 									@click="callModal"
 								>
 									Предложить выполнение работы
@@ -162,6 +162,7 @@ export default {
 		errorMsg: '',
 		account_id: null,
 		responses: [],
+		responsesLoading: false,
 	}),
 	computed: {
 		project() {
@@ -169,13 +170,14 @@ export default {
 		},
 		userAccounts() {
 			const userAccounts = this.$store.getters.userAccounts
-			if (userAccounts) {
+			if (userAccounts && userAccounts.length) {
 				this.loadResponses(userAccounts)
 				if (userAccounts.length === 1) {
 					this.account_id = userAccounts[0].id
 				}
+				return userAccounts
 			}
-			return userAccounts
+			return null
 		},
 		noResponseUserAccounts() {
 			const result = this.userAccounts.filter(ac => {
@@ -236,11 +238,19 @@ export default {
 			this.showModal = true
 		},
 		loadResponses(userAccounts) {
+			this.responsesLoading = true
+			let idx = 0
 			userAccounts.forEach(account => {
 				responseService.getProjectAccountResponse(this.id, account.id)
 					.then(response => {
 						if (typeof response.data.data === 'object' && Object.keys(response.data.data).length > 0) {
 							this.responses.push(account.id)
+						}
+					})
+					.finally(() => {
+						idx++
+						if (idx === userAccounts.length) {
+							this.responsesLoading = false
 						}
 					})
 			})
