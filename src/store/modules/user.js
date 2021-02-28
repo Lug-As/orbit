@@ -27,10 +27,14 @@ class User {
 export default {
 	state: {
 		user: null,
+		userLoading: false,
 	},
 	getters: {
 		user(state) {
 			return state.user
+		},
+		userLoading(state) {
+			return state.userLoading
 		},
 		authCheck(state) {
 			return state.user !== null
@@ -43,11 +47,18 @@ export default {
 		setUser(state, payload) {
 			state.user = payload
 		},
+		startUserLoading(state) {
+			state.userLoading = true
+		},
+		stopUserLoading(state) {
+			state.userLoading = false
+		},
 	},
 	actions: {
 		async loadUser({commit}) {
 			let token = tokenService.getToken()
 			if (token !== null) {
+				commit('startUserLoading')
 				let set = true
 				const response = await userService.fetchUser(token)
 					.catch(err => {
@@ -59,11 +70,22 @@ export default {
 							throw err
 						}
 					})
+					.finally(() => {
+						commit('stopUserLoading')
+					})
 				if (set) {
 					commit('setUser', User.createFromApiData(response.data.data))
 				}
 			}
 			return token
+		},
+		async saveUserInfo({commit}, payload = {
+			type, value,
+		}) {
+			userService.putUserInfo(payload.type, payload.value)
+				.then(res => {
+					console.log(res)
+				})
 		},
 	},
 }

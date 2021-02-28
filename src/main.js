@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import Vuelidate from 'vuelidate'
+import vClickOutside from 'v-click-outside'
 import vSelect from 'vue-select'
 import router from './router'
 import store from './store'
@@ -17,6 +18,7 @@ import './assets/css/my.scss'
 Vue.config.productionTip = false
 
 Vue.use(Vuelidate)
+Vue.use(vClickOutside)
 Vue.component('v-select', vSelect)
 Vue.component('pagination', PaginationCmp)
 Vue.filter('round', roundNumber)

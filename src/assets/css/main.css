@@ -2331,7 +2331,7 @@ template {
 }
 
 .profile__information-item-data-value {
-	display: none;
+	/*display: none;*/
 }
 
 .profile__information-item-data-input {
