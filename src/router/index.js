@@ -25,6 +25,32 @@ const routes = [
 		component: () => import('../views/ProjectsList'),
 	},
 	{
+		path: '/profile',
+		children: [
+			{
+				path: 'notices',
+				name: 'ProfileNotices',
+				component: () => import('../views/ProfileNotices'),
+			},
+			{
+				path: 'accounts',
+				name: 'ProfileAccounts',
+				component: () => import('../views/ProfileAccounts'),
+			},
+			{
+				path: 'projects',
+				name: 'ProfileProjects',
+				component: () => import('../views/ProfileProjects'),
+			},
+			{
+				path: '',
+				name: 'Profile',
+				component: () => import('../views/ProfileInfo'),
+			},
+		],
+		component: () => import('../views/Profile'),
+	},
+	{
 		path: '*',
 		name: '404',
 		component: () => import('../views/NotFound'),
