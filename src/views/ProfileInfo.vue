@@ -16,21 +16,25 @@
 					<info-item
 						title="Имя"
 						:value="user.name"
+						:max="150"
 						@change="saveInfo('name', $event)"
 					/>
 					<info-item
 						title="Номер телефона"
 						:value="user.phone"
+						:phone="true"
 						@change="saveInfo('phone', $event)"
 					/>
 					<info-item
 						title="Эл. почта"
 						:value="user.email"
+						:email="true"
 						@change="saveInfo('email', $event)"
 					/>
 					<info-item
 						title="Телеграм"
 						:value="'lug_as'"
+						:max="32"
 					/>
 				</div>
 			</div>

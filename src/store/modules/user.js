@@ -83,9 +83,6 @@ export default {
 			type, value,
 		}) {
 			userService.putUserInfo(payload.type, payload.value)
-				.then(res => {
-					console.log(res)
-				})
 		},
 	},
 }

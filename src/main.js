@@ -10,6 +10,8 @@ import PaginationCmp from './components/pagination/Pagination'
 import roundNumber from './filters/roundNumber'
 import slashedList from './filters/slashedList'
 import cutText from './filters/cutText'
+import phoneNumber from './filters/phoneNumber'
+import inputMask from './directives/inputMask'
 import {ApiBaseUrl} from './api/info'
 import './assets/css/main.css'
 import 'vue-select/dist/vue-select.css'
@@ -21,7 +23,9 @@ Vue.use(Vuelidate)
 Vue.use(vClickOutside)
 Vue.component('v-select', vSelect)
 Vue.component('pagination', PaginationCmp)
+Vue.directive('mask', inputMask)
 Vue.filter('round', roundNumber)
+Vue.filter('phone', phoneNumber)
 Vue.filter('cut', cutText)
 Vue.filter('slashedList', slashedList)
 
