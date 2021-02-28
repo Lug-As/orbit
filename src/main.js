@@ -10,8 +10,8 @@ import roundNumber from './filters/roundNumber'
 import slashedList from './filters/slashedList'
 import cutText from './filters/cutText'
 import {ApiBaseUrl} from './api/info'
-import 'vue-select/dist/vue-select.css'
 import './assets/css/main.css'
+import 'vue-select/dist/vue-select.css'
 import './assets/css/my.scss'
 
 Vue.config.productionTip = false

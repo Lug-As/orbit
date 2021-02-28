@@ -108,7 +108,7 @@
 											<source srcset="../assets/img/filter.webp" type="image/webp">
 											<img src="../assets/img/filter.png" alt=""></picture>
 									</div>
-									<div class="offers__button-title main__title-text">
+									<div class="offers__button-title main__title-text" @click="openFilterWindow">
 										Фильтр
 									</div>
 								</button>
@@ -372,6 +372,9 @@ export default {
 			this.reloadPage({
 				q,
 			})
+		},
+		openFilterWindow() {
+			//
 		},
 		loadProjects() {
 			return this.$store.dispatch('loadProjects', {
