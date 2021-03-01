@@ -25,7 +25,7 @@
 							<div class="profile__questionnaire-load">
 								<label class="profile__questionnaire-load-button">
 									<input type="file" style="display:none">
-									Загрзить фото
+									Загрузить фото
 								</label>
 							</div>
 						</div>
@@ -101,11 +101,123 @@
 					</div>
 				</div>
 			</transition>
-			<div class="profile__questionnaire-accounts">
+			<div class="profile__questionnaire-accounts" v-if="requests && requests.length">
 				<div class=" profile__questionnaire-accounts-row">
 					<div class="profile__questionnaire-accounts-row-title">
 						<h2 class="profile__questionnaire-accounts-row-title-h2">
-							Существующие аккаунты
+							Заявки на создание аккаунтов
+						</h2>
+					</div>
+					<div class="profile-accounts-list">
+						<div
+							v-for="(request, idx) in requests"
+							:key="idx"
+							class="profile__questionnaire-accounts-body"
+						>
+							<template v-if="request.is_approved">
+								<h2>Поздравляю</h2>
+								<p>Ваш аккаунт <strong>{{ request.name }}</strong> успешно подтвержден и помещен на сайт.</p>
+								<button
+									@click="deleteRequest(request.id, true)"
+									class="profile__questionnaire-accounts-button button-grand-black"
+								>
+									Спасибо
+								</button>
+							</template>
+							<template v-else>
+								<div class="profile__questionnaire-accounts-item">
+									<div class="profile__questionnaire-accounts-item-number" v-if="requests.length > 1">
+										<span class="profile__questionnaire-accounts-item-number-span">{{ idx + 1 }}</span>
+									</div>
+									<div class="profile__questionnaire-accounts-item-avatar">
+										<div class="profile__questionnaire-accounts-item-avatar-img">
+											<img :src="request.image" :alt="request.title">
+										</div>
+										<button
+											@click="deleteRequest(request.id)"
+											class="profile__questionnaire-accounts-item-avatar-delete"
+										>
+											Удалить заявку
+										</button>
+									</div>
+									<div class="profile__questionnaire-accounts-body-info">
+										<div class="profile__questionnaire-accounts-item-info title">
+											<h2
+												class="profile__questionnaire-accounts-item-info-title-h2"
+											>
+												{{ request.name }}
+											</h2>
+											<a :href="request.reference"
+												class="profile__questionnaire-accounts-item-info-title-link">
+												Перейти в Тик-Ток аккаунт
+											</a>
+										</div>
+										<div class="profile__questionnaire-accounts-item-info theme">
+											<div class="profile__questionnaire-accounts-item-info-h2">
+												Тема канала:
+											</div>
+											<div class="profile__questionnaire-accounts-item-info-p">
+												{{ request.topics | slashedList }}
+											</div>
+										</div>
+										<div class="profile__questionnaire-accounts-item-info advertising">
+											<h2 class="profile__questionnaire-accounts-item-info-h2">Вид / Цена рекламы:</h2>
+											<ul class="profile__questionnaire-accounts-item-info-ul">
+												<li
+													v-for="type in request.ad_types"
+													:key="type.id"
+													class="profile__questionnaire-accounts-item-info-li"
+												>
+													{{ type.name }} - {{ type.price ? `${type.price} ₽` : 'Договорная' }}
+												</li>
+											</ul>
+										</div>
+										<div class="profile__questionnaire-accounts-item-info confirmation">
+											<template v-if="!request.checked">
+												<img src="../assets/img/clock.png" alt="">
+												<p class="profile__questionnaire-accounts-item-info-p">
+													Для того, чтобы подтвердить аккаунт, вам необходимо написать в директ Тик-Ток
+													аккаунта (<a href="https://www.tiktok.com/@danya_milokhin"
+																	 target="_blank">@orbita</a>)
+													такой текст: "Привет, подтверди меня на сайте orbitaa.ru"
+												</p>
+											</template>
+											<template v-else-if="request.is_canceled">
+												<picture>
+													<source srcset="../assets/img/notcomfirt.webp" type="image/webp">
+													<img src="../assets/img/notcomfirt.png" alt=""></picture>
+												<p class="profile__questionnaire-accounts-item-info-p accounts-item-info-p-red">
+													Ваша заявка отклонена.
+													<template v-if="request.fail_msg">
+														Причина: <br>
+														<span>{{ request.fail_msg }}</span>
+													</template>
+												</p>
+											</template>
+										</div>
+									</div>
+								</div>
+								<div class="profile__questionnaire-accounts-buttons">
+									<button class="profile__questionnaire-accounts-button button-grand-black">Перейти в
+										тик-ток аккаунт
+									</button>
+									<button
+										@click="deleteRequest(request.id)"
+										class="profile__questionnaire-accounts-button button-grand-transparent"
+									>
+										Удалить заявку
+									</button>
+								</div>
+							</template>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="profile__questionnaire-accounts" v-if="userAccounts && userAccounts.length">
+				<div class="profile__questionnaire-accounts-row">
+					<div class="profile__questionnaire-accounts-row-title">
+						<h2 class="profile__questionnaire-accounts-row-title-h2">
+							Ваши аккаунты
 						</h2>
 					</div>
 					<div class="profile-accounts-list">
@@ -149,7 +261,7 @@
 										</router-link>
 										<a :href="account.reference"
 											class="profile__questionnaire-accounts-item-info-title-link">
-											Перейти в ток-ток аккаунт
+											Перейти в Тик-Ток аккаунт
 										</a>
 									</div>
 									<div class="profile__questionnaire-accounts-item-info subscribe">
@@ -166,15 +278,14 @@
 										</div>
 									</div>
 									<div class="profile__questionnaire-accounts-item-info advertising">
-										<h2 class="profile__questionnaire-accounts-item-info-h2">Вид / Цена рекламы:
-										</h2>
+										<h2 class="profile__questionnaire-accounts-item-info-h2">Вид / Цена рекламы:</h2>
 										<ul class="profile__questionnaire-accounts-item-info-ul">
 											<li
 												v-for="type in account.ad_types"
 												:key="type.id"
 												class="profile__questionnaire-accounts-item-info-li"
 											>
-												{{ type.name }} - {{ type.price ? `от ${type.price} ₽` : 'Договорная' }}
+												{{ type.name }} - {{ type.price ? `${type.price} ₽` : 'Договорная' }}
 											</li>
 										</ul>
 									</div>
@@ -192,8 +303,11 @@
 								<button class="profile__questionnaire-accounts-button button-grand-black">Перейти в
 									тик-ток аккаунт
 								</button>
-								<button class="profile__questionnaire-accounts-button button-grand-transparent">Удалить
-									аккаунт
+								<button
+									class="profile__questionnaire-accounts-button button-grand-transparent"
+									@click="deleteAccount(account.id)"
+								>
+									Удалить аккаунт
 								</button>
 							</div>
 						</div>
@@ -214,20 +328,29 @@ export default {
 		userAccounts() {
 			return this.$store.getters.userAccounts
 		},
+		requests() {
+			return this.$store.getters.requests
+		},
 	},
 	methods: {
 		toggleCreateMode() {
 			this.createMode = !this.createMode
 		},
 		deleteAccount(id) {
-			if (confirm('Вы точно хотите удалить аккаунта? Восстановить его будет невозможно.')) {
+			if (confirm('Вы точно хотите удалить аккаунт? Восстановить его будет невозможно.')) {
 				this.$store.dispatch('removeAccount', {id})
 			}
 		},
+		deleteRequest(id, force = false) {
+			if (force || confirm('Вы точно хотите удалить заявку? Восстановить её будет невозможно.')) {
+				this.$store.dispatch('removeRequest', {id})
+			}
+		},
+	},
+	mounted() {
+		this.$onUserLoad.func = () => {
+			this.$store.dispatch('loadRequests')
+		}
 	},
 }
 </script>
-
-<style scoped>
-
-</style>

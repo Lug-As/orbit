@@ -112,6 +112,7 @@ export default {
 					const projectsList = result.data.map(item => {
 						return Project.createFromShortApiData(item)
 					})
+					delete result.data
 					commit('setProjectsPagination', result)
 					commit('setProjects', projectsList)
 				}

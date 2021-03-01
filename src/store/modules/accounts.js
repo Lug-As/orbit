@@ -129,6 +129,7 @@ export default {
 					const accountsList = result.data.map(item => {
 						return Account.createFromShortApiData(item)
 					})
+					delete result.data
 					commit('setAccountsPagination', result)
 					commit('setAccounts', accountsList)
 				}

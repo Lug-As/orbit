@@ -52,7 +52,7 @@
 										:key="type.id"
 										class="bloger__ul-li bloger__body-text"
 									>
-										{{ type.name }} - {{ type.price ? `от ${type.price} ₽` : 'Договорная' }}
+										{{ type.name }} - {{ type.price ? `${type.price} ₽` : 'Договорная' }}
 									</li>
 								</ul>
 							</div>

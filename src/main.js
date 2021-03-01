@@ -31,12 +31,17 @@ Vue.filter('slashedList', slashedList)
 
 axios.defaults.baseURL = ApiBaseUrl
 
+Vue.prototype.$onUserLoad = {
+	func: () => {},
+}
+
 new Vue({
 	beforeCreate() {
 		this.$store.dispatch('loadUser')
 			.then(token => {
 				if (token) {
 					axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+					this.$onUserLoad.func()
 					this.$store.dispatch('loadUserAccounts')
 				}
 			})
