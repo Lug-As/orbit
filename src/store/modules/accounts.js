@@ -14,6 +14,7 @@ class Account {
 	username
 	region
 	country
+	reference
 
 	constructor(
 		id, title, image, followers, likes, ad_types, topics, username,
@@ -32,6 +33,8 @@ class Account {
 		this.username = username
 		this.region = region
 		this.country = country
+
+		this.reference = 'https://www.tiktok.com/' + this.title
 	}
 
 	static createFromApiData(apiData) {
@@ -90,6 +93,9 @@ export default {
 		},
 		setUserAccounts(state, payload) {
 			state.userAccounts = payload
+		},
+		removeFromUserAccounts(state, id) {
+			state.userAccounts = state.userAccounts.filter(ac => ac.id !== id)
 		},
 		startLoading(state) {
 			state.loading = true
@@ -151,6 +157,14 @@ export default {
 			} finally {
 				commit('stopLoading')
 			}
+		},
+		async removeAccount({commit}, {
+			id,
+		}) {
+			accountsService.deleteAccount(id)
+				.then(() => {
+					commit('removeFromUserAccounts', id)
+				})
 		},
 	},
 }

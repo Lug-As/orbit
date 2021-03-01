@@ -6,13 +6,59 @@
 	}
 }
 
-.fade-enter-active, .fade-leave-active {
-	transition: opacity .4s;
+.fade {
+	&-enter-active, &-leave-active {
+		transition: opacity .4s;
+	}
+
+	&-enter, &-leave-to {
+		opacity: 0;
+	}
 }
 
-.fade-enter, .fade-leave-to {
-	opacity: 0;
+.slide-up-down {
+	&-enter-active {
+		transition-duration: .35s;
+		transition-timing-function: ease-in;
+	}
+
+	&-leave-active {
+		transition-duration: .35s;
+		transition-timing-function: ease;
+	}
+
+	&-enter-to, &-leave {
+		overflow: hidden;
+		max-height: 1000px;
+	}
+
+	&-enter, &-leave-to {
+		overflow: hidden;
+		max-height: 0;
+	}
 }
+
+.side-slide {
+	&-enter-active {
+		transition-duration: .25s;
+	}
+
+	&-leave-active {
+		transition-duration: .25s;
+	}
+
+	&-enter-to, &-leave {
+		overflow: hidden;
+		transform: translateX(0);
+	}
+
+	&-enter, &-leave-to {
+		overflow: hidden;
+		transform: translateX(25%);
+		opacity: 0;
+	}
+}
+
 
 .red {
 	color: #ff0000;

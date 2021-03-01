@@ -22,5 +22,8 @@ export default {
 	async fetchUserAccounts() {
 		return axios.get(AccountsPath + '/own')
 	},
+	async deleteAccount(id) {
+		return axios.delete(AccountsPath + '/' + encodeURI(id))
+	}
 }
 

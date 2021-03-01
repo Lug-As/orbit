@@ -31,7 +31,7 @@
 								</h2>
 								<div class="bloger__title-text border-body">
 									<h3 class="bloger__title-nickname">{{ account.title }}</h3>
-									<a class="bloger__title-link" :href="reference">Перейти в ток-ток
+									<a class="bloger__title-link" :href="account.reference">Перейти в ток-ток
 										аккаунт</a>
 								</div>
 							</div>
@@ -42,16 +42,17 @@
 							</div>
 							<div class="bloger__body-theme border-body">
 								<h3 class="bloger__body-title">Тема канала: </h3>
-								<p class="bloger__body-text"> {{ account.topics | slashedList }}</p>
+								<p class="bloger__body-text">{{ account.topics | slashedList }}</p>
 							</div>
 							<div class="bloger__body-view border-body">
 								<h3 class="bloger__body-title">Вид / Цена рекламы:</h3>
 								<ul class="bloger__view-ul">
-									<li v-for="type in account.ad_types"
-										 :key="type.id"
-										 class="bloger__ul-li bloger__body-text"
+									<li
+										v-for="type in account.ad_types"
+										:key="type.id"
+										class="bloger__ul-li bloger__body-text"
 									>
-										{{ type.name }} - от {{ type.price }} ₽;
+										{{ type.name }} - {{ type.price ? `от ${type.price} ₽` : 'Договорная' }}
 									</li>
 								</ul>
 							</div>
@@ -77,7 +78,7 @@
 								>
 									Предложить работу
 								</button>
-								<a :href="reference" class="bloger__button-black button-grand-transparent">
+								<a :href="account.reference" class="bloger__button-black button-grand-transparent">
 									Перейти в ток-ток аккаунт
 								</a>
 								<div
@@ -177,9 +178,6 @@ export default {
 		},
 		user() {
 			return this.$store.getters.user
-		},
-		reference() {
-			return 'https://www.tiktok.com/' + this.account.title
 		},
 	},
 	methods: {

@@ -43,7 +43,7 @@
 				</div>
 			</div>
 		</transition>
-		<transition name="fade">
+		<transition name="side-slide">
 			<div class="profile__notifications" v-if="showThanks" @click="closeThanks">
 				<div class="profile__notifications-row">
 					<div class="profile__notifications-img">
