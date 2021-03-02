@@ -2,7 +2,7 @@
 	<div class="profile__questionnaire-body">
 		<div class="profile__questionnaire-body-row">
 			<div class="profile__questionnaire-avatar">
-				<div class="profile__questionnaire-img">
+				<div class="profile__questionnaire-img cursor" @click="$refs['imageinput'].click()">
 					<img v-if="src" :src="src" alt="">
 					<picture v-else>
 						<source srcset="../../assets/img/noneimg.webp" type="image/webp">
@@ -12,11 +12,13 @@
 				<div class="profile__questionnaire-load">
 					<label class="profile__questionnaire-load-button">
 						<input
+							ref="imageinput"
 							@change="uploadImage"
 							type="file"
 							style="display:none"
 						>
 						Загрузить фото
+						<span class="red">*</span>
 					</label>
 				</div>
 			</div>
@@ -163,9 +165,10 @@
 					</v-select>
 				</div>
 				<div class="profile__questionnaire-item-button-create">
+					<p><span class="red">*</span> Обязательные поля</p>
 					<button
 						@click="submit"
-						:disabled="$v.$invalid"
+						:disabled="!this.valid"
 						class="profile__questionnaire-item-button button-grand-black"
 					>
 						Отправить анкету
@@ -179,6 +182,9 @@
 <script>
 import {integer, maxLength, maxValue, minValue, required} from 'vuelidate/lib/validators'
 
+const MAX_FILE_SIZE = 5000000
+const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp']
+
 export default {
 	name: 'AccountForm',
 	data: () => ({
@@ -191,6 +197,7 @@ export default {
 		topics: [],
 		region: null,
 		src: null,
+		reader: null,
 	}),
 	watch: {
 		ad_types_id(ids) {
@@ -206,12 +213,8 @@ export default {
 			})
 		},
 		image(file) {
-			const reader = new FileReader()
-			reader.onloadend = () => {
-				this.src = reader.result
-			}
 			if (file) {
-				reader.readAsDataURL(file)
+				this.reader.readAsDataURL(file)
 			} else {
 				this.src = ''
 			}
@@ -255,6 +258,9 @@ export default {
 		user() {
 			return this.$store.getters.user
 		},
+		valid() {
+			return !this.$v.$invalid && this.image
+		},
 	},
 	methods: {
 		submit() {
@@ -283,10 +289,19 @@ export default {
 		},
 		validate() {
 			this.$v.$touch()
-			return !this.$v.$invalid
+			return this.valid
 		},
 		uploadImage(ev) {
-			this.image = ev.target.files[0]
+			const file = ev.target.files[0]
+			if (file) {
+				if (file.size > MAX_FILE_SIZE) {
+					return alert('Размер файла не должен превышать ' + Math.floor(MAX_FILE_SIZE / 1000 / 1000) + ' МБ')
+				}
+				if (!ALLOWED_MIME_TYPES.includes(file.type)) {
+					return alert('Картинка должна быть в этих форматах ' + ALLOWED_MIME_TYPES.join(', '))
+				}
+				this.image = file
+			}
 		},
 	},
 	mounted() {
@@ -294,6 +309,11 @@ export default {
 		this.$store.dispatch('loadTypes')
 		this.$store.dispatch('loadAges')
 		this.$store.dispatch('loadRegions')
+
+		this.reader = new FileReader()
+		this.reader.onloadend = () => {
+			this.src = this.reader.result
+		}
 	},
 }
 </script>
