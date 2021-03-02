@@ -3,14 +3,19 @@
 		<div class="profile__questionnaire-body-row">
 			<div class="profile__questionnaire-avatar">
 				<div class="profile__questionnaire-img">
-					<picture>
+					<img v-if="src" :src="src" alt="">
+					<picture v-else>
 						<source srcset="../../assets/img/noneimg.webp" type="image/webp">
 						<img src="../../assets/img/noneimg.png" alt="">
 					</picture>
 				</div>
 				<div class="profile__questionnaire-load">
 					<label class="profile__questionnaire-load-button">
-						<input type="file" style="display:none">
+						<input
+							@change="uploadImage"
+							type="file"
+							style="display:none"
+						>
 						Загрузить фото
 					</label>
 				</div>
@@ -109,7 +114,8 @@
 								Цена должна быть больше 0
 							</template>
 							<template v-if="!$v.ad_types.$each[idx].price.maxValue">
-								Цена должна быть меньше {{ ($v.ad_types.$each[idx].price.$params.maxValue.max + 1).toLocaleString() }}
+								Цена должна быть меньше
+								{{ ($v.ad_types.$each[idx].price.$params.maxValue.max + 1).toLocaleString() }}
 							</template>
 						</p>
 					</div>
@@ -184,6 +190,7 @@ export default {
 		ages: [],
 		topics: [],
 		region: null,
+		src: null,
 	}),
 	watch: {
 		ad_types_id(ids) {
@@ -197,6 +204,17 @@ export default {
 					price: null,
 				}
 			})
+		},
+		image(file) {
+			const reader = new FileReader()
+			reader.onloadend = () => {
+				this.src = reader.result
+			}
+			if (file) {
+				reader.readAsDataURL(file)
+			} else {
+				this.src = ''
+			}
 		},
 	},
 	validations: {
@@ -266,6 +284,9 @@ export default {
 		validate() {
 			this.$v.$touch()
 			return !this.$v.$invalid
+		},
+		uploadImage(ev) {
+			this.image = ev.target.files[0]
 		},
 	},
 	mounted() {
