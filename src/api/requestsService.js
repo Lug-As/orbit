@@ -3,7 +3,30 @@ import axios from 'axios'
 const RequestsPath = 'requests'
 
 const storeRequest = (request) => {
-	return axios.post(RequestsPath, request)
+	const formData = new FormData()
+	Object.keys(request)
+		.forEach(key => {
+			let item = request[key]
+			if (key === 'ad_types') {
+				for (let i = 0; i < item.length; i++) {
+					formData.append(key + '[' + i + '][id]', item[i].id)
+					if (item[i].price) {
+						formData.append(key + '[' + i + '][price]', item[i].price)
+					}
+				}
+			} else if (Array.isArray(item)) {
+				for (let i = 0; i < item.length; i++) {
+					formData.append(key + '[' + i + ']', item[i])
+				}
+			} else {
+				formData.append(key, item)
+			}
+		})
+	return axios.post(RequestsPath, formData, {
+		headers: {
+			'Content-Type': 'multipart/form-data',
+		},
+	})
 }
 
 const fetchRequests = () => {
@@ -19,5 +42,5 @@ export default {
 	},
 	async deleteRequest(id) {
 		return axios.delete(RequestsPath + '/' + encodeURI(id))
-	}
+	},
 }

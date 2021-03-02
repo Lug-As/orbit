@@ -17,6 +17,9 @@ export default {
 		setRequests(state, payload) {
 			state.requests = payload
 		},
+		addRequest(state, payload) {
+			state.requests.push(payload)
+		},
 		setRequestsPagination(state, payload) {
 			state.requestsPagination = payload
 		},
@@ -44,5 +47,11 @@ export default {
 					commit('removeFromRequests', id)
 				})
 		},
+		async createRequest({commit}, request) {
+			requestsService.sendRequest(request)
+				.then(res => {
+					commit('addRequest', res.data.data)
+				})
+		}
 	},
 }

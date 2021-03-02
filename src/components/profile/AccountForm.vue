@@ -183,7 +183,7 @@
 import {integer, maxLength, maxValue, minValue, required} from 'vuelidate/lib/validators'
 
 const MAX_FILE_SIZE = 5000000
-const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp']
+const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/jpg']
 
 export default {
 	name: 'AccountForm',
@@ -265,16 +265,16 @@ export default {
 	methods: {
 		submit() {
 			if (this.validate()) {
-				const account = {
-					title: this.title,
-					about: this.about,
-					image: this.image,
-					ad_types: this.ad_types,
-					topics: this.topics,
-					ages: this.ages,
-					region: this.region,
+				const request = {
+					'name': this.title,
+					'about': this.about,
+					'image': this.image,
+					'ad_types': this.ad_types,
+					'topics': this.topics,
+					'ages': this.ages,
+					'region': this.region,
 				}
-				console.log(account)
+				this.$store.dispatch('createRequest', request)
 			}
 		},
 		resolveInputKeys(ev) {
