@@ -1,105 +1,29 @@
 <template>
 	<div class="profile__questionnaire profile__contant tab-3">
-		<div class=" profile__questionnaire-row">
+		<preloader v-if="userLoading"/>
+		<div v-else-if="user" class="profile__questionnaire-row">
 			<div class="profile__questionnaire-create">
 				<button
 					@click="toggleCreateMode"
 					class="profile__questionnaire-create-button button-grand-black"
 				>
-					<picture>
-						<source srcset="../assets/img/plus-create.webp" type="image/webp">
-						<img src="../assets/img/plus-create.png" alt="">
-					</picture>
-					Создать анкету
+					<span
+						class="big_char"
+						:class="{ 'big_char-cross': createMode }"
+					>+</span>
+					<template v-if="createMode">
+						Закрыть анкету
+					</template>
+					<template v-else>
+						Создать анкету
+					</template>
 				</button>
 			</div>
 			<transition name="slide-up-down">
-				<div class="profile__questionnaire-body" v-if="createMode">
-					<div class="profile__questionnaire-body-row">
-						<div class="profile__questionnaire-avatar">
-							<div class="profile__questionnaire-img">
-								<picture>
-									<source srcset="../assets/img/noneimg.webp" type="image/webp">
-									<img src="../assets/img/noneimg.png" alt=""></picture>
-							</div>
-							<div class="profile__questionnaire-load">
-								<label class="profile__questionnaire-load-button">
-									<input type="file" style="display:none">
-									Загрузить фото
-								</label>
-							</div>
-						</div>
-						<div class="profile__questionnaire-item">
-							<div class="profile__questionnaire-item-info">
-								<h2 class="profile__questionnaire-item-info-h2">
-									Впишите название аккаунта
-								</h2>
-								<input type="text" class="profile__questionnaire-item-info-input">
-							</div>
-							<div class="profile__questionnaire-item-info">
-								<h2 class="profile__questionnaire-item-info-h2">
-									Тематика блога
-								</h2>
-								<div class="profile__questionnaire-item-info-select">
-									<p class="profile__questionnaire-item-info-option select">Тематика блога</p>
-								</div>
-								<div class="profile__questionnaire-item-info-list">
-									<p class="profile__questionnaire-item-info-option">Тематика блога</p>
-									<p class="profile__questionnaire-item-info-option">Тематика блога</p>
-									<p class="profile__questionnaire-item-info-option">Тематика блога</p>
-									<p class="profile__questionnaire-item-info-option">Тематика блога</p>
-								</div>
-							</div>
-							<div class="profile__questionnaire-item-info">
-								<h2 class="profile__questionnaire-item-info-h2">
-									Виды рекламы
-								</h2>
-								<div class="profile__questionnaire-item-info-select">
-									<p class="profile__questionnaire-item-info-option select">Реклама услуги/товары</p>
-								</div>
-								<div class="profile__questionnaire-item-info-list">
-									<p class="profile__questionnaire-item-info-option">Реклама услуги/товары</p>
-									<p class="profile__questionnaire-item-info-option">Реклама услуги/товары</p>
-									<p class="profile__questionnaire-item-info-option">Реклама услуги/товары</p>
-									<p class="profile__questionnaire-item-info-option">Реклама услуги/товары</p>
-								</div>
-							</div>
-							<div class="profile__questionnaire-item-info">
-								<h2 class="profile__questionnaire-item-info-h2">
-									Цена на виды рекламы
-								</h2>
-								<input type="text" value="15 000 / Рекламный пост"
-										 class="profile__questionnaire-item-info-input">
-							</div>
-							<div class="profile__questionnaire-item-info">
-								<h2 class="profile__questionnaire-item-info-h2">
-									О себе
-								</h2>
-								<textarea
-									class="profile__questionnaire-item-info-textarea">15 000 / Рекламный пост</textarea>
-							</div>
-							<div class="profile__questionnaire-item-info">
-								<h2 class="profile__questionnaire-item-info-h2">
-									Возрастные категории аудитории
-								</h2>
-								<input type="text" value="16 - 50 / 18 - 40 / 99 - 100"
-										 class="profile__questionnaire-item-info-input">
-							</div>
-							<div class="profile__questionnaire-item-info">
-								<h2 class="profile__questionnaire-item-info-h2">
-									Субъект РФ
-								</h2>
-								<input type="text" value="Алтайский край, Россия"
-										 class="profile__questionnaire-item-info-input">
-							</div>
-							<div class="profile__questionnaire-item-button-create">
-								<button class="profile__questionnaire-item-button button-grand-black">Отправить
-									анкету
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
+				<account-form
+					@submit="createAccount"
+					v-if="createMode"
+				/>
 			</transition>
 			<div class="profile__questionnaire-accounts" v-if="requests && requests.length">
 				<div class=" profile__questionnaire-accounts-row">
@@ -319,8 +243,12 @@
 </template>
 
 <script>
+import Preloader from '@/components/Preloader'
+import AccountForm from '@/components/profile/AccountForm'
+
 export default {
 	name: 'ProfileAccounts',
+	components: {AccountForm, Preloader},
 	data: () => ({
 		createMode: false,
 	}),
@@ -330,6 +258,12 @@ export default {
 		},
 		requests() {
 			return this.$store.getters.requests
+		},
+		user() {
+			return this.$store.getters.user
+		},
+		userLoading() {
+			return this.$store.getters.userLoading
 		},
 	},
 	methods: {
@@ -346,11 +280,33 @@ export default {
 				this.$store.dispatch('removeRequest', {id})
 			}
 		},
+		loadRequests() {
+			this.$store.dispatch('loadRequests')
+		},
+		createAccount(ev) {
+			console.log(ev)
+		},
 	},
 	mounted() {
-		this.$onUserLoad.func = () => {
-			this.$store.dispatch('loadRequests')
+		if (this.user) {
+			this.loadRequests()
+		} else {
+			this.$onUserLoad.func = this.loadRequests
 		}
 	},
 }
 </script>
+
+<style lang="scss" scoped>
+.big_char {
+	display: inline-block;
+	font-size: 42px;
+	vertical-align: bottom;
+	font-family: "Montserrat-Light", sans-serif;
+	transition: transform .2s;
+
+	&-cross {
+		transform: rotate(45deg);
+	}
+}
+</style>

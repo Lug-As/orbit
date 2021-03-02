@@ -8,7 +8,8 @@
 							<div class="main__title-img">
 								<picture>
 									<source srcset="../assets/img/filter.webp" type="image/webp">
-									<img src="../assets/img/filter.png" alt=""></picture>
+									<img src="../assets/img/filter.png" alt="">
+								</picture>
 							</div>
 							<div class="main__title-text">Фильтр</div>
 							<a

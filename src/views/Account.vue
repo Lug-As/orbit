@@ -31,8 +31,9 @@
 								</h2>
 								<div class="bloger__title-text border-body">
 									<h3 class="bloger__title-nickname">{{ account.title }}</h3>
-									<a class="bloger__title-link" :href="account.reference">Перейти в ток-ток
-										аккаунт</a>
+									<a class="bloger__title-link" :href="account.reference">
+										Перейти в ток-ток аккаунт
+									</a>
 								</div>
 							</div>
 							<div class="bloger__body-statistics border-body">
@@ -56,17 +57,17 @@
 									</li>
 								</ul>
 							</div>
-							<div class="bloger__body-about border-body">
+							<div class="bloger__body-about border-body" v-if="account.about">
 								<h3 class="bloger__body-title">О себе: </h3>
 								<p class="bloger__body-text text-padding">{{ account.about }}</p>
 							</div>
-							<div class="bloger__body-age border-body">
+							<div class="bloger__body-age border-body" v-if="account.ages">
 								<h3 class="bloger__body-title">Возрастные категории аудитории:</h3>
 								<p class="bloger__body-text">
 									{{ account.ages | slashedList('range') }}
 								</p>
 							</div>
-							<div class="bloger__body-place border-body">
+							<div class="bloger__body-place border-body" v-if="account.region">
 								<h3 class="bloger__body-title">Субъект РФ: </h3>
 								<p class="bloger__body-text">{{ account.region }}, {{ account.country }}.</p>
 							</div>
