@@ -48,10 +48,7 @@ export default {
 				})
 		},
 		async createRequest({commit}, request) {
-			requestsService.sendRequest(request)
-				.then(res => {
-					commit('addRequest', res.data.data)
-				})
+			await requestsService.sendRequest(request)
 		}
 	},
 }

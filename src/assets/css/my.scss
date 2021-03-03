@@ -149,3 +149,16 @@
 .profile__contant {
 	display: block;
 }
+
+.ac-proj-form__select {
+	& .vs__search::placeholder,
+	& .vs__dropdown-toggle,
+	& .vs__dropdown-menu {
+		font-size: 18px;
+	}
+
+	& .vs__search::placeholder,
+	& .vs__dropdown-toggle {
+		padding: 10px;
+	}
+}

@@ -284,7 +284,11 @@ export default {
 			this.$store.dispatch('loadRequests')
 		},
 		createAccount(ev) {
-			console.log(ev)
+			this.$store.dispatch('createRequest', ev)
+				.then(() => {
+					this.toggleCreateMode()
+					this.loadRequests()
+				})
 		},
 	},
 	mounted() {

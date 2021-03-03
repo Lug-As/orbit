@@ -26,10 +26,11 @@
 				<div class="profile__questionnaire-item-info">
 					<h2 class="profile__questionnaire-item-info-h2">
 						Впишите название аккаунта
+						<span class="secondary">(Без @)</span>
 						<span class="red">*</span>
 					</h2>
 					<input
-						v-model="title"
+						v-model.trim="title"
 						@blur="$v.title.$touch"
 						type="text"
 						class="profile__questionnaire-item-info-input"
@@ -37,6 +38,9 @@
 					<p class="red account_form__error" v-if="$v.title.$error">
 						<template v-if="!$v.title.required">
 							Поле обязательно для заполнения
+						</template>
+						<template v-if="!$v.title.maxLength">
+							Длина названия не должна превышать {{ $v.title.$params.maxLength.max }} символов
 						</template>
 					</p>
 				</div>
@@ -52,7 +56,7 @@
 						:options="allTopics"
 						:reduce="opt => opt.id"
 						multiple
-						class="main__vue-select form__select"
+						class="main__vue-select ac-proj-form__select"
 					/>
 					<p class="red account_form__error" v-if="$v.topics.$error">
 						<template v-if="!$v.topics.required">
@@ -72,7 +76,7 @@
 						:options="allTypes"
 						:reduce="opt => opt.id"
 						multiple
-						class="main__vue-select form__select"
+						class="main__vue-select ac-proj-form__select"
 					/>
 					<p class="red account_form__error" v-if="$v.ad_types.$error && !$v.ad_types.required">
 						<template v-if="!$v.ad_types.required">
@@ -100,10 +104,10 @@
 							@keydown="resolveInputKeys"
 							@blur="$v.ad_types.$each[idx].price.$touch"
 							placeholder="Цена"
-							class="profile__questionnaire-item-info-input account_form__price_input"
+							class="profile__details-input-small main__details-input-small account_form__price_input"
 						>
 						<span class="account_form__price_rub">₽</span>
-						<label>
+						<label title="Выбрано, если цена не заполнена.">
 							<input
 								:checked="!ad_types[idx].price"
 								@click.prevent
@@ -127,9 +131,15 @@
 						О себе
 					</h2>
 					<textarea
-						v-model="about"
+						v-model.trim="about"
+						@blur="$v.about.$touch"
 						class="profile__questionnaire-item-info-textarea"
 					></textarea>
+					<p class="red account_form__error" v-if="$v.about.$error">
+						<template v-if="!$v.about.maxLength">
+							Длина описания не должна превышать {{ $v.about.$params.maxLength.max }} символов
+						</template>
+					</p>
 				</div>
 				<div class="profile__questionnaire-item-info">
 					<h2 class="profile__questionnaire-item-info-h2">
@@ -141,7 +151,7 @@
 						:options="allAges"
 						:reduce="opt => opt.id"
 						multiple
-						class="main__vue-select form__select"
+						class="main__vue-select ac-proj-form__select"
 					/>
 				</div>
 				<div class="profile__questionnaire-item-info">
@@ -152,7 +162,7 @@
 						:options="allRegions"
 						:reduce="opt => opt.id"
 						:selectable="option => !option.hasOwnProperty('group')"
-						class="main__vue-select main__vue-select--region form__select"
+						class="main__vue-select main__vue-select--region ac-proj-form__select"
 					>
 						<template #option="{ group, name }">
 							<div v-if="group" class="group">
@@ -274,7 +284,7 @@ export default {
 					'ages': this.ages,
 					'region': this.region,
 				}
-				this.$store.dispatch('createRequest', request)
+				this.$emit('submit', request)
 			}
 		},
 		resolveInputKeys(ev) {
@@ -309,7 +319,6 @@ export default {
 		this.$store.dispatch('loadTypes')
 		this.$store.dispatch('loadAges')
 		this.$store.dispatch('loadRegions')
-
 		this.reader = new FileReader()
 		this.reader.onloadend = () => {
 			this.src = this.reader.result
@@ -326,7 +335,6 @@ export default {
 
 	&__price {
 		&_input {
-			width: 105px;
 			margin: 5px 12px;
 			padding-left: 10px;
 			padding-right: 10px;
@@ -342,21 +350,6 @@ export default {
 			font-size: 20px;
 			margin: 0 8px;
 		}
-	}
-}
-</style>
-
-<style lang="scss">
-.form__select {
-	& .vs__search::placeholder,
-	& .vs__dropdown-toggle,
-	& .vs__dropdown-menu {
-		font-size: 18px;
-	}
-
-	& .vs__search::placeholder,
-	& .vs__dropdown-toggle {
-		padding: 10px;
 	}
 }
 </style>
