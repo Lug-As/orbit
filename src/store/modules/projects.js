@@ -50,12 +50,20 @@ export default {
 	state: {
 		projects: [],
 		projectsPagination: {},
+		userProjects: [],
+		userProjectsPagination: {},
 		currentProject: {},
 		projectLoading: true,
 	},
 	getters: {
 		projects(state) {
 			return state.projects
+		},
+		userProjects(state) {
+			return state.userProjects
+		},
+		userProjectsPagination(state) {
+			return state.userProjectsPagination
 		},
 		projectsPagination(state) {
 			return state.projectsPagination
@@ -71,14 +79,23 @@ export default {
 		setCurrentProject(state, payload) {
 			state.currentProject = payload
 		},
-		setProjectsPagination(state, payload) {
-			state.projectsPagination = payload
-		},
 		destroyCurrentProject(state) {
 			state.currentProject = {}
 		},
 		setProjects(state, payload) {
 			state.projects = payload
+		},
+		setProjectsPagination(state, payload) {
+			state.projectsPagination = payload
+		},
+		removeFromUserProjects(state, id) {
+			state.userProjects = state.userProjects.filter(project => project.id !== id)
+		},
+		setUserProjects(state, payload) {
+			state.userProjects = payload
+		},
+		setUserProjectsPagination(state, payload) {
+			state.userProjectsPagination = payload
 		},
 		startProjectLoading(state) {
 			state.projectLoading = true
@@ -100,7 +117,7 @@ export default {
 				commit('stopProjectLoading')
 			}
 		},
-		async loadProjects({commit, state}, payload = {
+		async loadProjects({commit}, payload = {
 			page: 1,
 			params: {},
 		}) {
@@ -121,6 +138,26 @@ export default {
 			} finally {
 				commit('stopProjectLoading')
 			}
+		},
+		async loadUserProjects({commit}, {
+			page = 1,
+		}) {
+			commit('startProjectLoading')
+			const response = await projectsService.fetchUserProjects(page),
+				result = response.data
+			const projectsList = result.data.map(item => {
+				return Project.createFromShortApiData(item)
+			})
+			delete result.data
+			commit('setUserProjectsPagination', result)
+			commit('setUserProjects', projectsList)
+			commit('stopProjectLoading')
+		},
+		async deleteProject({commit}, id) {
+			projectsService.deleteProject(id)
+				.then(() => {
+					commit('removeFromUserProjects', id)
+				})
 		},
 	},
 }

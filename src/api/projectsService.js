@@ -19,5 +19,15 @@ export default {
 			},
 		})
 	},
+	async fetchUserProjects(page = 1) {
+		return axios.get(ProjectsPath + '/own', {
+			params: {
+				page: encodeURI(String(parseInt(page))),
+			},
+		})
+	},
+	async deleteProject(id) {
+		return axios.delete(ProjectsPath + '/' + encodeURI(id))
+	},
 }
 

@@ -9,7 +9,7 @@
 					Добавить предложение
 				</button>
 			</div>
-			<div class="profile__questionnaire-body">
+			<div v-if="false" class="profile__questionnaire-body">
 				<div class="profile__offer-body-row profile__questionnaire-body-row">
 					<div class="profile__offer-body-avatar">
 						<picture>
@@ -104,52 +104,61 @@
 							Актуальные предложения работы
 						</h2>
 					</div>
-					<div class="offers__proposal-body">
-						<div class="offers__proposal-body-title">
-							<div class="offers__title-info">
-								<h2 class="offers__info-text">Нужна реклама магазина верхней одежды</h2>
+					<preloader v-if="projectLoading"/>
+					<div v-else-if="userProjects" class="offers__project-list">
+						<div
+							v-for="project in userProjects"
+							class="offers__proposal-body"
+						>
+							<div class="offers__proposal-body-title">
+								<div class="offers__title-info">
+									<router-link
+										:to="{name: 'Project', params: { id: project.id }}"
+										custom v-slot="{ navigate }"
+									>
+										<h2 @click="navigate" class="offers__info-text cursor">{{ project.name }}</h2>
+									</router-link>
+								</div>
+								<div class="offers__title-price price-info">
+									<p class="offers__price-text ">Желаемый бюджет:</p>
+									<span class="offers__price-value">{{ project.budget.toLocaleString() }} ₽</span>
+								</div>
 							</div>
-							<div class="offers__title-price price-info">
-								<p class="offers__price-text ">Желаемый бюджет:</p>
-								<span class="offers__price-value">3000 ₽</span>
-							</div>
-						</div>
-						<div class="offers__proposal-item details">
-							<div class="offers__proposal-item-info">
-								<p class="offers__details-text">Это текст-"рыба", часто используемый в печати и
-									вэб-дизайне. Lorem Ipsum является стандартной "рыбой" для текстов на латинице с
-									начала XVI века... Это текст-"рыба", часто используемый в печати и вэб-дизайне.
-									Lorem Ipsum является стандартной "рыбой" для текстов на латинице с начала XVI
-									века...Это текст-"рыба", часто используемый в печати и вэб-дизайне. Lorem Ipsum
-									является стандартной "рыбой" для текстов на латинице с начала XVI века...</p>
-
-							</div>
-						</div>
-
-						<div class="offers__proposal-item region">
-							<div class="offers__proposal-item-info justify-item">
-								<div class="offers__proposal-info-text">
-									<h2 class="offers__proposal-item-title">
-										Вид рекламы:
-									</h2>
-									<p class="offers__proposal-item-text">
-										Тематика блога
+							<div class="offers__proposal-item details">
+								<div class="offers__proposal-item-info">
+									<p class="offers__details-text">
+										{{ project.text | cut }}
 									</p>
 								</div>
-								<div class="offers__proposal-item-button">
-									<div class="offers__proposal-item-button-row">
-
-										<div class="offers__title-price price-button">
-											<p class="offers__price-text">Желаемый бюджет:</p>
-											<span class="offers__price-value">3000 ₽</span>
+							</div>
+							<div class="offers__proposal-item region">
+								<div class="offers__proposal-item-info justify-item">
+									<div class="offers__proposal-item-button">
+										<div class="offers__proposal-item-button-row">
+											<div class="offers__title-price price-button">
+												<p class="offers__price-text">Желаемый бюджет:</p>
+												<span class="offers__price-value">{{ project.budget.toLocaleString() }} ₽</span>
+											</div>
 										</div>
-									</div>
-									<div class="offers__item-button">
-										<button class="button-grand-black big">Удалить предложение</button>
+										<div class="offers__item-button">
+											<button
+												@click="deleteProject(project.id)"
+												class="button-grand-black big"
+											>
+												Удалить предложение
+											</button>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
+					</div>
+					<div class="objects-pagination">
+						<pagination
+							:data="userProjectsPagination"
+							:limit="2"
+							@pagination-change-page="changePage"
+						/>
 					</div>
 				</div>
 			</div>
@@ -158,11 +167,81 @@
 </template>
 
 <script>
+import Preloader from '@/components/Preloader'
+
 export default {
 	name: 'ProfileProjects',
+	components: {Preloader},
+	data: () => ({}),
+	computed: {
+		userProjects() {
+			return this.$store.getters.userProjects
+		},
+		userProjectsPagination() {
+			return this.$store.getters.userProjectsPagination
+		},
+		projectLoading() {
+			return this.$store.getters.projectLoading
+		},
+		page() {
+			let page
+			if (this.$route.query['page']) {
+				page = Math.abs(parseInt(this.$route.query['page']))
+				if (page === 1) {
+					this.clearQueryParam('page')
+				}
+			} else {
+				page = 1
+			}
+			if (page === 0 || !Number.isInteger(page)) {
+				page = 1
+			}
+			return page
+		},
+	},
+	methods: {
+		loadUserProjects() {
+			this.$store.dispatch('loadUserProjects', {
+				page: this.page,
+			})
+		},
+		deleteProject(id) {
+			if (confirm('Вы точно хотите удалить рекламное предложение? Восстановить его будет невозможно.')) {
+				this.$store.dispatch('deleteProject', id)
+			}
+		},
+		clearQueryParam(key) {
+			if (this.$route.query[key] !== undefined) {
+				let query = Object.assign({}, this.$route.query)
+				delete query[key]
+				this.$router.replace({query})
+			}
+		},
+		changePage(page = 1) {
+			if (page !== this.page) {
+				this.scrollToTop(300)
+				this.$router.push({
+					name: this.$route.name,
+					query: {
+						page,
+					},
+				})
+					.then(() => this.loadUserProjects())
+			}
+		},
+		scrollToTop(top = 0) {
+			window.scrollTo({
+				top,
+				behavior: 'smooth',
+			})
+		},
+	},
+	mounted() {
+		if (this.user) {
+			this.loadUserProjects()
+		} else {
+			this.$onUserLoad.func = this.loadUserProjects
+		}
+	},
 }
 </script>
-
-<style scoped>
-
-</style>
