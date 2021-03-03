@@ -135,8 +135,15 @@ export default {
 				page: this.page,
 			})
 		},
-		createProject(ev) {
-			console.log('CREATE', ev)
+		createProject(project) {
+			this.$store.dispatch('createProject', project)
+				.then(() => {
+					this.toggleCreateMode()
+					if (!this.changePage()) {
+						this.scrollToTop(300)
+						this.loadUserProjects()
+					}
+				})
 		},
 		deleteProject(id) {
 			if (confirm('Вы точно хотите удалить рекламное предложение? Восстановить его будет невозможно.')) {
@@ -161,6 +168,7 @@ export default {
 				})
 					.then(() => this.loadUserProjects())
 			}
+			return false
 		},
 		scrollToTop(top = 0) {
 			window.scrollTo({

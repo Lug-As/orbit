@@ -159,5 +159,8 @@ export default {
 					commit('removeFromUserProjects', id)
 				})
 		},
+		async createProject({commit}, project) {
+			await projectsService.createProject(project)
+		}
 	},
 }

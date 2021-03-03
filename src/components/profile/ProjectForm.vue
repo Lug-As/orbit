@@ -140,6 +140,8 @@
 				<div class="profile__offer-item-button-create profile__questionnaire-item-button-create">
 					<p><span class="red">*</span> Обязательные поля</p>
 					<button
+						:disabled="this.$v.$invalid"
+						@click="submit"
 						class="profile__offer-item-button profile__questionnaire-item-button button-grand-black">
 						Создать предложение
 					</button>
@@ -167,6 +169,44 @@ export default {
 		ad_types: [],
 		region: null,
 	}),
+	computed: {
+		allTypes() {
+			return this.$store.getters.types
+		},
+		allRegions() {
+			return this.$store.getters.regions
+		},
+	},
+	methods: {
+		submit() {
+			if (this.validate()) {
+				const project = {
+					'name': this.name,
+					'text': this.text,
+					'budget': this.budget,
+					'followers_from': this.followers_from,
+					'followers_to': this.followers_to,
+					'ad_types': this.ad_types,
+					'region': this.region,
+				}
+				this.$emit('submit', project)
+			}
+		},
+		validate() {
+			this.$v.$touch()
+			return !this.$v.$invalid
+		},
+		resolveInputKeys(ev) {
+			const allowedKeyCodes = [8, 46, 37, 38, 39, 40, 116, 13]
+			if (!allowedKeyCodes.includes(ev.keyCode)) {
+				const key = ev.key
+				if (!Number.isInteger(parseInt(key))) {
+					ev.returnValue = false
+					if (ev.preventDefault) ev.preventDefault()
+				}
+			}
+		},
+	},
 	validations: {
 		name: {
 			required,
@@ -181,26 +221,6 @@ export default {
 			integer,
 			maxValue: maxValue(999999),
 			minValue: minValue(1),
-		},
-	},
-	computed: {
-		allTypes() {
-			return this.$store.getters.types
-		},
-		allRegions() {
-			return this.$store.getters.regions
-		},
-	},
-	methods: {
-		resolveInputKeys(ev) {
-			const allowedKeyCodes = [8, 46, 37, 38, 39, 40, 116, 13]
-			if (!allowedKeyCodes.includes(ev.keyCode)) {
-				const key = ev.key
-				if (!Number.isInteger(parseInt(key))) {
-					ev.returnValue = false
-					if (ev.preventDefault) ev.preventDefault()
-				}
-			}
 		},
 	},
 	mounted() {

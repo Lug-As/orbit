@@ -29,5 +29,8 @@ export default {
 	async deleteProject(id) {
 		return axios.delete(ProjectsPath + '/' + encodeURI(id))
 	},
+	async createProject(project) {
+		return axios.post(ProjectsPath, project)
+	}
 }
 

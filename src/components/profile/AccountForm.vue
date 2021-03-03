@@ -287,6 +287,10 @@ export default {
 				this.$emit('submit', request)
 			}
 		},
+		validate() {
+			this.$v.$touch()
+			return this.valid
+		},
 		resolveInputKeys(ev) {
 			const allowedKeyCodes = [8, 46, 37, 38, 39, 40, 116, 13]
 			if (!allowedKeyCodes.includes(ev.keyCode)) {
@@ -296,10 +300,6 @@ export default {
 					if (ev.preventDefault) ev.preventDefault()
 				}
 			}
-		},
-		validate() {
-			this.$v.$touch()
-			return this.valid
 		},
 		uploadImage(ev) {
 			const file = ev.target.files[0]
