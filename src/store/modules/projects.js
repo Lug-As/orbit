@@ -6,6 +6,7 @@ class Project {
 	text
 	budget
 	username
+	user_id
 	region
 	country
 	ad_types
@@ -14,25 +15,27 @@ class Project {
 	responses_count
 
 	constructor(
-		id, name, text, budget, username, region, country, followers_from, followers_to,
+		id, name, text, budget, user, region, country, followers_from, followers_to,
 		responses_count = null, ad_types = null,
 	) {
 		this.id = id
 		this.name = name
 		this.text = text
 		this.budget = budget
-		this.username = username
+		this.user_id = user.id
 		this.region = region
 		this.country = country
 		this.followers_from = followers_from
 		this.followers_to = followers_to
 		this.ad_types = ad_types
 		this.responses_count = responses_count
+
+		this.username = user.name
 	}
 
 	static createFromApiData(apiData) {
 		return new this(
-			apiData.id, apiData.name, apiData.text, apiData.budget, apiData.user.name, apiData.region?.name,
+			apiData.id, apiData.name, apiData.text, apiData.budget, apiData.user, apiData.region?.name,
 			apiData.region?.country.name, apiData.followers_from, apiData.followers_to,
 			apiData.responses_count, apiData.ad_types,
 		)
@@ -40,7 +43,7 @@ class Project {
 
 	static createFromShortApiData(apiData) {
 		return new this(
-			apiData.id, apiData.name, apiData.text, apiData.budget, apiData.user.name, apiData.region?.name,
+			apiData.id, apiData.name, apiData.text, apiData.budget, apiData.user, apiData.region?.name,
 			apiData.region?.country.name, apiData.followers_from, apiData.followers_to, apiData.responses_count,
 		)
 	}

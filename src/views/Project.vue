@@ -64,7 +64,7 @@
 									{{ project.budget.toLocaleString() }}₽
 								</span>
 							</div>
-							<div class="offer__body-price-button">
+							<div class="offer__body-price-button" v-if="notMyProject">
 								<button
 									class="button-grand-black big button__open-massage"
 									:disabled="userAccounts === null || (responses.length === userAccounts.length) || responsesLoading"
@@ -170,6 +170,9 @@ export default {
 				return userAccounts
 			}
 			return null
+		},
+		notMyProject() {
+			return this.user ? this.project.user_id !== this.user.id : true
 		},
 		noResponseUserAccounts() {
 			if (this.userAccounts) {
