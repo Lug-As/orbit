@@ -290,8 +290,24 @@ export default {
 					this.toggleCreateMode()
 					this.loadRequests()
 				})
-				.catch(() => {
-					alert('Произошла ошибка отправки формы. Повторите позже.')
+				.catch(e => {
+					let displayError = true
+					if (
+						e.response && e.response.data && e.response.data['errors'] && e.response.data['errors']['user_error_code']
+						&& Array.isArray(e.response.data['errors']['user_error_code'])
+					) {
+						const user_error_code = e.response.data['errors']['user_error_code'][0]
+						if (user_error_code === 1) {
+							alert('На сайте уже зарегистрирован подтвержденный Тик-Ток аккаунт с таким названием')
+							displayError = false
+						} else if (user_error_code === 2) {
+							alert('Вы уже подали заявку на создание аккаунта с таким названием')
+							displayError = false
+						}
+					}
+					if (displayError) {
+						alert('Произошла ошибка отправки формы. Повторите позже.')
+					}
 				})
 		},
 	},
