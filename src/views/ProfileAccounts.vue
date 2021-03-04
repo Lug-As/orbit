@@ -25,8 +25,9 @@
 					v-if="createMode"
 				/>
 			</transition>
-			<div class="profile__questionnaire-accounts" v-if="requests && requests.length">
-				<div class=" profile__questionnaire-accounts-row">
+			<preloader v-if="requestsLoading"/>
+			<div class="profile__questionnaire-accounts" v-else-if="requests && requests.length">
+				<div class="profile__questionnaire-accounts-row">
 					<div class="profile__questionnaire-accounts-row-title">
 						<h2 class="profile__questionnaire-accounts-row-title-h2">
 							Заявки на создание аккаунтов
@@ -134,6 +135,13 @@
 								</div>
 							</template>
 						</div>
+					</div>
+					<div class="objects-pagination">
+						<pagination
+							:data="requestsPagination"
+							:limit="2"
+							@pagination-change-page="changePage"
+						/>
 					</div>
 				</div>
 			</div>
@@ -260,29 +268,79 @@ export default {
 		requests() {
 			return this.$store.getters.requests
 		},
+		requestsLoading() {
+			return this.$store.getters.requestsLoading
+		},
+		requestsPagination() {
+			return this.$store.getters.requestsPagination
+		},
 		user() {
 			return this.$store.getters.user
 		},
 		userLoading() {
 			return this.$store.getters.userLoading
 		},
+		page() {
+			let page
+			if (this.$route.query['page']) {
+				page = Math.abs(parseInt(this.$route.query['page']))
+				if (page === 1) {
+					this.clearQueryParam('page')
+				}
+			} else {
+				page = 1
+			}
+			if (page === 0 || !Number.isInteger(page)) {
+				page = 1
+			}
+			return page
+		},
 	},
 	methods: {
 		toggleCreateMode() {
 			this.createMode = !this.createMode
+		},
+		clearQueryParam(key) {
+			if (this.$route.query[key] !== undefined) {
+				let query = Object.assign({}, this.$route.query)
+				delete query[key]
+				this.$router.replace({query})
+			}
 		},
 		deleteAccount(id) {
 			if (confirm('Вы точно хотите удалить аккаунт? Восстановить его будет невозможно.')) {
 				this.$store.dispatch('removeAccount', {id})
 			}
 		},
+		scrollToTop(top = 0) {
+			window.scrollTo({
+				top,
+				behavior: 'smooth',
+			})
+		},
 		deleteRequest(id, force = false) {
 			if (force || confirm('Вы точно хотите удалить заявку? Восстановить её будет невозможно.')) {
 				this.$store.dispatch('removeRequest', {id})
 			}
 		},
+		changePage (page = 1) {
+			if (page !== this.page) {
+				this.scrollToTop(390)
+				this.$router.push({
+					name: this.$route.name,
+					query: {
+						page,
+					},
+				})
+					.then(() => this.loadRequests())
+				return true
+			}
+			return false
+		},
 		loadRequests() {
-			this.$store.dispatch('loadRequests')
+			this.$store.dispatch('loadRequests', {
+				page: this.page,
+			})
 		},
 		createAccount(ev) {
 			this.$store.dispatch('createRequest', ev)

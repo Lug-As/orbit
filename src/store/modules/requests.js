@@ -3,11 +3,15 @@ import requestsService from '@/api/requestsService'
 export default {
 	state: {
 		requests: [],
+		requestsLoading: false,
 		requestsPagination: {},
 	},
 	getters: {
 		requests(state) {
 			return state.requests
+		},
+		requestsLoading(state) {
+			return state.requestsLoading
 		},
 		requestsPagination(state) {
 			return state.requestsPagination
@@ -17,8 +21,11 @@ export default {
 		setRequests(state, payload) {
 			state.requests = payload
 		},
-		addRequest(state, payload) {
-			state.requests.push(payload)
+		startRequestsLoading(state) {
+			state.requestsLoading = true
+		},
+		stopRequestsLoading(state) {
+			state.requestsLoading = false
 		},
 		setRequestsPagination(state, payload) {
 			state.requestsPagination = payload
@@ -28,8 +35,11 @@ export default {
 		},
 	},
 	actions: {
-		async loadRequests({commit}) {
-			const response = await requestsService.getRequests(),
+		async loadRequests({commit}, {
+			page = 1
+		}) {
+			commit('startRequestsLoading')
+			const response = await requestsService.getRequests(page),
 				result = response.data
 			const requestsList = result.data.map(item => ({
 				...item,
@@ -38,6 +48,7 @@ export default {
 			delete result.data
 			commit('setRequestsPagination', result)
 			commit('setRequests', requestsList)
+			commit('stopRequestsLoading')
 		},
 		async removeRequest({commit}, {
 			id,

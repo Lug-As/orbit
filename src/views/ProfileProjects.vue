@@ -141,7 +141,7 @@ export default {
 				.then(() => {
 					this.toggleCreateMode()
 					if (!this.changePage()) {
-						this.scrollToTop(300)
+						this.scrollToTop(390)
 						this.loadUserProjects()
 					}
 				})

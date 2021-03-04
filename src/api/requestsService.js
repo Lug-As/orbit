@@ -29,16 +29,20 @@ const storeRequest = (request) => {
 	})
 }
 
-const fetchRequests = () => {
-	return axios.get(RequestsPath + '/my')
+const fetchRequests = (page) => {
+	return axios.get(RequestsPath + '/my', {
+		params: {
+			page: encodeURI(String(parseInt(page))),
+		},
+	})
 }
 
 export default {
 	async sendRequest(request) {
 		return await storeRequest(request)
 	},
-	async getRequests() {
-		return await fetchRequests()
+	async getRequests(page = 1) {
+		return await fetchRequests(page)
 	},
 	async deleteRequest(id) {
 		return axios.delete(RequestsPath + '/' + encodeURI(id))
