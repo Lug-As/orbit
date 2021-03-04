@@ -71,7 +71,7 @@
 								<h3 class="bloger__body-title">Субъект РФ: </h3>
 								<p class="bloger__body-text">{{ account.region }}, {{ account.country }}.</p>
 							</div>
-							<div class="bloger__body-button">
+							<div class="bloger__body-button" v-if="notMyAccount">
 								<button
 									class="bloger__button button-grand-black big"
 									:disabled="!verifyed"
@@ -170,6 +170,9 @@ export default {
 		},
 		id() {
 			return this.$route.params.id
+		},
+		notMyAccount() {
+			return !this.user || this.account.user_id !== this.user.id
 		},
 		verifyed() {
 			if (this.user) {
