@@ -226,6 +226,7 @@ import Preloader from '@/components/Preloader'
 
 export default {
 	name: 'ProjectsList',
+	title: 'Все рекламные предложения',
 	components: {Preloader},
 	data: () => ({
 		filterOpts: {
@@ -238,9 +239,6 @@ export default {
 		searchQuery: null,
 	}),
 	computed: {
-		/**
-		 * @returns {Array.<Project>}
-		 */
 		projects() {
 			return this.$store.getters.projects
 		},

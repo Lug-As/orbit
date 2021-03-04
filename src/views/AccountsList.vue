@@ -301,6 +301,7 @@ import Preloader from '@/components/Preloader'
 
 export default {
 	name: 'AccountsList',
+	title: 'Все блогеры',
 	data: () => ({
 		filterOpts: {
 			topic: null,

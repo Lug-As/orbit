@@ -93,10 +93,11 @@ import ProjectForm from '@/components/profile/ProjectForm'
 
 export default {
 	name: 'ProfileProjects',
-	components: {ProjectForm, Preloader},
 	data: () => ({
 		createMode: false,
 	}),
+	title: 'Мои рекламные предложения',
+	components: {ProjectForm, Preloader},
 	computed: {
 		user() {
 			return this.$store.getters.user
@@ -144,6 +145,9 @@ export default {
 						this.loadUserProjects()
 					}
 				})
+				.catch(() => {
+					alert('Произошла ошибка отправки формы. Повторите позже.')
+				})
 		},
 		deleteProject(id) {
 			if (confirm('Вы точно хотите удалить рекламное предложение? Восстановить его будет невозможно.')) {
@@ -167,6 +171,7 @@ export default {
 					},
 				})
 					.then(() => this.loadUserProjects())
+				return true
 			}
 			return false
 		},
@@ -181,7 +186,7 @@ export default {
 		if (this.user) {
 			this.loadUserProjects()
 		} else {
-			this.$onUserLoad.func = this.loadUserProjects
+			this.$onUserLoad.hook = this.loadUserProjects
 		}
 	},
 }

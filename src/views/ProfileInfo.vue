@@ -52,6 +52,7 @@ import Preloader from '@/components/Preloader'
 
 export default {
 	name: 'ProfileInfo',
+	title: 'Мои данные',
 	components: {Preloader, InfoItem},
 	computed: {
 		user() {

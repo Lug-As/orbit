@@ -172,7 +172,7 @@ export default {
 			return null
 		},
 		notMyProject() {
-			return this.user ? this.project.user_id !== this.user.id : true
+			return !this.user || this.project.user_id !== this.user.id
 		},
 		noResponseUserAccounts() {
 			if (this.userAccounts) {
@@ -259,6 +259,9 @@ export default {
 	},
 	mounted() {
 		this.$store.dispatch('loadProject', this.id)
+			.then(project => {
+				this.$setPageTitle(project.name.substring(0, 50))
+			})
 			.catch(e => {
 				if (e.response && e.response.status && e.response.status === 404) {
 					let route = this.$router.match({name: '404'})

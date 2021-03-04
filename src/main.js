@@ -7,15 +7,17 @@ import router from './router'
 import store from './store'
 import App from './App.vue'
 import PaginationCmp from './components/pagination/Pagination'
-import roundNumber from './filters/roundNumber'
-import slashedList from './filters/slashedList'
-import cutText from './filters/cutText'
-import phoneNumber from './filters/phoneNumber'
-import inputMask from './directives/inputMask'
+import roundNumber from './helpers/filters/roundNumber'
+import slashedList from './helpers/filters/slashedList'
+import cutText from './helpers/filters/cutText'
+import phoneNumber from './helpers/filters/phoneNumber'
+import inputMask from './helpers/directives/inputMask'
+import titleMixin from './helpers/mixins/titleMixin'
 import {ApiBaseUrl} from './api/info'
 import './assets/css/main.css'
 import 'vue-select/dist/vue-select.css'
 import './assets/css/my.scss'
+
 
 Vue.config.productionTip = false
 
@@ -28,11 +30,12 @@ Vue.filter('round', roundNumber)
 Vue.filter('phone', phoneNumber)
 Vue.filter('cut', cutText)
 Vue.filter('slashedList', slashedList)
+Vue.mixin(titleMixin)
 
 axios.defaults.baseURL = ApiBaseUrl
 
 Vue.prototype.$onUserLoad = {
-	func: () => {},
+	hook: () => {},
 }
 
 new Vue({
@@ -41,7 +44,7 @@ new Vue({
 			.then(token => {
 				if (token) {
 					axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-					this.$onUserLoad.func()
+					this.$onUserLoad.hook()
 					this.$store.dispatch('loadUserAccounts')
 				}
 			})

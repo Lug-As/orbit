@@ -113,7 +113,9 @@ export default {
 			try {
 				const response = await projectsService.fetchProject(id)
 				const result = response.data.data
-				commit('setCurrentProject', Project.createFromApiData(result))
+				const project = Project.createFromApiData(result)
+				commit('setCurrentProject', project)
+				return project
 			} catch (e) {
 				throw e
 			} finally {

@@ -201,6 +201,9 @@ export default {
 	},
 	mounted() {
 		this.$store.dispatch('loadAccount', this.id)
+			.then(account => {
+				this.$setPageTitle(account.title + ', ' + account.username)
+			})
 			.catch(e => {
 				if (e.response && e.response.status && e.response.status === 404) {
 					let route = this.$router.match({name: '404'})

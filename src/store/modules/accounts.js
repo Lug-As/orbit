@@ -58,7 +58,9 @@ export default {
 			try {
 				const response = await accountsService.fetchAccount(id)
 				const result = response.data.data
-				commit('setCurrentAccount', Account.createFromApiData(result))
+				const account = Account.createFromApiData(result)
+				commit('setCurrentAccount', account)
+				return account
 			} catch (e) {
 				throw e
 			} finally {

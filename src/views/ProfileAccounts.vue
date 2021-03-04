@@ -248,6 +248,7 @@ import AccountForm from '@/components/profile/AccountForm'
 
 export default {
 	name: 'ProfileAccounts',
+	title: 'Мои аккаунты',
 	components: {AccountForm, Preloader},
 	data: () => ({
 		createMode: false,
@@ -289,13 +290,16 @@ export default {
 					this.toggleCreateMode()
 					this.loadRequests()
 				})
+				.catch(() => {
+					alert('Произошла ошибка отправки формы. Повторите позже.')
+				})
 		},
 	},
 	mounted() {
 		if (this.user) {
 			this.loadRequests()
 		} else {
-			this.$onUserLoad.func = this.loadRequests
+			this.$onUserLoad.hook = this.loadRequests
 		}
 	},
 }
