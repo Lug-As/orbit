@@ -7,19 +7,20 @@ class User {
 	email
 	phone
 	verifyed
+	telegram
 
-	// !!! Telegram !!!
-	constructor(id, name, email, phone, verifyed) {
+	constructor(id, name, email, phone, verifyed, telegram) {
 		this.id = id
 		this.name = name
 		this.email = email
 		this.phone = phone
 		this.verifyed = verifyed
+		this.telegram = telegram
 	}
 
 	static createFromApiData(apiData) {
 		return new this(
-			apiData.id, apiData.name, apiData.email, apiData.phone, apiData.verifyed,
+			apiData.id, apiData.name, apiData.email, apiData.phone, apiData.verifyed, apiData.telegram,
 		)
 	}
 }
@@ -82,7 +83,7 @@ export default {
 		async saveUserInfo({commit}, payload = {
 			type, value,
 		}) {
-			userService.putUserInfo(payload.type, payload.value)
+			await userService.putUserInfo(payload.type, payload.value)
 		},
 	},
 }
