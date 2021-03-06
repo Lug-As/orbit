@@ -65,6 +65,11 @@ const routes = [
 		],
 	},
 	{
+		path: '/verify-email/:id/:hash',
+		name: 'Verification',
+		component: () => import('../views/Verification'),
+	},
+	{
 		path: '*',
 		name: '404',
 		component: () => import('../views/NotFound'),

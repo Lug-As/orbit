@@ -386,17 +386,3 @@ export default {
 	},
 }
 </script>
-
-<style lang="scss" scoped>
-.big_char {
-	display: inline-block;
-	font-size: 42px;
-	vertical-align: bottom;
-	font-family: "Montserrat-Light", sans-serif;
-	transition: transform .2s;
-
-	&-cross {
-		transform: rotate(45deg);
-	}
-}
-</style>

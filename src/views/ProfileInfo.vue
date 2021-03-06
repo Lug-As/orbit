@@ -78,6 +78,9 @@ export default {
 				})
 					.then(() => {
 						this.$notify('Новые данные сохранены!')
+						setTimeout(() => {
+							location.reload()
+						}, 800)
 					})
 					.catch(e => {
 						let displayError = true

@@ -6,10 +6,16 @@
 					@click="toggleCreateMode"
 					class="profile__questionnaire-create-button button-grand-black"
 				>
-					<picture>
-						<source srcset="../assets/img/plus-create.webp" type="image/webp">
-						<img src="../assets/img/plus-create.png" alt=""></picture>
-					Добавить предложение
+					<span
+						class="big_char"
+						:class="{ 'big_char-cross': createMode }"
+					>+</span>
+					<template v-if="createMode">
+						Закрыть форму
+					</template>
+					<template v-else>
+						Добавить предложение
+					</template>
 				</button>
 			</div>
 			<transition name="slide-up-down">

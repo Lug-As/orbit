@@ -64,36 +64,38 @@
 									{{ project.budget.toLocaleString() }}₽
 								</span>
 							</div>
-							<div class="offer__body-price-button" v-if="notMyProject">
-								<button
-									class="button-grand-black big button__open-massage"
-									:disabled="userAccounts === null || (responses.length === userAccounts.length) || responsesLoading"
-									@click="callModal"
+							<template v-if="notMyProject">
+								<div class="offer__body-price-button">
+									<button
+										class="button-grand-black big button__open-massage"
+										:disabled="userAccounts === null || (responses.length === userAccounts.length) || responsesLoading"
+										@click="callModal"
+									>
+										Предложить выполнение работы
+									</button>
+								</div>
+								<div
+									v-if="userAccounts === null"
+									class="offer__body-price-confirmation bloger__button-confirmation"
 								>
-									Предложить выполнение работы
-								</button>
-							</div>
-							<div
-								v-if="userAccounts === null"
-								class="offer__body-price-confirmation bloger__button-confirmation"
-							>
-								<picture>
-									<source srcset="../assets/img/Иллюстрация.webp" type="image/webp">
-									<img src="../assets/img/Иллюстрация.png" alt="">
-								</picture>
-								<p class="bloger__button-text">
-									Чтобы оставлять отклики,
-									<template v-if="!user">
-										войди или зарегистрируйся.
-									</template>
-									<template v-else-if="!verifyed">
-										подтверди свой почтовый ящик.
-									</template>
-									<template v-else-if="userAccounts === null">
-										необходимо завести Тик-Ток аккаунт.
-									</template>
-								</p>
-							</div>
+									<picture>
+										<source srcset="../assets/img/Иллюстрация.webp" type="image/webp">
+										<img src="../assets/img/Иллюстрация.png" alt="">
+									</picture>
+									<p class="bloger__button-text">
+										Чтобы оставлять отклики,
+										<template v-if="!user">
+											войди или зарегистрируйся.
+										</template>
+										<template v-else-if="!verifyed">
+											подтверди свой почтовый ящик.
+										</template>
+										<template v-else-if="userAccounts === null">
+											необходимо завести Тик-Ток аккаунт.
+										</template>
+									</p>
+								</div>
+							</template>
 						</div>
 						<p v-if="responses.length" v-html="responseString"></p>
 					</div>
@@ -257,10 +259,14 @@ export default {
 	mounted() {
 		if (!this.userAccounts) {
 			if (this.user) {
-				this.$store.dispatch('loadUserAccounts')
+				if (this.user.verifyed) {
+					this.$store.dispatch('loadUserAccounts')
+				}
 			} else {
 				this.$onUserLoad.hook(() => {
-					this.$store.dispatch('loadUserAccounts')
+					if (this.user.verifyed) {
+						this.$store.dispatch('loadUserAccounts')
+					}
 				})
 			}
 		}

@@ -67,6 +67,9 @@
 							Чтобы создавать заявки и получать предложения - подтвердите свою почту. Мы отправили вам сообщение
 							на E-mail.
 						</p>
+						<p class="profile__confirmation-text-p secondary">
+							(Обновите страницу, если вы уже подтвердили почту)
+						</p>
 					</div>
 					<div class="profile__confirmation-button">
 						<preloader height="90" v-if="mailSending"/>
@@ -124,8 +127,19 @@ export default {
 					this.mailSending = false
 				})
 		},
+		clearQueryParam(key) {
+			if (this.$route.query[key] !== undefined) {
+				let query = Object.assign({}, this.$route.query)
+				delete query[key]
+				this.$router.replace({query})
+			}
+		},
 	},
 	mounted() {
+		if (this.$route.query['reload']) {
+			this.clearQueryParam('reload')
+			location.reload()
+		}
 		if (this.user) {
 			if (this.user.verifyed) {
 				this.$store.dispatch('loadNotices', {page: 1})

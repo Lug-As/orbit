@@ -1,5 +1,6 @@
 import tokenService from '@/auth/tokenService'
 import userService from '@/api/userService'
+import axios from 'axios'
 
 class User {
 	id
@@ -73,6 +74,7 @@ export default {
 						}
 					})
 				if (set) {
+					axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
 					commit('setUser', User.createFromApiData(response.data.data))
 					commit('stopUserLoading')
 				}
