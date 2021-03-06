@@ -1,7 +1,6 @@
 <template>
 	<div class="profile__questionnaire profile__contant tab-3">
-		<preloader v-if="userLoading"/>
-		<div v-else-if="user" class="profile__questionnaire-row">
+		<div v-if="user && user.verifyed" class="profile__questionnaire-row">
 			<div class="profile__questionnaire-create">
 				<button
 					@click="toggleCreateMode"
@@ -347,7 +346,7 @@ export default {
 				.then(() => {
 					this.toggleCreateMode()
 					this.loadRequests()
-					this.$notify('Спасибо за заявку! Подтвердите аккаунт, чтобы он появился на сайте!')
+					this.$notify('Благодарим за создание! Ваша заявка будет рассмотрена администраторами в течение 24 часов! Подтвердите аккаунт, чтобы он появился на сайте!')
 				})
 				.catch(e => {
 					let displayError = true
@@ -369,20 +368,20 @@ export default {
 					}
 				})
 		},
-	},
-	mounted() {
-		if (this.user) {
-			this.loadRequests()
-			if (!this.userAccounts) {
-				this.$store.dispatch('loadUserAccounts')
-			}
-		} else {
-			this.$onUserLoad.hook(() => {
+		starterFunction() {
+			if (this.user.verifyed) {
 				this.loadRequests()
 				if (!this.userAccounts) {
 					this.$store.dispatch('loadUserAccounts')
 				}
-			})
+			}
+		}
+	},
+	mounted() {
+		if (this.user) {
+			this.starterFunction()
+		} else {
+			this.$onUserLoad.hook(() => this.starterFunction)
 		}
 	},
 }

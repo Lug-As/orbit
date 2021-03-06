@@ -7,10 +7,11 @@
 						<span class="header__menu-burger"></span>
 					</div>
 					<div class="header__img">
-						<a href="index.html">
+						<a href="/">
 							<picture>
 								<source srcset="../assets/img/Логотип.webp" type="image/webp">
-								<img src="../assets/img/Логотип.png" alt=""></picture>
+								<img src="../assets/img/Логотип.png" alt="">
+							</picture>
 						</a>
 					</div>
 

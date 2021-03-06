@@ -60,50 +60,69 @@
 					</li>
 				</ul>
 			</div>
-			<div class="profile__confirmation" v-if="false">
+			<div class="profile__confirmation" v-if="!userLoading && !user.verifyed">
 				<div class="profile__confirmation-row">
 					<div class="profile__confirmation-text">
 						<p class="profile__confirmation-text-p">
-							Чтобы создавать заявки и получать предложения -
-							подтвердите свою почту. Мы отправили вам сообщение на E-mail.
+							Чтобы создавать заявки и получать предложения - подтвердите свою почту. Мы отправили вам сообщение
+							на E-mail.
 						</p>
 					</div>
 					<div class="profile__confirmation-button">
-						<button class="button-grand-black">
+						<preloader height="90" v-if="mailSending"/>
+						<button
+							v-else
+							@click="resendVerification"
+							class="button-grand-black"
+						>
 							Отправить повторно
 						</button>
 					</div>
 				</div>
 			</div>
-			<router-view/>
-			<div class="profile__notifications" v-if="false">
-				<div class="profile__notifications-row">
-					<div class="profile__notifications-img">
-						<picture>
-							<source srcset="../assets/img/notific.webp" type="image/webp">
-							<img src="../assets/img/notific.png" alt=""></picture>
-					</div>
-					<div class="profile__notifications-text">
-						<p class="profile__notifications-text-p">
-							Благодарим за создание! <br> Ваша заявка будет рассмотрена <br> администраторами в течение 24
-							часов!
-						</p>
-					</div>
-				</div>
-			</div>
+			<br>
+			<preloader v-if="userLoading"/>
+			<router-view v-else/>
 		</div>
 	</section>
 </template>
 
 <script>
+import Preloader from '@/components/Preloader'
+import verificationService from '@/api/verificationService'
+
 export default {
 	name: 'Profile',
+	data: () => ({
+		mailSending: false,
+	}),
+	components: {Preloader},
 	computed: {
 		user() {
 			return this.$store.getters.user
 		},
+		userLoading() {
+			return this.$store.getters.userLoading
+		},
 		noticesCount() {
 			return this.$store.getters.notices.length
+		},
+	},
+	methods: {
+		resendVerification() {
+			this.mailSending = true
+			verificationService.resendEmailVerification()
+				.then(() => {
+					this.$notify('Письмо с подтверждением отправлено на ваш E-mail.')
+				})
+				.catch(e => {
+					if (e.response && e.response.status === 429) {
+						alert('Вы слишком часто просите переотправить вам подтверждение. Повторите попытку позже.')
+					}
+				})
+				.finally(() => {
+					this.mailSending = false
+				})
 		},
 	},
 	mounted() {

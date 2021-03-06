@@ -1,6 +1,6 @@
 <template>
 	<div class="profile__offer profile__questionnaire profile__contant tab-4">
-		<div class="profile__offer-row profile__questionnaire-row">
+		<div class="profile__offer-row profile__questionnaire-row" v-if="!userLoading && user.verifyed">
 			<div class="profile__questionnaire-create">
 				<button
 					@click="toggleCreateMode"
@@ -102,6 +102,9 @@ export default {
 		user() {
 			return this.$store.getters.user
 		},
+		userLoading() {
+			return this.$store.getters.userLoading
+		},
 		userProjects() {
 			return this.$store.getters.userProjects
 		},
@@ -181,12 +184,17 @@ export default {
 				behavior: 'smooth',
 			})
 		},
+		starterFunction() {
+			if (this.user.verifyed) {
+				this.loadUserProjects()
+			}
+		}
 	},
 	mounted() {
 		if (this.user) {
-			this.loadUserProjects()
+			this.starterFunction()
 		} else {
-			this.$onUserLoad.hook(this.loadUserProjects)
+			this.$onUserLoad.hook(this.starterFunction)
 		}
 	},
 }

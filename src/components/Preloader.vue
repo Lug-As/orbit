@@ -1,5 +1,5 @@
 <template>
-	<div class="preload-container">
+	<div class="preload-container" :style="{'height': (height + 'px')}">
 		<div class="sk-circle-bounce">
 			<div class="sk-child sk-circle-1"></div>
 			<div class="sk-child sk-circle-2"></div>
@@ -20,6 +20,13 @@
 <script>
 export default {
 	name: 'Preloader',
+	props: {
+		height: {
+			type: [Number, String],
+			required: false,
+			default: 400,
+		},
+	},
 }
 </script>
 
@@ -28,7 +35,6 @@ $spinkit-size: 6em !default;
 $spinkit-spinner-color: #337ab7 !default;
 
 .preload-container {
-	height: 400px;
 	display: flex;
 }
 
