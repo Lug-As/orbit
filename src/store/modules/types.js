@@ -29,12 +29,14 @@ export default {
 		},
 	},
 	actions: {
-		async loadTypes({commit}) {
-			let typesList = await typesService.getTypes()
-			typesList = typesList.map(item => {
-				return Type.createFromApiData(item)
-			})
-			commit('setTypes', typesList)
+		async loadTypes({commit, getters}) {
+			if (!getters.types.length) {
+				let typesList = await typesService.getTypes()
+				typesList = typesList.map(item => {
+					return Type.createFromApiData(item)
+				})
+				commit('setTypes', typesList)
+			}
 		},
 	},
 }

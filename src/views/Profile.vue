@@ -33,7 +33,7 @@
 							>
 								<li
 									@click="navigate"
-									class="profile__tab-menu-ul-li-drop"
+									class="profile__tab-menu-ul-li profile__tab-menu-ul-li-drop"
 									:class="{
 										'choice': isActive,
 									}"
@@ -48,7 +48,7 @@
 							>
 								<li
 									@click="navigate"
-									class="profile__tab-menu-ul-li-drop"
+									class="profile__tab-menu-ul-li profile__tab-menu-ul-li-drop"
 									:class="{
 										'choice': isActive,
 									}"
@@ -108,7 +108,7 @@ export default {
 			return this.$store.getters.userLoading
 		},
 		noticesCount() {
-			return this.$store.getters.notices.length
+			return this.$store.getters.noticesPagination.total
 		},
 	},
 	methods: {

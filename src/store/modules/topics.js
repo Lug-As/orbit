@@ -29,12 +29,14 @@ export default {
 		},
 	},
 	actions: {
-		async loadTopics({commit}) {
-			let topicsList = await topicsService.getTopics()
-			topicsList = topicsList.map(item => {
-				return Topic.createFromApiData(item)
-			})
-			commit('setTopics', topicsList)
+		async loadTopics({commit, getters}) {
+			if (!getters.topics.length) {
+				let topicsList = await topicsService.getTopics()
+				topicsList = topicsList.map(item => {
+					return Topic.createFromApiData(item)
+				})
+				commit('setTopics', topicsList)
+			}
 		},
 	},
 }

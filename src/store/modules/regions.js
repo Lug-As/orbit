@@ -29,19 +29,21 @@ export default {
 		},
 	},
 	actions: {
-		async loadRegions({commit}) {
-			let regionsList = await regionsService.getRegions()
-			let formatRegionList = []
-			regionsList.forEach(country => {
-				formatRegionList.push({
-					name: null,
-					group: country.name,
+		async loadRegions({commit, getters}) {
+			if (!getters.regions.length) {
+				let regionsList = await regionsService.getRegions()
+				let formatRegionList = []
+				regionsList.forEach(country => {
+					formatRegionList.push({
+						name: null,
+						group: country.name,
+					})
+					country.regions.forEach(region => {
+						formatRegionList.push(Region.createFromApiData(region))
+					})
 				})
-				country.regions.forEach(region => {
-					formatRegionList.push(Region.createFromApiData(region))
-				})
-			})
-			commit('setRegions', formatRegionList)
+				commit('setRegions', formatRegionList)
+			}
 		},
 	},
 }

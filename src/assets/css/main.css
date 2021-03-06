@@ -769,9 +769,9 @@ template {
 	height: 45px;
 	position: absolute;
 	background: #f3f3f3;
-	-webkit-transition: all 0.5s;
-	-o-transition: all 0.5s;
-	transition: all 0.5s;
+	-webkit-transition: all 0.35s;
+	-o-transition: all 0.35s;
+	transition: all 0.35s;
 	color: transparent;
 	overflow: hidden;
 	opacity: 1;
@@ -2105,7 +2105,7 @@ template {
 .profile .profile__tab-menu-ul-li:hover .profile__tab-menu-ul-drop {
 	visibility: visible;
 	opacity: 1;
-	top: 60px;
+	top: 56px;
 }
 
 .profile__tab-menu-li-body {
@@ -2166,7 +2166,7 @@ template {
 	width: 100%;
 	-webkit-transition: top 0.5s, opacity 0.2s, visibility 0s linear 0.1s;
 	-o-transition: top 0.5s, opacity 0.2s, visibility 0s linear 0.1s;
-	transition: top 0.5s, opacity 0.2s, visibility 0s linear 0.1s;
+	transition: top 0.45s, opacity 0.2s, visibility 0s linear 0.1s;
 	visibility: hidden;
 	position: absolute;
 	overflow: hidden;
@@ -3278,8 +3278,8 @@ button:disabled {
 
 	.header__li-nickname:hover,
 	.header__li-nickname:focus {
-		width: 200px;
-		left: -160px;
+		width: 207px;
+		left: -167px;
 	}
 
 	.header__menu-ul {

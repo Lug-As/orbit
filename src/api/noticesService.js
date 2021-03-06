@@ -12,6 +12,6 @@ const fetchNotices = (page = 1) => {
 
 export default {
 	async getNotices(page = 1) {
-		return await fetchNotices()
+		return await fetchNotices(page)
 	},
 }

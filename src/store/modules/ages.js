@@ -29,12 +29,14 @@ export default {
 		},
 	},
 	actions: {
-		async loadAges({commit}) {
-			let agesList = await agesService.getAges()
-			agesList = agesList.map(item => {
-				return Age.createFromApiData(item)
-			})
-			commit('setAges', agesList)
+		async loadAges({commit, getters}) {
+			if (!getters.ages.length) {
+				let agesList = await agesService.getAges()
+				agesList = agesList.map(item => {
+					return Age.createFromApiData(item)
+				})
+				commit('setAges', agesList)
+			}
 		},
 	},
 }

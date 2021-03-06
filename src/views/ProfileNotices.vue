@@ -37,7 +37,12 @@ export default {
 			return this.$store.getters.noticesLoading
 		},
 		noticesPagination() {
-			return this.$store.getters.noticesPagination
+			const pagination = this.$store.getters.noticesPagination,
+				notsCount = pagination.total
+			if (notsCount) {
+				this.$setPageTitle(`Уведомления (${notsCount})`)
+			}
+			return pagination
 		},
 		page() {
 			let page
@@ -76,7 +81,7 @@ export default {
 		},
 		changePage(page = 1) {
 			if (page !== this.page) {
-				this.scrollToTop(390)
+				this.scrollToTop(280)
 				this.$router.push({
 					name: this.$route.name,
 					query: {

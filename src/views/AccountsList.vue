@@ -619,7 +619,9 @@ export default {
 		},
 	},
 	mounted() {
-		this.loadAccounts()
+		if (!this.accounts.length || this.page !== this.accountsPagination.current_page) {
+			this.loadAccounts()
+		}
 		this.$store.dispatch('loadTopics')
 			.then(() => this.$store.dispatch('loadTypes'))
 			.then(() => this.$store.dispatch('loadAges'))

@@ -11,7 +11,7 @@
 						:class="{ 'big_char-cross': createMode }"
 					>+</span>
 					<template v-if="createMode">
-						Закрыть анкету
+						Закрыть форму
 					</template>
 					<template v-else>
 						Создать анкету
@@ -370,12 +370,14 @@ export default {
 		},
 		starterFunction() {
 			if (this.user.verifyed) {
-				this.loadRequests()
+				if (!this.requests.length || this.page !== this.requestsPagination.current_page) {
+					this.loadRequests()
+				}
 				if (!this.userAccounts) {
 					this.$store.dispatch('loadUserAccounts')
 				}
 			}
-		}
+		},
 	},
 	mounted() {
 		if (this.user) {

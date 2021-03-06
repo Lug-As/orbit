@@ -192,9 +192,11 @@ export default {
 		},
 		starterFunction() {
 			if (this.user.verifyed) {
-				this.loadUserProjects()
+				if (!this.userProjects.length || this.page !== this.userProjectsPagination.current_page) {
+					this.loadUserProjects()
+				}
 			}
-		}
+		},
 	},
 	mounted() {
 		if (this.user) {

@@ -421,7 +421,9 @@ export default {
 		},
 	},
 	mounted() {
-		this.loadProjects()
+		if (!this.projects.length || this.page !== this.projectsPagination.current_page) {
+			this.loadProjects()
+		}
 		this.$store.dispatch('loadTypes')
 			.then(() => this.freshOpts())
 	},

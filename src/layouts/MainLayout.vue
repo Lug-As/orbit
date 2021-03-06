@@ -45,11 +45,12 @@
 						<div class="header__log-row">
 							<ul class="header__log-ul">
 								<li class="header__menu-li-left">
-									<a href="" class="header__menu-left-link">
+									<router-link :to="{name: 'Profile'}" class="header__menu-left-link">
 										<picture>
 											<source srcset="../assets/img/АИ.webp" type="image/webp">
-											<img src="../assets/img/АИ.png" alt=""></picture>
-									</a>
+											<img src="../assets/img/АИ.png" alt="">
+										</picture>
+									</router-link>
 									<ul class="header__li-left-drop">
 										<li class="header__li-nickname">
 											<h2 class="header__nickname-text">
