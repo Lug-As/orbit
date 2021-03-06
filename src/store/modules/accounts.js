@@ -99,6 +99,7 @@ export default {
 						...item,
 						user: {
 							name: getters.user.name,
+							id: getters.user.id,
 						},
 					})
 				})

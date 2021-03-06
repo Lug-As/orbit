@@ -255,6 +255,15 @@ export default {
 		},
 	},
 	mounted() {
+		if (!this.userAccounts) {
+			if (this.user) {
+				this.$store.dispatch('loadUserAccounts')
+			} else {
+				this.$onUserLoad.hook(() => {
+					this.$store.dispatch('loadUserAccounts')
+				})
+			}
+		}
 		this.$store.dispatch('loadProject', this.id)
 			.then(project => {
 				this.$setPageTitle(project.name.substring(0, 50))

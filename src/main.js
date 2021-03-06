@@ -48,7 +48,6 @@ new Vue({
 				if (token) {
 					axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
 					this.$onUserLoad.stack.forEach(hook => hook())
-					this.$store.dispatch('loadUserAccounts')
 				}
 			})
 	},

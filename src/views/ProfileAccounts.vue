@@ -373,8 +373,16 @@ export default {
 	mounted() {
 		if (this.user) {
 			this.loadRequests()
+			if (!this.userAccounts) {
+				this.$store.dispatch('loadUserAccounts')
+			}
 		} else {
-			this.$onUserLoad.hook(this.loadRequests)
+			this.$onUserLoad.hook(() => {
+				this.loadRequests()
+				if (!this.userAccounts) {
+					this.$store.dispatch('loadUserAccounts')
+				}
+			})
 		}
 	},
 }
