@@ -72,6 +72,9 @@ const routes = [
 	{
 		path: '*',
 		name: '404',
+		meta: {
+			layout: false,
+		},
 		component: () => import('../views/NotFound'),
 	},
 ]

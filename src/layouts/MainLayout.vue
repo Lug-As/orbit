@@ -44,14 +44,14 @@
 									<router-link :to="{name: 'Profile'}" class="header__menu-left-link"
 													 title="Перейти в личный кабинет">
 										<picture>
-											<source srcset="../assets/img/АИ.webp" type="image/webp">
-											<img src="../assets/img/АИ.png" alt="">
+											<source srcset="../assets/img/noneimg.webp" type="image/webp">
+											<img src="../assets/img/noneimg.png" alt="">
 										</picture>
 									</router-link>
 									<ul class="header__li-left-drop">
 										<li class="header__li-nickname">
 											<h2 class="header__nickname-text">
-												<a>_agentgirl_</a>
+												<a>{{ user.name }}</a>
 											</h2>
 											<ul class="header__menu-drop width-all">
 												<li class="header__drop-li">
@@ -74,7 +74,8 @@
 							<button
 								@click="showLoginForm"
 								class="header__menu-sign button-grand"
-							>Вход</button>
+							>Вход
+							</button>
 							<button class="header__menu-sign button-grand">Регистрация</button>
 						</div>
 					</div>
@@ -160,7 +161,10 @@ export default {
 	computed: {
 		authCheck() {
 			return this.$store.getters.authCheck
-		}
+		},
+		user() {
+			return this.$store.getters.user
+		},
 	},
 	methods: {
 		closeNotice() {
@@ -175,7 +179,7 @@ export default {
 		},
 		showLoginForm() {
 			//
-		}
+		},
 	},
 	mounted() {
 		Vue.prototype.$notify = (text) => {

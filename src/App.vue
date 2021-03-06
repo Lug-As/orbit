@@ -1,6 +1,7 @@
 <template>
 	<div id="app">
-		<main-layout></main-layout>
+		<router-view v-if="layout === false"/>
+		<main-layout v-else/>
 	</div>
 </template>
 
@@ -9,9 +10,13 @@ import MainLayout from '@/layouts/MainLayout'
 import {I} from '@/assets/js/script'
 
 export default {
-	data: () => ({}),
 	components: {
 		MainLayout,
+	},
+	computed: {
+		layout() {
+			return this.$route.meta['layout']
+		},
 	},
 	mounted() {
 		I.init()
