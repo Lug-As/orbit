@@ -3,180 +3,182 @@
 		<div class="container">
 			<div class="main__row">
 				<div class="main__filters">
-					<div class="main__filters-row">
-						<div class="main__title">
-							<div class="main__title-img">
-								<picture>
-									<source srcset="../assets/img/filter.webp" type="image/webp">
-									<img src="../assets/img/filter.png" alt="">
-								</picture>
-							</div>
-							<div class="main__title-text">Фильтр</div>
-							<a
-								v-if="wasFiltered"
-								@click.prevent="clearFilters"
-								class="reset-filters-link"
-								href="#"
-							>
-								Сбросить все
-							</a>
-						</div>
+					<div class="main__filters-container">
 						<div class="main__filters-row">
-							<div class="main__body-filters">
-								<div class="main__body-details">
-									<h2 class="main__filters-summary">Цена</h2>
-									<div class="main__details-row">
-										<div class="main__details-from-to">
-											<div class="main__details-from">
-												<p class="main__details-text">от</p>
-												<div class="main__details-input">
-													<input
-														v-model.lazy="filterOpts.price_from"
-														@change="filter($event, 'price_from')"
-														@keydown="resolveInputKeys"
-														class="main__details-input-small"
-													>
-												</div>
-											</div>
-											<div class="main__details-to">
-												<p class="main__details-text">до</p>
-												<div class="main__details-input">
-													<input
-														v-model.lazy="filterOpts.price_to"
-														@change="filter($event, 'price_to')"
-														@keydown="resolveInputKeys"
-														class="main__details-input-small"
-													>
-												</div>
-											</div>
-										</div>
-									</div>
+							<div class="main__title">
+								<div class="main__title-img">
+									<picture>
+										<source srcset="../assets/img/filter.webp" type="image/webp">
+										<img src="../assets/img/filter.png" alt="">
+									</picture>
 								</div>
-								<div class="main__body-details">
-									<h2 class="main__filters-summary">Тема канала</h2>
-									<div class="main__details-row">
-										<v-select
-											label="name"
-											v-model="filterOpts.topic"
-											:options="topics"
-											:reduce="opt => opt.id"
-											multiple
-											@input="filter($event, 'topic')"
-											class="main__vue-select"
-										/>
-										<small class="main__details-small">
-											Например: Еда / Отдых / Путешествия
-										</small>
-									</div>
-								</div>
-								<div class="main__body-details">
-									<h2 class="main__filters-summary">Виды рекламы</h2>
-									<div class="main__details-row">
-										<v-select
-											label="name"
-											v-model="filterOpts.type"
-											:options="types"
-											:reduce="opt => opt.id"
-											multiple
-											class="main__vue-select"
-											@input="filter($event, 'type')"
-										/>
-									</div>
-								</div>
-								<div class="main__body-details">
-									<h2 class="main__filters-summary">Количество подписчиков</h2>
-									<div class="main__details-row">
-										<div class="main__details-from-to">
-											<div class="main__details-from">
-												<p class="main__details-text">от</p>
-												<div class="main__details-input">
-													<input
-														v-model.lazy="filterOpts.followers_from"
-														@change="filter($event, 'followers_from')"
-														@keydown="resolveInputKeys"
-														class="main__details-input-small"
-													>
+								<div class="main__title-text">Фильтр</div>
+								<a
+									v-if="wasFiltered"
+									@click.prevent="clearFilters"
+									class="reset-filters-link"
+									href="#"
+								>
+									Сбросить все
+								</a>
+							</div>
+							<div class="main__filters-row">
+								<div class="main__body-filters">
+									<div class="main__body-details">
+										<h2 class="main__filters-summary">Цена</h2>
+										<div class="main__details-row">
+											<div class="main__details-from-to">
+												<div class="main__details-from">
+													<p class="main__details-text">от</p>
+													<div class="main__details-input">
+														<input
+															v-model.lazy="filterOpts.price_from"
+															@change="filter($event, 'price_from')"
+															@keydown="resolveInputKeys"
+															class="main__details-input-small"
+														>
+													</div>
 												</div>
-											</div>
-											<div class="main__details-to">
-												<p class="main__details-text">до</p>
-												<div class="main__details-input">
-													<input
-														v-model.lazy="filterOpts.followers_to"
-														@change="filter($event, 'followers_to')"
-														@keydown="resolveInputKeys"
-														class="main__details-input-small"
-													>
+												<div class="main__details-to">
+													<p class="main__details-text">до</p>
+													<div class="main__details-input">
+														<input
+															v-model.lazy="filterOpts.price_to"
+															@change="filter($event, 'price_to')"
+															@keydown="resolveInputKeys"
+															class="main__details-input-small"
+														>
+													</div>
 												</div>
 											</div>
 										</div>
 									</div>
-								</div>
-								<div class="main__body-details">
-									<h2 class="main__filters-summary">Количество лайков</h2>
-									<div class="main__details-row">
-										<div class="main__details-from-to">
-											<div class="main__details-from">
-												<p class="main__details-text">от</p>
-												<div class="main__details-input">
-													<input
-														v-model.lazy="filterOpts.likes_from"
-														@change="filter($event, 'likes_from')"
-														@keydown="resolveInputKeys"
-														class="main__details-input-small"
-													>
+									<div class="main__body-details">
+										<h2 class="main__filters-summary">Тема канала</h2>
+										<div class="main__details-row">
+											<v-select
+												label="name"
+												v-model="filterOpts.topic"
+												:options="topics"
+												:reduce="opt => opt.id"
+												multiple
+												@input="filter($event, 'topic')"
+												class="main__vue-select"
+											/>
+											<small class="main__details-small">
+												Например: Еда / Отдых / Путешествия
+											</small>
+										</div>
+									</div>
+									<div class="main__body-details">
+										<h2 class="main__filters-summary">Виды рекламы</h2>
+										<div class="main__details-row">
+											<v-select
+												label="name"
+												v-model="filterOpts.type"
+												:options="types"
+												:reduce="opt => opt.id"
+												multiple
+												class="main__vue-select"
+												@input="filter($event, 'type')"
+											/>
+										</div>
+									</div>
+									<div class="main__body-details">
+										<h2 class="main__filters-summary">Количество подписчиков</h2>
+										<div class="main__details-row">
+											<div class="main__details-from-to">
+												<div class="main__details-from">
+													<p class="main__details-text">от</p>
+													<div class="main__details-input">
+														<input
+															v-model.lazy="filterOpts.followers_from"
+															@change="filter($event, 'followers_from')"
+															@keydown="resolveInputKeys"
+															class="main__details-input-small"
+														>
+													</div>
 												</div>
-											</div>
-											<div class="main__details-to">
-												<p class="main__details-text">до</p>
-												<div class="main__details-input">
-													<input
-														v-model.lazy="filterOpts.likes_to"
-														@change="filter($event, 'likes_to')"
-														@keydown="resolveInputKeys"
-														class="main__details-input-small"
-													>
+												<div class="main__details-to">
+													<p class="main__details-text">до</p>
+													<div class="main__details-input">
+														<input
+															v-model.lazy="filterOpts.followers_to"
+															@change="filter($event, 'followers_to')"
+															@keydown="resolveInputKeys"
+															class="main__details-input-small"
+														>
+													</div>
 												</div>
 											</div>
 										</div>
 									</div>
-								</div>
-								<div class="main__body-details">
-									<h2 class="main__filters-summary">Возрастные категории</h2>
-									<div class="main__details-row">
-										<v-select
-											label="name"
-											v-model="filterOpts.age"
-											:options="ages"
-											:reduce="opt => opt.id"
-											multiple
-											class="main__vue-select"
-											@input="filter($event, 'age')"
-										/>
-									</div>
-								</div>
-								<div class="main__body-details">
-									<h2 class="main__filters-summary">Регион</h2>
-									<div class="main__details-row">
-										<v-select
-											label="name"
-											v-model="filterOpts.region"
-											:options="regions"
-											:reduce="opt => opt.id"
-											:selectable="option => !option.hasOwnProperty('group')"
-											class="main__vue-select main__vue-select--region"
-											multiple
-											@input="filter($event, 'region')"
-										>
-											<template #option="{ group, name }">
-												<div v-if="group" class="group">
-													{{ group }}
+									<div class="main__body-details">
+										<h2 class="main__filters-summary">Количество лайков</h2>
+										<div class="main__details-row">
+											<div class="main__details-from-to">
+												<div class="main__details-from">
+													<p class="main__details-text">от</p>
+													<div class="main__details-input">
+														<input
+															v-model.lazy="filterOpts.likes_from"
+															@change="filter($event, 'likes_from')"
+															@keydown="resolveInputKeys"
+															class="main__details-input-small"
+														>
+													</div>
 												</div>
-												<template v-else>
-													{{ name }}
+												<div class="main__details-to">
+													<p class="main__details-text">до</p>
+													<div class="main__details-input">
+														<input
+															v-model.lazy="filterOpts.likes_to"
+															@change="filter($event, 'likes_to')"
+															@keydown="resolveInputKeys"
+															class="main__details-input-small"
+														>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="main__body-details">
+										<h2 class="main__filters-summary">Возрастные категории</h2>
+										<div class="main__details-row">
+											<v-select
+												label="name"
+												v-model="filterOpts.age"
+												:options="ages"
+												:reduce="opt => opt.id"
+												multiple
+												class="main__vue-select"
+												@input="filter($event, 'age')"
+											/>
+										</div>
+									</div>
+									<div class="main__body-details">
+										<h2 class="main__filters-summary">Регион</h2>
+										<div class="main__details-row">
+											<v-select
+												label="name"
+												v-model="filterOpts.region"
+												:options="regions"
+												:reduce="opt => opt.id"
+												:selectable="option => !option.hasOwnProperty('group')"
+												class="main__vue-select main__vue-select--region"
+												multiple
+												@input="filter($event, 'region')"
+											>
+												<template #option="{ group, name }">
+													<div v-if="group" class="group">
+														{{ group }}
+													</div>
+													<template v-else>
+														{{ name }}
+													</template>
 												</template>
-											</template>
-										</v-select>
+											</v-select>
+										</div>
 									</div>
 								</div>
 							</div>

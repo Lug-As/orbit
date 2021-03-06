@@ -64,7 +64,8 @@
 									{{ project.budget.toLocaleString() }}₽
 								</span>
 							</div>
-							<template v-if="notMyProject">
+							<preloader v-if="responsesLoading" height="90" style="margin-left: 60px; margin-right: 60px;"/>
+							<template v-else-if="notMyProject">
 								<div class="offer__body-price-button">
 									<button
 										class="button-grand-black big button__open-massage"
@@ -104,7 +105,6 @@
 					:open="showModal"
 					@close-modal="showModal = false"
 					@submit="sendResponse"
-					:notify-text="'Благодарим за отклик!<br> Рекламодатель уже оповещен вашим <br>предложением о работе!'"
 				>
 					<p
 						v-if="userAccounts !== null && responses.length !== userAccounts.length"
@@ -153,7 +153,7 @@ export default {
 		showModal: false,
 		account_id: null,
 		responses: [],
-		responsesLoading: false,
+		responsesLoading: true,
 	}),
 	computed: {
 		project() {

@@ -138,7 +138,9 @@ export default {
 	mounted() {
 		if (this.$route.query['reload']) {
 			this.clearQueryParam('reload')
-			location.reload()
+			setTimeout(() => {
+				location.reload()
+			}, 400)
 		}
 		if (this.user) {
 			if (this.user.verifyed) {
