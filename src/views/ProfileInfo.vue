@@ -85,7 +85,7 @@ export default {
 							e.response && e.response.data && e.response.data['errors'] && e.response.data['errors']['email']
 						) {
 							const email_error = e.response.data['errors']['email'][0]
-							if (email_error === "The email has already been taken.") {
+							if (email_error === 'The email has already been taken.') {
 								alert('Такой email уже занят.')
 								this.user[type] = oldVal
 								this.$refs['emailinput'].freshData()

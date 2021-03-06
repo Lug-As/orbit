@@ -312,18 +312,18 @@ export default {
 				this.$store.dispatch('removeAccount', {id})
 			}
 		},
+		deleteRequest(id, force = false) {
+			if (force || confirm('Вы точно хотите удалить заявку? Восстановить её будет невозможно.')) {
+				this.$store.dispatch('removeRequest', {id})
+			}
+		},
 		scrollToTop(top = 0) {
 			window.scrollTo({
 				top,
 				behavior: 'smooth',
 			})
 		},
-		deleteRequest(id, force = false) {
-			if (force || confirm('Вы точно хотите удалить заявку? Восстановить её будет невозможно.')) {
-				this.$store.dispatch('removeRequest', {id})
-			}
-		},
-		changePage (page = 1) {
+		changePage(page = 1) {
 			if (page !== this.page) {
 				this.scrollToTop(390)
 				this.$router.push({
@@ -374,7 +374,7 @@ export default {
 		if (this.user) {
 			this.loadRequests()
 		} else {
-			this.$onUserLoad.hook = this.loadRequests
+			this.$onUserLoad.hook(this.loadRequests)
 		}
 	},
 }

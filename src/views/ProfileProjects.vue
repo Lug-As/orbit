@@ -186,7 +186,7 @@ export default {
 		if (this.user) {
 			this.loadUserProjects()
 		} else {
-			this.$onUserLoad.hook = this.loadUserProjects
+			this.$onUserLoad.hook(this.loadUserProjects)
 		}
 	},
 }

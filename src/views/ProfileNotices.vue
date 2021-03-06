@@ -1,141 +1,93 @@
 <template>
 	<div class="profile__notification profile__contant tab-2">
-		<div class="profile__notification-row">
-			<div class="profile__notification-body">
-				<div class="profile__notification-item">
-					<div class="profile__notification-item-title">
-						<a href="" class="profile__notification-item-link">_agentgirl_</a>
-						<span class="profile__notification-item-text">откликнулся на предложение</span>
-						<a href="" class="profile__notification-item-info-text">
-							“ <p class="profile__notification-item-info-text-p">Необходимо прорекламировать мерч
-							Lorem ipsum
-							dolor sit amet.</p>”</a>
-					</div>
-					<div class="profile__notification-item-data">
-						<div class="profile__notification-item-data-title">
-							<div class="profile__notification-item-data-title-text">
-								<h2 class="profile__notification-item-data-title-h2">
-									Комментарий блогера:
-								</h2>
-								<p class="profile__notification-item-data-title-p">
-									это текст-"рыба", часто используемый в печати и вэб-дизайне. Lorem Ipsum
-									является стандартной "рыбой" для текстов на латинице с начала XVI века... В то
-									время некий безымянный печатник создал большую коллекцию размеров и форм
-									шрифтов, используя Lorem Ipsum для распечатки образцов. Это текст-"рыба", часто
-									используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной "рыбой"
-									для текстов на латинице с начала XVI века Lorem ipsum dolor sit amet consectetur
-									adipisicing elit. Neque, quidem!
-								</p>
-							</div>
-						</div>
-						<div class="profile__notification-item-data-info-user">
-							<div class="profile__notification-item-data-info-user-text">
-								<h2 class="profile__notification-item-data-info-user-h2">
-									Имя:
-								</h2>
-								<p class="profile__notification-item-data-info-user-p">
-									Анастасия Ивлеева
-								</p>
-							</div>
-							<div class="profile__notification-item-data-info-user-text">
-								<h2 class="profile__notification-item-data-info-user-h2">
-									Эл. почта:
-								</h2>
-								<p class="profile__notification-item-data-info-user-p">
-									marta_b@mail.ru
-								</p>
-							</div>
-							<div class="profile__notification-item-data-info-user-text">
-								<h2 class="profile__notification-item-data-info-user-h2">
-									Телефон:
-								</h2>
-								<p class="profile__notification-item-data-info-user-p">
-									+7 903 596 49 79
-								</p>
-							</div>
-						</div>
-					</div>
-					<div class="profile__notification-item-button">
-						<button class="profile__notification-item-button-text button-grand-transparent">Скрыть
-							данные
-						</button>
-						<button class="profile__notification-item-button-text button-grand-black">Отправить мои
-							контакты
-						</button>
-					</div>
-				</div>
+		<preloader v-if="noticesLoading"/>
+		<div v-else-if="notices && notices.length" class="profile__notification-row">
+			<div
+				v-for="notice in notices"
+				class="profile__notification-body"
+			>
+				<profile-response-notice v-if="notice.type === 'responses'" :notice="notice"/>
+				<profile-offer-notice v-else-if="notice.type === 'offers'" :notice="notice"/>
 			</div>
-			<div class="profile__notification-body">
-				<div class="profile__notification-item">
-					<div class="profile__notification-item-title">
-						<span class="profile__notification-item-text">Вам сделано предложение на аккаунт</span>
-						<a href="" class="profile__notification-item-link">_agentgirl_</a>
-					</div>
-					<div class="profile__notification-item-data">
-						<div class="profile__notification-item-data-title">
-							<div class="profile__notification-item-data-title-text">
-								<h2 class="profile__notification-item-data-title-h2">
-									Текст предложения:
-								</h2>
-								<p class="profile__notification-item-data-title-p">
-									это текст-"рыба", часто используемый в печати и вэб-дизайне. Lorem Ipsum
-									является стандартной "рыбой" для текстов на латинице с начала XVI века... В то
-									время некий безымянный печатник создал большую коллекцию размеров и форм
-									шрифтов, используя Lorem Ipsum для распечатки образцов. Это текст-"рыба", часто
-									используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной "рыбой"
-									для текстов на латинице с начала XVI века Lorem ipsum dolor sit amet consectetur
-									adipisicing elit. Neque, quidem!
-								</p>
-							</div>
-						</div>
-						<div class="profile__notification-item-data-info-user">
-							<div class="profile__notification-item-data-info-user-text">
-								<h2 class="profile__notification-item-data-info-user-h2">
-									Имя:
-								</h2>
-								<p class="profile__notification-item-data-info-user-p">
-									Анастасия Ивлеева
-								</p>
-							</div>
-							<div class="profile__notification-item-data-info-user-text">
-								<h2 class="profile__notification-item-data-info-user-h2">
-									Эл. почта:
-								</h2>
-								<p class="profile__notification-item-data-info-user-p">
-									marta_b@mail.ru
-								</p>
-							</div>
-							<div class="profile__notification-item-data-info-user-text">
-								<h2 class="profile__notification-item-data-info-user-h2">
-									Телефон:
-								</h2>
-								<p class="profile__notification-item-data-info-user-p">
-									+7 903 596 49 79
-								</p>
-							</div>
-						</div>
-					</div>
-					<div class="profile__notification-item-button">
-						<button class="profile__notification-item-button-text button-grand-transparent">Скрыть
-							данные
-						</button>
-						<button class="profile__notification-item-button-text button-grand-black">Отправить мои
-							контакты
-						</button>
-					</div>
-				</div>
-			</div>
+		</div>
+		<div class="objects-pagination">
+			<pagination
+				:data="noticesPagination"
+				:limit="2"
+				@pagination-change-page="changePage"
+			/>
 		</div>
 	</div>
 </template>
 
 <script>
+import Preloader from '@/components/Preloader'
+import ProfileOfferNotice from '@/components/profile/ProfileOfferNotice'
+import ProfileResponseNotice from '@/components/profile/ProfileResponseNotice'
+
 export default {
 	name: 'ProfileNotices',
+	components: {ProfileResponseNotice, ProfileOfferNotice, Preloader},
 	title: 'Уведомления',
+	computed: {
+		notices() {
+			return this.$store.getters.notices
+		},
+		noticesLoading() {
+			return this.$store.getters.noticesLoading
+		},
+		noticesPagination() {
+			return this.$store.getters.noticesPagination
+		},
+		page() {
+			let page
+			if (this.$route.query['page']) {
+				page = Math.abs(parseInt(this.$route.query['page']))
+				if (page === 1) {
+					this.clearQueryParam('page')
+				}
+			} else {
+				page = 1
+			}
+			if (page === 0 || !Number.isInteger(page)) {
+				page = 1
+			}
+			return page
+		},
+	},
+	methods: {
+		loadNotices() {
+			this.$store.dispatch('loadNotices', {
+				page: this.page,
+			})
+		},
+		clearQueryParam(key) {
+			if (this.$route.query[key] !== undefined) {
+				let query = Object.assign({}, this.$route.query)
+				delete query[key]
+				this.$router.replace({query})
+			}
+		},
+		scrollToTop(top = 0) {
+			window.scrollTo({
+				top,
+				behavior: 'smooth',
+			})
+		},
+		changePage(page = 1) {
+			if (page !== this.page) {
+				this.scrollToTop(390)
+				this.$router.push({
+					name: this.$route.name,
+					query: {
+						page,
+					},
+				})
+					.then(() => this.loadNotices())
+				return true
+			}
+			return false
+		},
+	},
 }
 </script>
-
-<style scoped>
-
-</style>

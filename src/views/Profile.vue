@@ -20,7 +20,7 @@
 					>
 						<div class="profile__tab-menu-li-body">
 							<span class="profile__tab-menu-li-link">Уведомления</span>
-							<span class="profile__tab-menu-li-span">55</span>
+							<span v-if="noticesCount" class="profile__tab-menu-li-span">{{ noticesCount }}</span>
 						</div>
 					</router-link>
 					<li class="profile__tab-menu-ul-li profile__tab-menu-ul-li-last">
@@ -98,6 +98,23 @@
 <script>
 export default {
 	name: 'Profile',
+	computed: {
+		user() {
+			return this.$store.getters.user
+		},
+		noticesCount() {
+			return this.$store.getters.notices.length
+		},
+	},
+	mounted() {
+		if (this.user) {
+			this.$store.dispatch('loadNotices', {page: 1})
+		} else {
+			this.$onUserLoad.hook(() => {
+				this.$store.dispatch('loadNotices', {page: 1})
+			})
+		}
+	},
 }
 </script>
 

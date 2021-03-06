@@ -8,11 +8,12 @@ import ages from './modules/ages'
 import regions from './modules/regions'
 import projects from './modules/projects'
 import requests from './modules/requests'
+import notices from './modules/notices'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
 	modules: {
-		accounts, user, topics, types, ages, regions, projects, requests,
+		accounts, user, topics, types, ages, regions, projects, requests, notices,
 	},
 })

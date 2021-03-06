@@ -35,7 +35,10 @@ Vue.mixin(titleMixin)
 axios.defaults.baseURL = ApiBaseUrl
 
 Vue.prototype.$onUserLoad = {
-	hook: () => {},
+	hook(callback) {
+		this.stack.push(callback)
+	},
+	stack: [],
 }
 
 new Vue({
@@ -44,7 +47,7 @@ new Vue({
 			.then(token => {
 				if (token) {
 					axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-					this.$onUserLoad.hook()
+					this.$onUserLoad.stack.forEach(hook => hook())
 					this.$store.dispatch('loadUserAccounts')
 				}
 			})
