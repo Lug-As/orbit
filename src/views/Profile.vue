@@ -108,10 +108,14 @@ export default {
 	},
 	mounted() {
 		if (this.user) {
-			this.$store.dispatch('loadNotices', {page: 1})
+			if (this.user.verifyed) {
+				this.$store.dispatch('loadNotices', {page: 1})
+			}
 		} else {
 			this.$onUserLoad.hook(() => {
-				this.$store.dispatch('loadNotices', {page: 1})
+				if (this.user.verifyed) {
+					this.$store.dispatch('loadNotices', {page: 1})
+				}
 			})
 		}
 	},

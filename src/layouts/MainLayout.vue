@@ -145,7 +145,7 @@ export default {
 			if (val === true) {
 				setTimeout(this.closeNotice, 2500)
 			}
-		}
+		},
 	},
 	methods: {
 		closeNotice() {
@@ -158,6 +158,6 @@ export default {
 			this.noticeText = text
 			this.showNotice = true
 		}
-	}
+	},
 }
 </script>

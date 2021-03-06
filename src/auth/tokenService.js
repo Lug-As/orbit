@@ -6,6 +6,10 @@ export default {
 		return localStorage.getItem(this.tokenName)
 	},
 
+	isTokenSet() {
+		return this.getToken() !== null
+	},
+
 	/**
 	 * @param {String} token
 	 * */

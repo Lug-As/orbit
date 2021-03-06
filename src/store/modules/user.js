@@ -28,7 +28,7 @@ class User {
 export default {
 	state: {
 		user: null,
-		userLoading: false,
+		userLoading: true,
 	},
 	getters: {
 		user(state) {
@@ -38,10 +38,10 @@ export default {
 			return state.userLoading
 		},
 		authCheck(state) {
-			return state.user !== null
+			return state.user !== null || (state.userLoading && tokenService.isTokenSet())
 		},
-		guestCheck(state) {
-			return state.user === null
+		guestCheck(state, getters) {
+			return !getters.authCheck
 		},
 	},
 	mutations: {
@@ -66,16 +66,15 @@ export default {
 						set = false
 						if (err.response && err.response.status && err.response.status === 401) {
 							tokenService.clearToken()
+							location.reload()
 							token = null
 						} else {
 							throw err
 						}
 					})
-					.finally(() => {
-						commit('stopUserLoading')
-					})
 				if (set) {
 					commit('setUser', User.createFromApiData(response.data.data))
+					commit('stopUserLoading')
 				}
 			}
 			return token

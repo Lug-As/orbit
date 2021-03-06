@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '@/store'
+import auth from '@/router/middleware/auth'
 
 Vue.use(VueRouter)
 
@@ -26,29 +28,41 @@ const routes = [
 	},
 	{
 		path: '/profile',
+		component: () => import('../views/Profile'),
 		children: [
 			{
 				path: 'notices',
 				name: 'ProfileNotices',
+				meta: {
+					middleware: auth,
+				},
 				component: () => import('../views/ProfileNotices'),
 			},
 			{
 				path: 'accounts',
 				name: 'ProfileAccounts',
+				meta: {
+					middleware: auth,
+				},
 				component: () => import('../views/ProfileAccounts'),
 			},
 			{
 				path: 'projects',
 				name: 'ProfileProjects',
+				meta: {
+					middleware: auth,
+				},
 				component: () => import('../views/ProfileProjects'),
 			},
 			{
 				path: '',
 				name: 'Profile',
+				meta: {
+					middleware: auth,
+				},
 				component: () => import('../views/ProfileInfo'),
 			},
 		],
-		component: () => import('../views/Profile'),
 	},
 	{
 		path: '*',
@@ -57,7 +71,7 @@ const routes = [
 	},
 ]
 
-export default new VueRouter({
+const router = new VueRouter({
 	mode: 'history',
 	base: process.env.BASE_URL,
 	scrollBehavior(to, from, savedPosition) {
@@ -77,3 +91,21 @@ export default new VueRouter({
 	},
 	routes,
 })
+
+router.beforeEach((to, from, next) => {
+	if (!to.meta.middleware) {
+		return next()
+	}
+	const middleware = to.meta.middleware
+	const context = {
+		to,
+		from,
+		next,
+		store,
+	}
+	return middleware({
+		...context,
+	})
+})
+
+export default router
