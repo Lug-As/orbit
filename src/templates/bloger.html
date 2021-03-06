@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	<title>Document</title>
 	<link rel="stylesheet" href="css/main.min.css">
 </head>
@@ -39,7 +39,7 @@
 					</li>
 					<!-- /.header__menu-li -->
 					<li class="header__menu-li">
-						<a href="blogers.html" class="header__menu-link">Блогеры</a>
+						<a href="blogers.html" class="header__menu-link ">Блогеры</a>
 					</li>
 					<!-- /.header__menu-li -->
 					<li class="header__menu-li">
@@ -181,7 +181,9 @@
 					</div>
 					<!-- /.bloger__body-theme -->
 					<div class="bloger__body-button">
-						<button class="bloger__button button-grand-black big">Предложить работу</button>
+						<button class="bloger__button button-grand-black big button__open-massage">Предложить
+							работу
+						</button>
 						<button class="bloger__button-black button-grand-transparent">Перейти в ток-ток аккаунт</button>
 						<div class="bloger__button-confirmation">
 							<picture>
@@ -200,34 +202,39 @@
 		</div>
 		<!-- /.bloger__row -->
 		<div class="bloger__massage">
-			<div class="bloger__massage-row">
-				<span class="bloger__massage-close">&times;</span>
-				<div class="bloger__massage-alert">
-					<h2 class="bloger__alert-h2">
-						Все сообщения модерируются. За распространение
-						некорректных предложений, или предложений
-						неподходящих для нашего сервиса мы вправе отключать
-						пользователей. <span class="bloger__alert-span">Будьте корректны!</span>
-					</h2>
+			<div class="bloger__massage-container">
+				<div class="bloger__massage-row">
+					<span class="bloger__massage-close">&times;</span>
+					<div class="bloger__massage-alert">
+						<h2 class="bloger__alert-h2">
+							Все сообщения модерируются. За распространение
+							некорректных предложений, или предложений
+							неподходящих для нашего сервиса мы вправе отключать
+							пользователей. <span class="bloger__alert-span">Будьте корректны!</span>
+						</h2>
+					</div>
+					<!-- /.bloger__massage-alert -->
+					<form class="bloger__massage-comment">
+						<div class="bloger__massage-title">
+							<h2 class="bloger__title-text">Оставь комментарий по поводу задачи</h2>
+						</div>
+						<!-- /.bloger__massage-title -->
+						<div class="bloger__comment-text">
+							<textarea required class="bloger__text-area" name="" id="" cols="30" rows="10"></textarea>
+						</div>
+						<!-- /.bloger__comment-text -->
+						<div class="bloger__comment-button">
+							<button class="button-grand-transparent bloger__button-border">Предложить выполнение
+								задачи
+							</button>
+						</div>
+						<!-- /.bloger__comment-button -->
+					</form>
+					<!-- /.bloger__massage-comment -->
 				</div>
-				<!-- /.bloger__massage-alert -->
-				<form class="bloger__massage-comment">
-					<div class="bloger__massage-title">
-						<h2 class="bloger__title-text">Оставь комментарий по поводу задачи</h2>
-					</div>
-					<!-- /.bloger__massage-title -->
-					<div class="bloger__comment-text">
-						<textarea required class="bloger__text-area" name="" id="" cols="30" rows="10"></textarea>
-					</div>
-					<!-- /.bloger__comment-text -->
-					<div class="bloger__comment-button">
-						<button class="bloger__button-border">Предложить выполнение задачи</button>
-					</div>
-					<!-- /.bloger__comment-button -->
-				</form>
-				<!-- /.bloger__massage-comment -->
+				<!-- /.bloger__massage-row -->
 			</div>
-			<!-- /.bloger__massage-row -->
+			<!-- /.bloger__massage-container -->
 		</div>
 		<!-- /.bloger__massage -->
 	</div>

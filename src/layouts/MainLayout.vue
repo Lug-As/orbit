@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<header class="header header__blogers normal-header ">
+		<header class="header header__blogers normal-header">
 			<div class="container">
 				<div class="header__row normal-row">
 					<div class="header__menu-mobile">
@@ -38,14 +38,11 @@
 						</ul>
 					</div>
 					<div class="header__sign">
-						<div class="header__sign-row" style="display: none;">
-							<button class="header__menu-sign button-grand">Вход</button>
-							<button class="header__menu-sign button-grand">Регистрация</button>
-						</div>
-						<div class="header__log-row">
+						<div class="header__log-row" v-if="authCheck">
 							<ul class="header__log-ul">
 								<li class="header__menu-li-left">
-									<router-link :to="{name: 'Profile'}" class="header__menu-left-link">
+									<router-link :to="{name: 'Profile'}" class="header__menu-left-link"
+													 title="Перейти в личный кабинет">
 										<picture>
 											<source srcset="../assets/img/АИ.webp" type="image/webp">
 											<img src="../assets/img/АИ.png" alt="">
@@ -54,7 +51,7 @@
 									<ul class="header__li-left-drop">
 										<li class="header__li-nickname">
 											<h2 class="header__nickname-text">
-												<a href="">_agentgirl_</a>
+												<a>_agentgirl_</a>
 											</h2>
 											<ul class="header__menu-drop width-all">
 												<li class="header__drop-li">
@@ -62,13 +59,23 @@
 													</router-link>
 												</li>
 												<li class="header__drop-li">
-													<a href="" class="header__li-link">Выход</a>
+													<span
+														@click="logout"
+														class="header__li-link cursor"
+													>Выход</span>
 												</li>
 											</ul>
 										</li>
 									</ul>
 								</li>
 							</ul>
+						</div>
+						<div class="header__sign-row" v-else>
+							<button
+								@click="showLoginForm"
+								class="header__menu-sign button-grand"
+							>Вход</button>
+							<button class="header__menu-sign button-grand">Регистрация</button>
 						</div>
 					</div>
 				</div>
@@ -135,6 +142,7 @@
 
 <script>
 import Vue from 'vue'
+import tokenService from '@/auth/tokenService'
 
 export default {
 	name: 'MainLayout',
@@ -149,11 +157,25 @@ export default {
 			}
 		},
 	},
+	computed: {
+		authCheck() {
+			return this.$store.getters.authCheck
+		}
+	},
 	methods: {
 		closeNotice() {
 			this.showNotice = false
 			this.noticeText = null
 		},
+		logout() {
+			if (confirm('Вы точно хотите выйти из учетной записи?')) {
+				tokenService.clearToken()
+				location.reload()
+			}
+		},
+		showLoginForm() {
+			//
+		}
 	},
 	mounted() {
 		Vue.prototype.$notify = (text) => {
