@@ -100,9 +100,7 @@
 				</div>
 				<message-modal
 					:open="showModal"
-					:notify="showNotify"
 					@close-modal="showModal = false"
-					@close-notify="showNotify = false"
 					@submit="sendResponse"
 					:notify-text="'Благодарим за отклик!<br> Рекламодатель уже оповещен вашим <br>предложением о работе!'"
 				>
@@ -151,7 +149,6 @@ export default {
 	components: {MessageModal, Preloader},
 	data: () => ({
 		showModal: false,
-		showNotify: false,
 		account_id: null,
 		responses: [],
 		responsesLoading: false,
@@ -229,7 +226,7 @@ export default {
 			responseService.sendResponse(response)
 				.then(() => {
 					this.responses.push(response.account_id)
-					this.showNotify = true
+					this.$notify('Благодарим за отклик! Рекламодатель уже оповещен вашим предложением о работе!')
 				})
 				.catch(() => {
 					alert('Произошла ошибка отправки формы. Повторите позже.')

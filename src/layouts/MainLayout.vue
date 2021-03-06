@@ -75,6 +75,21 @@
 		<template>
 			<router-view></router-view>
 		</template>
+		<transition name="side-slide">
+			<div class="profile__notifications" v-if="showNotice" @click="closeNotice">
+				<div class="profile__notifications-row">
+					<div class="profile__notifications-img">
+						<picture>
+							<source srcset="../assets/img/notific.webp" type="image/webp">
+							<img src="../assets/img/notific.png" alt="">
+						</picture>
+					</div>
+					<div class="profile__notifications-text">
+						<p class="profile__notifications-text-p" v-html="noticeText"></p>
+					</div>
+				</div>
+			</div>
+		</transition>
 		<footer class="footer normal-footer">
 			<div class="container">
 				<div class="footer__row">
@@ -117,11 +132,32 @@
 </template>
 
 <script>
+import Vue from 'vue'
+
 export default {
 	name: 'MainLayout',
+	data: () => ({
+		showNotice: false,
+		noticeText: null,
+	}),
+	watch: {
+		showNotice(val) {
+			if (val === true) {
+				setTimeout(this.closeNotice, 2500)
+			}
+		}
+	},
+	methods: {
+		closeNotice() {
+			this.showNotice = false
+			this.noticeText = null
+		},
+	},
+	mounted() {
+		Vue.prototype.$notify = (text) => {
+			this.noticeText = text
+			this.showNotice = true
+		}
+	}
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -40,8 +40,8 @@ export default class Account {
 	static createFromApiData(apiData) {
 		return new this(
 			apiData.id, apiData.title, apiData.image, apiData.followers, apiData.likes, apiData.ad_types, apiData.topics,
-			apiData.user, apiData.about, apiData.ages, apiData.gallery, apiData.region.name,
-			apiData.region.country.name,
+			apiData.user, apiData.about, apiData.ages, apiData.gallery, apiData.region?.name,
+			apiData.region?.country.name,
 		)
 	}
 

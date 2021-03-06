@@ -2811,10 +2811,15 @@ template {
 
 .profile__notifications {
 	/*display: none;*/
+	width: 40%;
 	position: fixed;
 	z-index: 999;
 	bottom: 20px;
 	right: 20px;
+}
+
+.profile__notifications p {
+	margin: 0;
 }
 
 .profile__notifications-row {
@@ -3776,14 +3781,22 @@ button:disabled {
 		font-size: 20px;
 	}
 
+	.profile__notifications {
+		width: 32%;
+	}
+
+	.profile__notifications p {
+		margin: 10px 0;
+	}
+
 	.profile__notifications-row {
-		padding: 10px 20px;
+		padding: 13px 16px;
 		border-radius: 45px;
 	}
 
 	.profile__notifications-text {
 		font-size: 15px;
-		margin-left: 18px;
+		margin-left: 22px;
 		line-height: 1.8;
 	}
 
@@ -4612,12 +4625,16 @@ button:disabled {
 		margin-top: 20px;
 	}
 
+	.profile__notifications {
+		width: 45%;
+	}
+
 	.profile__notifications-row {
-		padding: 30px 70px;
+		padding: 20px 35px;
 	}
 
 	.profile__notifications-text {
-		font-size: 18px;
+		font-size: 16px;
 	}
 
 	.profile__notifications-img img {
@@ -5014,7 +5031,7 @@ button:disabled {
 		right: 0;
 		left: 0;
 		margin: 0px auto;
-		width: 80%;
+		width: 70%;
 	}
 
 	.profile__notifications-row {

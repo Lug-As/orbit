@@ -504,6 +504,12 @@ export default {
 					minPrice = type.price
 				}
 			})
+			if (minPrice === null && maxPrice === null) {
+				return 'Договорная'
+			}
+			if (minPrice === null || maxPrice === null) {
+				return (minPrice || maxPrice) + '₽'
+			}
 			if (minPrice === maxPrice) {
 				return minPrice + '₽'
 			}

@@ -347,6 +347,7 @@ export default {
 				.then(() => {
 					this.toggleCreateMode()
 					this.loadRequests()
+					this.$notify('Спасибо за заявку! Подтвердите аккаунт, чтобы он появился на сайте!')
 				})
 				.catch(e => {
 					let displayError = true

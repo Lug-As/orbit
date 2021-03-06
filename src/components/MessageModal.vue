@@ -7,10 +7,10 @@
 				@click.self="closeModal()"
 			>
 				<div class="bloger__massage-row">
-							<span
-								class="bloger__massage-close"
-								@click="closeModal()"
-							>&times;</span>
+					<span
+						class="bloger__massage-close"
+						@click="closeModal()"
+					>&times;</span>
 					<div class="bloger__massage-alert">
 						<h2 class="bloger__alert-h2">
 							Все сообщения модерируются. За распространение
@@ -25,14 +25,14 @@
 							<h2 class="bloger__title-text">Оставь комментарий по поводу задачи</h2>
 						</div>
 						<div class="bloger__comment-text">
-									<textarea
-										v-model.trim="offerText"
-										class="bloger__text-area"
-									></textarea>
+							<textarea
+								v-model.trim="offerText"
+								class="bloger__text-area"
+							></textarea>
 							<span
 								:class="{
-											'red': !this.$v.offerText.maxLength,
-										}"
+									'red': !this.$v.offerText.maxLength,
+								}"
 							>{{ this.offerText.length }}/{{ this.$v.offerText.$params.maxLength.max }}</span>
 							<p v-if="errorMsg.length" class="red">{{ errorMsg }}</p>
 						</div>
@@ -40,20 +40,6 @@
 							<button class="bloger__button-border">Предложить выполнение задачи</button>
 						</div>
 					</form>
-				</div>
-			</div>
-		</transition>
-		<transition name="side-slide">
-			<div class="profile__notifications" v-if="showThanks" @click="closeThanks">
-				<div class="profile__notifications-row">
-					<div class="profile__notifications-img">
-						<picture>
-							<source srcset="../assets/img/notific.webp" type="image/webp">
-							<img src="../assets/img/notific.png" alt=""></picture>
-					</div>
-					<div class="profile__notifications-text">
-						<p class="profile__notifications-text-p" v-html="notifyText"></p>
-					</div>
 				</div>
 			</div>
 		</transition>
@@ -71,20 +57,9 @@ export default {
 			default: false,
 			required: false,
 		},
-		notify: {
-			type: Boolean,
-			default: false,
-			required: false,
-		},
-		notifyText: {
-			type: String,
-			default: 'Благодарим за предложение!<br> Блогер уже оповещен вашим <br>личным предложением!',
-			required: false,
-		},
 	},
 	data: () => ({
 		showModal: false,
-		showThanks: false,
 		offerText: '',
 		errorMsg: '',
 	}),
@@ -94,31 +69,11 @@ export default {
 				this.showModal = true
 			}
 		},
-		notify(val) {
-			if (val === true) {
-				this.blinkThanks()
-			}
-		},
 	},
 	methods: {
 		closeModal() {
 			this.showModal = false
 			this.$emit('close-modal')
-		},
-		closeThanks() {
-			this.showThanks = false
-			this.$emit('close-notify')
-		},
-		openThanks() {
-			this.showThanks = true
-		},
-		blinkThanks() {
-			this.openThanks()
-			setTimeout(() => {
-				if (this.showThanks) {
-					this.closeThanks()
-				}
-			}, 2500)
 		},
 		handleForm() {
 			if (this.validate()) {

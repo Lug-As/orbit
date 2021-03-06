@@ -115,9 +115,7 @@
 				/>
 				<message-modal
 					:open="showModal"
-					:notify="showNotify"
 					@close-modal="showModal = false"
-					@close-notify="showNotify = false"
 					@submit="sendOffer"
 				/>
 			</template>
@@ -137,7 +135,6 @@ export default {
 	components: {MessageModal, Preloader, LightGallery},
 	data: () => ({
 		showModal: false,
-		showNotify: false,
 		index: null,
 	}),
 	computed: {
@@ -192,7 +189,7 @@ export default {
 			}
 			offerService.sendOffer(offer)
 				.then(() => {
-					this.showNotify = true
+					this.$notify('Благодарим за предложение! Блогер уже оповещен вашим личным предложением!')
 				})
 				.catch(() => {
 					alert('Произошла ошибка отправки формы. Повторите позже.')
