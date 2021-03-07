@@ -38,6 +38,29 @@
 	}
 }
 
+.upper {
+	&-enter-active {
+		transition-duration: .18s;
+		transition-timing-function: ease;
+	}
+
+	&-leave-active {
+		transition-duration: .18s;
+		transition-timing-function: ease-in;
+	}
+
+	&-enter-to, &-leave {
+		transform: translateY(0) scaleY(1);
+		transform-origin: bottom;
+	}
+
+	&-enter, &-leave-to {
+		transform: translateY(20%) scaleY(.9);
+		transform-origin: bottom;
+		opacity: 0;
+	}
+}
+
 .side-slide {
 	&-enter-active {
 		transition-duration: .25s;
