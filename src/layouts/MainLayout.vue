@@ -131,47 +131,11 @@
 			/>
 		</transition>
 		<transition name="fade">
-			<section class="change" v-if="false">
-				<div class="container">
-					<div class="login__row">
-						<div class="login__row-title">
-							<h2 class="login__row-title-h2">
-								Впишите новый пароль дважды
-							</h2>
-						</div>
-						<form action="post" class="login__row-form">
-							<div class="login__row-form-body">
-								<div class="login__row-form-item">
-									<div class="login__row-form-item-label">
-										<label for="changepass">
-											Впишите пароль
-										</label>
-									</div>
-									<div class="login__row-form-item-input">
-										<input type="text" id="changepass" required>
-									</div>
-								</div>
-								<div class="login__row-form-item">
-									<div class="login__row-form-item-label">
-										<label for="secondchangepass">
-											Впишите пароль повторно
-										</label>
-									</div>
-									<div class="login__row-form-item-input">
-										<input type="password" id="secondchangepass" required>
-									</div>
-								</div>
-								<div class="login__row-img"></div>
-							</div>
-							<div class="login__row-form-button">
-								<div class="login__row-form-button-reg">
-									<button class="login__row-form-button-log button-grand-transparent big">СОЗДАТЬ</button>
-								</div>
-							</div>
-						</form>
-					</div>
-				</div>
-			</section>
+			<change
+				v-if="showChange"
+				@closed="showChange = false"
+				@submit="change"
+			/>
 		</transition>
 		<preloader v-if="loading" class="auth-loader" height="100vh"/>
 		<footer class="footer normal-footer">
@@ -223,22 +187,29 @@ import authService from '@/api/authService'
 import Preloader from '@/components/Preloader'
 import Login from '@/components/auth/Login'
 import Forget from '@/components/auth/Forget'
+import Change from '@/components/auth/Change'
 
 export default {
 	name: 'MainLayout',
-	components: {Forget, Login, Preloader, Sign},
+	components: {Change, Forget, Login, Preloader, Sign},
 	data: () => ({
 		showNotice: false,
 		noticeText: null,
 		showLogin: false,
 		showSign: false,
 		showForget: false,
+		showChange: false,
 		loading: false,
 	}),
 	watch: {
 		showNotice(val) {
 			if (val === true) {
 				setTimeout(this.closeNotice, 2500)
+			}
+		},
+		'$route'(val) {
+			if (val['name'] === 'ChangePassword') {
+				this.showChange = true
 			}
 		},
 	},
@@ -248,6 +219,18 @@ export default {
 		},
 		user() {
 			return this.$store.getters.user
+		},
+		expires() {
+			return this.$route.query['expires']
+		},
+		signature() {
+			return this.$route.query['signature']
+		},
+		email() {
+			return this.$route.query['email']
+		},
+		token() {
+			return this.$route.query['token']
 		},
 	},
 	methods: {
@@ -260,6 +243,28 @@ export default {
 				tokenService.clearToken()
 				location.reload()
 			}
+		},
+		change(data) {
+			this.loading = true
+			authService.change({
+				'email': this.email,
+				'expires': this.expires,
+				'signature': this.signature,
+				'token': this.token,
+			}, data)
+				.then(() => {
+					this.showChange = false
+					this.$notify('Пароль успешно изменен! Зайдите в аккаунт заново.')
+					this.$router.push({
+						name: 'AccountsList',
+					})
+				})
+				.catch(() => {
+					alert('Что-то пошло не так! :( Возможно срок действия ссылки истёк либо она была повреждена.')
+				})
+				.finally(() => {
+					this.loading = false
+				})
 		},
 		forget(data) {
 			this.loading = true
@@ -275,9 +280,13 @@ export default {
 						&& Array.isArray(e.response.data.errors.email)
 					) {
 						const email_error = e.response.data.errors.email[0]
-						if (email_error === "We can't find a user with that email address.") {
+						if (email_error === 'We can\'t find a user with that email address.') {
 							alert('Пользователь с такой почтой не зарегистрирован.')
 							display = false
+						} else if (email_error === 'Please wait before retrying.') {
+							alert('Вы запрашиваете ссылку на сброс пароля слишком часто. Подождите перед повторной отправкой.')
+							display = false
+							this.showForget = false
 						}
 					}
 					if (display) {
@@ -357,6 +366,9 @@ export default {
 		},
 	},
 	mounted() {
+		if (this.$route.name === 'ChangePassword') {
+			this.showChange = true
+		}
 		Vue.prototype.$notify = (text) => {
 			this.noticeText = text
 			this.showNotice = true

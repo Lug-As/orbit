@@ -70,6 +70,11 @@ const routes = [
 		component: () => import('../views/Verification'),
 	},
 	{
+		path: '/change-password',
+		name: 'ChangePassword',
+		component: () => import('../views/ChangePassword'),
+	},
+	{
 		path: '*',
 		name: '404',
 		meta: {

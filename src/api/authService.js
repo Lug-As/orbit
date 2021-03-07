@@ -9,6 +9,13 @@ const loginRequest = (userData) => {
 const forgetRequest = (userData) => {
 	return axios.post('password/email', userData)
 }
+const changeRequest = (params, data) => {
+	return axios.post('password/reset', data, {
+		params: {
+			...params,
+		},
+	})
+}
 
 export default {
 	async register(userData) {
@@ -19,5 +26,8 @@ export default {
 	},
 	async forget(userData) {
 		return await forgetRequest(userData)
+	},
+	async change(params, data) {
+		return await changeRequest(params, data)
 	},
 }
