@@ -50,12 +50,13 @@
 									</router-link>
 									<ul class="header__li-left-drop">
 										<li class="header__li-nickname">
-											<h2 class="header__nickname-text">
+											<h2 class="header__nickname-text" v-if="user">
 												<a>{{ user.name }}</a>
 											</h2>
 											<ul class="header__menu-drop width-all">
 												<li class="header__drop-li">
-													<router-link :to="{name: 'Profile'}" class="header__li-link">Личный кабинет
+													<router-link :to="{name: 'Profile'}" class="header__li-link">
+														Личный кабинет
 													</router-link>
 												</li>
 												<li class="header__drop-li">
@@ -72,11 +73,17 @@
 						</div>
 						<div class="header__sign-row" v-else>
 							<button
-								@click="showLoginForm"
+								@click="showLogin = true"
 								class="header__menu-sign button-grand"
-							>Вход
+							>
+								Вход
 							</button>
-							<button class="header__menu-sign button-grand">Регистрация</button>
+							<button
+								@click="showSign = true"
+								class="header__menu-sign button-grand"
+							>
+								Регистрация
+							</button>
 						</div>
 					</div>
 				</div>
@@ -100,6 +107,141 @@
 				</div>
 			</div>
 		</transition>
+		<transition name="fade">
+			<sign
+				v-if="showSign"
+				@closed="showSign = false"
+				@login="showSign = false; showLogin = true"
+				@submit="register"
+			/>
+		</transition>
+		<transition name="fade">
+			<section class="login" v-if="showLogin" @click.self="showLogin = false">
+				<div class="container" @click.self="showLogin = false">
+					<div class="login__row">
+						<div class="login__row-title">
+							<h2 class="login__row-title-h2">
+								Впишите логин и пароль, чтобы войти в сервис
+							</h2>
+						</div>
+						<form action="post" class="login__row-form">
+							<div class="login__row-form-body">
+								<div class="login__row-form-item">
+									<div class="login__row-form-item-label">
+										<label for="logmail">
+											Почта
+										</label>
+									</div>
+									<div class="login__row-form-item-input">
+										<input type="text" id="logmail" required>
+									</div>
+								</div>
+								<div class="login__row-form-item">
+									<div class="login__row-form-item-label">
+										<label for="logpass">
+											Пароль
+										</label>
+									</div>
+									<div class="login__row-form-item-input">
+										<input type="password" id="logpass" required>
+									</div>
+								</div>
+								<div class="login__row-img"></div>
+							</div>
+							<div class="login__row-form-button">
+								<div class="login__row-form-button-reg">
+									<button class="login__row-form-button-log button-grand-transparent big">ВОЙТИ</button>
+								</div>
+								<div class="login__row-form-button-reg">
+									<a href="" class="login__row-form-span-log">Забыли пароль?</a>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</section>
+		</transition>
+		<transition name="fade">
+			<section class="forget" v-if="false">
+				<div class="container">
+					<div class="login__row">
+						<div class="login__row-title">
+							<h2 class="login__row-title-h2">
+								Забыли пароль?
+							</h2>
+							<p class="login__row-title-p">
+								Вскоре к вам на почту прийдёт ссылка по которой будет необходимо перейти и создать новый пароль!
+							</p>
+						</div>
+						<form action="post" class="login__row-form">
+							<div class="login__row-form-body">
+								<div class="login__row-form-item">
+									<div class="login__row-form-item-label">
+										<label for="forgetmail">
+											Почта
+										</label>
+									</div>
+									<div class="login__row-form-item-input">
+										<input type="text" id="forgetmail" required>
+									</div>
+								</div>
+								<div class="login__row-img"></div>
+							</div>
+							<div class="login__row-form-button">
+								<div class="login__row-form-button-reg">
+									<button class="login__row-form-button-log button-grand-transparent big">ОТПРАВИТЬ</button>
+								</div>
+
+							</div>
+						</form>
+					</div>
+				</div>
+			</section>
+		</transition>
+		<transition name="fade">
+			<section class="change" v-if="false">
+				<div class="container">
+					<div class="login__row">
+						<div class="login__row-title">
+							<h2 class="login__row-title-h2">
+								Впишите новый пароль дважды
+							</h2>
+						</div>
+						<form action="post" class="login__row-form">
+							<div class="login__row-form-body">
+								<div class="login__row-form-item">
+									<div class="login__row-form-item-label">
+										<label for="changepass">
+											Впишите пароль
+										</label>
+									</div>
+									<div class="login__row-form-item-input">
+										<input type="text" id="changepass" required>
+									</div>
+								</div>
+								<div class="login__row-form-item">
+									<div class="login__row-form-item-label">
+										<label for="secondchangepass">
+											Впишите пароль повторно
+										</label>
+									</div>
+									<div class="login__row-form-item-input">
+										<input type="password" id="secondchangepass" required>
+									</div>
+								</div>
+								<div class="login__row-img"></div>
+							</div>
+							<div class="login__row-form-button">
+								<div class="login__row-form-button-reg">
+									<button class="login__row-form-button-log button-grand-transparent big">СОЗДАТЬ</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</section>
+		</transition>
+		<preloader v-if="loading" class="auth-loader" height="100vh"/>
 		<footer class="footer normal-footer">
 			<div class="container">
 				<div class="footer__row">
@@ -144,12 +286,19 @@
 <script>
 import Vue from 'vue'
 import tokenService from '@/auth/tokenService'
+import Sign from '@/components/auth/Sign'
+import authService from '@/api/authService'
+import Preloader from '@/components/Preloader'
 
 export default {
 	name: 'MainLayout',
+	components: {Preloader, Sign},
 	data: () => ({
 		showNotice: false,
 		noticeText: null,
+		showLogin: false,
+		showSign: false,
+		loading: false,
 	}),
 	watch: {
 		showNotice(val) {
@@ -177,8 +326,38 @@ export default {
 				location.reload()
 			}
 		},
-		showLoginForm() {
-			//
+		register(userData) {
+			this.loading = true
+			authService.register(userData)
+				.then(response => {
+					if (response.data.token) {
+						const token = String(response.data.token).trim()
+						tokenService.setToken(token)
+						location.reload()
+					} else {
+						throw new Error
+					}
+				})
+				.catch(e => {
+					let display = true
+					if (
+						e.response && e.response.data && e.response.data.errors && e.response.data.errors.email
+						&& Array.isArray(e.response.data.errors.email)
+					) {
+						const email_error = e.response.data.errors.email[0]
+						if (email_error === 'The email has already been taken.') {
+							alert('Пользователь с таким email уже существует.')
+							display = false
+						}
+					}
+					if (display) {
+						alert('Произошла ошибка отправки формы. Повторите позже.')
+						this.showSign = false
+					}
+				})
+				.finally(() => {
+					this.loading = false
+				})
 		},
 	},
 	mounted() {

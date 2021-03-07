@@ -554,6 +554,7 @@ template {
 .header__menu-sign {
 	font-family: "Montserrat-Bold";
 	font-size: 18px;
+	margin-left: 5px;
 }
 
 .header__row-info {
@@ -3851,7 +3852,7 @@ template {
 }
 
 .login__row-form-item-input input:focus {
-	border-color: #ff0000;
+	/*border-color: #ff0000;*/
 }
 
 .login__row-form-conform {
@@ -3992,7 +3993,8 @@ template {
 .forget,
 .login,
 .change,
-.sign {
+.sign,
+.auth-loader{
 	position: fixed;
 	top: 0;
 	bottom: 0;
@@ -4008,7 +4010,7 @@ template {
 	background: rgba(0, 0, 0, 0.25);
 	z-index: 999999;
 	overflow-y: auto;
-	display: none;
+	display: flex;
 }
 
 .loader {

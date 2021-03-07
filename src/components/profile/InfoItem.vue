@@ -28,7 +28,15 @@
 					@dblclick="onEditMode"
 					class="profile__information-item-data-text"
 				>
-					{{ value | phone(this.phone) }}
+					<template v-if="this.phone">
+						{{ value | phone }}
+					</template>
+					<template v-else-if="value">
+						{{ value }}
+					</template>
+					<template v-else>
+						Пусто
+					</template>
 				</p>
 				<picture @click="onEditMode">
 					<source srcset="../../assets/img/change.webp" type="image/webp">
@@ -55,7 +63,6 @@ export default {
 			required: true,
 		},
 		value: {
-			type: [String, Number],
 			required: true,
 		},
 		max: {

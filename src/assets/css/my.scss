@@ -75,8 +75,9 @@
 }
 
 .empty-result-text {
-	margin: 50px 0;
+	margin: 75px 0;
 	text-align: center;
+	color: #6c757d;
 }
 
 .reset-filters-link {
@@ -171,5 +172,34 @@
 
 	&-cross {
 		transform: rotate(45deg);
+	}
+}
+
+.form-close-cross {
+	position: absolute;
+	right: 50px;
+	top: 60px;
+	font-size: 56px;
+	transition: color .2s;
+	cursor: pointer;
+	line-height: 0.6;
+
+	&:hover {
+		color: #BEBEBE;
+	}
+
+	@media (max-width: 1346px) {
+		right: 30px;
+	}
+
+	@media (max-width: 999px) {
+		top: 40px;
+		right: 25px;
+		font-size: 50px;
+	}
+
+	@media (max-width: 479px) {
+		right: 15px;
+		font-size: 47px;
 	}
 }

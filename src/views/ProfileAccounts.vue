@@ -245,6 +245,9 @@
 					</div>
 				</div>
 			</div>
+			<template v-else>
+			<p class="empty-result-text">У вас пока нет подтвержденных аккаунтов</p>
+		</template>
 		</div>
 	</div>
 </template>

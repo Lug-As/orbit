@@ -10,6 +10,9 @@
 				<profile-offer-notice v-else-if="notice.type === 'offers'" :notice="notice"/>
 			</div>
 		</div>
+		<template v-else>
+			<p class="empty-result-text">У вас пока нет уведомлений</p>
+		</template>
 		<div class="objects-pagination">
 			<pagination
 				:data="noticesPagination"

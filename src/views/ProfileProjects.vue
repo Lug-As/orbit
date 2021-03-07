@@ -32,7 +32,7 @@
 						</h2>
 					</div>
 					<preloader v-if="projectLoading"/>
-					<div v-else-if="userProjects" class="offers__project-list">
+					<div v-else-if="userProjects && userProjects.length" class="offers__project-list">
 						<div
 							v-for="project in userProjects"
 							class="offers__proposal-body"
@@ -80,6 +80,9 @@
 							</div>
 						</div>
 					</div>
+					<template v-else>
+						<p class="empty-result-text">У вас пока нет опубликованных рекламных предложений</p>
+					</template>
 					<div class="objects-pagination">
 						<pagination
 							:data="userProjectsPagination"
