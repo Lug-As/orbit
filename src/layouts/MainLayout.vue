@@ -119,45 +119,16 @@
 			<login
 				v-if="showLogin"
 				@closed="showLogin = false"
+				@forget="showLogin = false; showForget = true"
 				@submit="login"
 			/>
 		</transition>
 		<transition name="fade">
-			<section class="forget" v-if="false">
-				<div class="container">
-					<div class="login__row">
-						<div class="login__row-title">
-							<h2 class="login__row-title-h2">
-								Забыли пароль?
-							</h2>
-							<p class="login__row-title-p">
-								Вскоре к вам на почту прийдёт ссылка по которой будет необходимо перейти и создать новый пароль!
-							</p>
-						</div>
-						<form action="post" class="login__row-form">
-							<div class="login__row-form-body">
-								<div class="login__row-form-item">
-									<div class="login__row-form-item-label">
-										<label for="forgetmail">
-											Почта
-										</label>
-									</div>
-									<div class="login__row-form-item-input">
-										<input type="text" id="forgetmail" required>
-									</div>
-								</div>
-								<div class="login__row-img"></div>
-							</div>
-							<div class="login__row-form-button">
-								<div class="login__row-form-button-reg">
-									<button class="login__row-form-button-log button-grand-transparent big">ОТПРАВИТЬ</button>
-								</div>
-
-							</div>
-						</form>
-					</div>
-				</div>
-			</section>
+			<forget
+				v-if="showForget"
+				@closed="showForget = false"
+				@submit="forget"
+			/>
 		</transition>
 		<transition name="fade">
 			<section class="change" v-if="false">
@@ -251,15 +222,17 @@ import Sign from '@/components/auth/Sign'
 import authService from '@/api/authService'
 import Preloader from '@/components/Preloader'
 import Login from '@/components/auth/Login'
+import Forget from '@/components/auth/Forget'
 
 export default {
 	name: 'MainLayout',
-	components: {Login, Preloader, Sign},
+	components: {Forget, Login, Preloader, Sign},
 	data: () => ({
 		showNotice: false,
 		noticeText: null,
 		showLogin: false,
 		showSign: false,
+		showForget: false,
 		loading: false,
 	}),
 	watch: {
@@ -288,6 +261,34 @@ export default {
 				location.reload()
 			}
 		},
+		forget(data) {
+			this.loading = true
+			authService.forget(data)
+				.then(() => {
+					this.showForget = false
+					this.$notify('Ссылка для сброса пароля отправлена вам на почту!')
+				})
+				.catch(e => {
+					let display = true
+					if (
+						e.response && e.response.data && e.response.data.errors && e.response.data.errors.email
+						&& Array.isArray(e.response.data.errors.email)
+					) {
+						const email_error = e.response.data.errors.email[0]
+						if (email_error === "We can't find a user with that email address.") {
+							alert('Пользователь с такой почтой не зарегистрирован.')
+							display = false
+						}
+					}
+					if (display) {
+						alert('Произошла ошибка отправки формы. Повторите позже.')
+						this.showForget = false
+					}
+				})
+				.finally(() => {
+					this.loading = false
+				})
+		},
 		login(userData) {
 			this.loading = true
 			authService.login(userData)
@@ -314,7 +315,7 @@ export default {
 					}
 					if (display) {
 						alert('Произошла ошибка отправки формы. Повторите позже.')
-						this.showSign = false
+						this.showLogin = false
 					}
 				})
 				.finally(() => {
