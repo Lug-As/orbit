@@ -1,5 +1,9 @@
 <template>
-	<div class="preload-container" :style="{'height': (height + 'px')}">
+	<div class="preload-container"
+		  :style="{
+				'height': (String(height).match(/^[0-9]+$/) ? (height + 'px') : height),
+			}"
+	>
 		<div class="sk-circle-bounce">
 			<div class="sk-child sk-circle-1"></div>
 			<div class="sk-child sk-circle-2"></div>

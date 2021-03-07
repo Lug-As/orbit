@@ -116,50 +116,11 @@
 			/>
 		</transition>
 		<transition name="fade">
-			<section class="login" v-if="showLogin" @click.self="showLogin = false">
-				<div class="container" @click.self="showLogin = false">
-					<div class="login__row">
-						<div class="login__row-title">
-							<h2 class="login__row-title-h2">
-								Впишите логин и пароль, чтобы войти в сервис
-							</h2>
-						</div>
-						<form action="post" class="login__row-form">
-							<div class="login__row-form-body">
-								<div class="login__row-form-item">
-									<div class="login__row-form-item-label">
-										<label for="logmail">
-											Почта
-										</label>
-									</div>
-									<div class="login__row-form-item-input">
-										<input type="text" id="logmail" required>
-									</div>
-								</div>
-								<div class="login__row-form-item">
-									<div class="login__row-form-item-label">
-										<label for="logpass">
-											Пароль
-										</label>
-									</div>
-									<div class="login__row-form-item-input">
-										<input type="password" id="logpass" required>
-									</div>
-								</div>
-								<div class="login__row-img"></div>
-							</div>
-							<div class="login__row-form-button">
-								<div class="login__row-form-button-reg">
-									<button class="login__row-form-button-log button-grand-transparent big">ВОЙТИ</button>
-								</div>
-								<div class="login__row-form-button-reg">
-									<a href="" class="login__row-form-span-log">Забыли пароль?</a>
-								</div>
-							</div>
-						</form>
-					</div>
-				</div>
-			</section>
+			<login
+				v-if="showLogin"
+				@closed="showLogin = false"
+				@submit="login"
+			/>
 		</transition>
 		<transition name="fade">
 			<section class="forget" v-if="false">
@@ -289,10 +250,11 @@ import tokenService from '@/auth/tokenService'
 import Sign from '@/components/auth/Sign'
 import authService from '@/api/authService'
 import Preloader from '@/components/Preloader'
+import Login from '@/components/auth/Login'
 
 export default {
 	name: 'MainLayout',
-	components: {Preloader, Sign},
+	components: {Login, Preloader, Sign},
 	data: () => ({
 		showNotice: false,
 		noticeText: null,
@@ -325,6 +287,39 @@ export default {
 				tokenService.clearToken()
 				location.reload()
 			}
+		},
+		login(userData) {
+			this.loading = true
+			authService.login(userData)
+				.then(response => {
+					if (response.data.token) {
+						const token = String(response.data.token).trim()
+						tokenService.setToken(token)
+						location.reload()
+					} else {
+						throw new Error
+					}
+				})
+				.catch(e => {
+					let display = true
+					if (
+						e.response && e.response.data && e.response.data.errors && e.response.data.errors.email
+						&& Array.isArray(e.response.data.errors.email)
+					) {
+						const email_error = e.response.data.errors.email[0]
+						if (email_error === 'These credentials do not match our records.') {
+							alert('Данные введены неверно.')
+							display = false
+						}
+					}
+					if (display) {
+						alert('Произошла ошибка отправки формы. Повторите позже.')
+						this.showSign = false
+					}
+				})
+				.finally(() => {
+					this.loading = false
+				})
 		},
 		register(userData) {
 			this.loading = true

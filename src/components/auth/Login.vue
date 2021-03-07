@@ -1,5 +1,5 @@
 <template>
-	<section class="sign" @click.self="$emit('closed')">
+	<section class="login" @click.self="$emit('closed')">
 		<div class="container" @click.self="$emit('closed')">
 			<div class="login__row">
 				<span
@@ -8,58 +8,11 @@
 				>&times;</span>
 				<div class="login__row-title">
 					<h2 class="login__row-title-h2">
-						Данные для регистрации пригодятся, когда вам будет
-						необходимо связаться с реламодателем или рекламщиком
+						Впишите логин и пароль, чтобы войти в сервис
 					</h2>
 				</div>
 				<form class="login__row-form">
 					<div class="login__row-form-body">
-						<div class="login__row-form-item">
-							<div class="login__row-form-item-label">
-								<label for="nickname">
-									Имя
-								</label>
-							</div>
-							<div class="login__row-form-item-input">
-								<input
-									v-model.trim="name"
-									@blur="$v.name.$touch"
-									type="text"
-									id="nickname"
-									required
-								>
-							</div>
-							<div class="errors-box" v-if="$v.name.$error">
-								<p class="red">
-									<template v-if="!$v.name.required">Это поле обязательно для заполнения</template>
-								</p>
-							</div>
-						</div>
-						<div class="login__row-form-item">
-							<div class="login__row-form-item-label">
-								<label for="tel">
-									Номер телефона
-								</label>
-							</div>
-							<div class="login__row-form-item-input">
-								<input
-									v-model.trim="phone"
-									v-mask="{mask: '8 (999) 999-99-99'}"
-									@blur="$v.phone.$touch"
-									type="tel"
-									id="tel"
-									required
-								>
-							</div>
-							<div class="errors-box" v-if="$v.phone.$error">
-								<p class="red">
-									<template v-if="!$v.phone.required">Это поле обязательно для заполнения</template>
-									<template v-if="!$v.phone.maxLength || !$v.phone.minLength">
-										Заполните телефон до конца
-									</template>
-								</p>
-							</div>
-						</div>
 						<div class="login__row-form-item">
 							<div class="login__row-form-item-label">
 								<label for="regmail">
@@ -116,29 +69,15 @@
 						</div>
 						<div class="login__row-img"></div>
 					</div>
-					<div class="login__row-form-conform">
-						<input id="check" type="checkbox" v-model="agree">
-						<label for="check" class="login__row-form-conform-label"> Я согласен на обработку персональных
-							данных
-						</label>
-						<div class="errors-box" v-if="$v.agree.$error">
-							<p class="red">
-								<template v-if="!$v.agree.required">Мы не можем продолжать без вашего согласия</template>
-							</p>
-						</div>
-					</div>
 					<div class="login__row-form-button">
 						<div class="login__row-form-button-reg">
 							<button
 								@click.prevent="submit"
 								class="login__row-form-button-log button-grand-transparent big"
-							>
-								ЗАРЕГИСТРИРОВАТЬСЯ
-							</button>
+							>ВОЙТИ</button>
 						</div>
 						<div class="login__row-form-button-reg">
-							<a @click.prevent="$emit('login')" href class="login__row-form-span-log">Уже есть аккаунт?</a>
-							<a href class="login__row-form-span-log">Пользовательское соглашение</a>
+							<a href="" class="login__row-form-span-log">Забыли пароль?</a>
 						</div>
 					</div>
 				</form>
@@ -148,23 +87,18 @@
 </template>
 
 <script>
-import {email, maxLength, minLength, required, sameAs} from 'vuelidate/lib/validators'
+import {email, maxLength, minLength, required} from 'vuelidate/lib/validators'
 
 export default {
-	name: 'Sign',
+	name: 'Login',
 	data: () => ({
-		name: null,
-		phone: null,
 		email: null,
 		password: null,
-		agree: false,
 	}),
 	methods: {
 		submit() {
 			if (this.validate()) {
 				const user = {
-					name: this.name,
-					phone: this.phone,
 					email: this.email,
 					password: this.password,
 				}
@@ -177,15 +111,6 @@ export default {
 		},
 	},
 	validations: {
-		name: {
-			required,
-			maxLength: maxLength(150),
-		},
-		phone: {
-			required,
-			maxLength: maxLength(10),
-			minLength: minLength(10),
-		},
 		email: {
 			required,
 			email,
@@ -196,9 +121,10 @@ export default {
 			maxLength: maxLength(100),
 			minLength: minLength(8),
 		},
-		agree: {
-			sameAs: sameAs(() => true),
-		},
 	},
 }
 </script>
+
+<style lang="scss" scoped>
+
+</style>
