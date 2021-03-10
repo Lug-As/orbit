@@ -2,94 +2,96 @@
 	<section class="offers main">
 		<div class="container">
 			<div class="offers__row">
-				<div class="offers__filters main__filters">
-					<div class="main__filters-container">
-						<div class="main__filters-row">
-							<div class="main__title">
-								<div class="main__title-img">
-									<picture>
-										<source srcset="../assets/img/filter.webp" type="image/webp">
-										<img src="../assets/img/filter.png" alt=""></picture>
-								</div>
-								<div class="main__title-text">Фильтр</div>
-								<a
-									v-if="wasFiltered"
-									@click.prevent="clearFilters"
-									class="reset-filters-link"
-									href="#"
-								>
-									Сбросить все
-								</a>
-							</div>
+				<transition name="fade">
+					<div class="offers__filters main__filters" v-if="filtersOpened" @click.self="displayFilters = false">
+						<div class="main__filters-container">
 							<div class="main__filters-row">
-								<div class="main__body-filters">
-									<div class="main__body-details">
-										<h2 class="main__filters-summary">Бюджет</h2>
-										<div class="main__details-row">
-											<div class="main__details-from-to">
-												<div class="main__details-from">
-													<p class="main__details-text">от</p>
-													<div class="main__details-input">
-														<input
-															v-model.lazy="filterOpts.budget_from"
-															@change="filter($event, 'budget_from')"
-															@keydown="resolveInputKeys"
-															class="main__details-input-small"
-														>
+								<div class="main__title">
+									<div class="main__title-img">
+										<picture>
+											<source srcset="../assets/img/filter.webp" type="image/webp">
+											<img src="../assets/img/filter.png" alt=""></picture>
+									</div>
+									<div class="main__title-text">Фильтр</div>
+									<a
+										v-if="wasFiltered"
+										@click.prevent="clearFilters"
+										class="reset-filters-link"
+										href="#"
+									>
+										Сбросить все
+									</a>
+								</div>
+								<div class="main__filters-row">
+									<div class="main__body-filters">
+										<div class="main__body-details">
+											<h2 class="main__filters-summary">Бюджет</h2>
+											<div class="main__details-row">
+												<div class="main__details-from-to">
+													<div class="main__details-from">
+														<p class="main__details-text">от</p>
+														<div class="main__details-input">
+															<input
+																v-model.lazy="filterOpts.budget_from"
+																@change="filter($event, 'budget_from')"
+																@keydown="resolveInputKeys"
+																class="main__details-input-small"
+															>
+														</div>
 													</div>
-												</div>
-												<div class="main__details-to">
-													<p class="main__details-text">до</p>
-													<div class="main__details-input">
-														<input
-															v-model.lazy="filterOpts.budget_to"
-															@change="filter($event, 'budget_to')"
-															@keydown="resolveInputKeys"
-															class="main__details-input-small"
-														>
+													<div class="main__details-to">
+														<p class="main__details-text">до</p>
+														<div class="main__details-input">
+															<input
+																v-model.lazy="filterOpts.budget_to"
+																@change="filter($event, 'budget_to')"
+																@keydown="resolveInputKeys"
+																class="main__details-input-small"
+															>
+														</div>
 													</div>
 												</div>
 											</div>
 										</div>
-									</div>
-									<div class="main__body-details">
-										<h2 class="main__filters-summary">Виды рекламы</h2>
-										<div class="main__details-row">
-											<v-select
-												label="name"
-												v-model="filterOpts.type"
-												:options="types"
-												:reduce="opt => opt.id"
-												multiple
-												class="main__vue-select"
-												@input="filter($event, 'type')"
-											/>
+										<div class="main__body-details">
+											<h2 class="main__filters-summary">Виды рекламы</h2>
+											<div class="main__details-row">
+												<v-select
+													label="name"
+													v-model="filterOpts.type"
+													:options="types"
+													:reduce="opt => opt.id"
+													multiple
+													class="main__vue-select"
+													@input="filter($event, 'type')"
+												/>
+											</div>
 										</div>
-									</div>
-									<div class="main__body-details">
-										<h2 class="main__filters-summary">Количество подписчиков</h2>
-										<div class="main__details-row">
-											<div class="main__details-from-to">
-												<div class="main__details-from">
-													<p class="main__details-text">от</p>
-													<div class="main__details-input">
-														<input
-															v-model.lazy="filterOpts.followers_from"
-															@change="filter($event, 'followers_from')"
-															@keydown="resolveInputKeys"
-															class="main__details-input-small"
-														>
+										<div class="main__body-details">
+											<h2 class="main__filters-summary">Количество подписчиков</h2>
+											<div class="main__details-row">
+												<div class="main__details-from-to">
+													<div class="main__details-from">
+														<p class="main__details-text">от</p>
+														<div class="main__details-input">
+															<input
+																v-model.lazy="filterOpts.followers_from"
+																@change="filter($event, 'followers_from')"
+																@keydown="resolveInputKeys"
+																class="main__details-input-small"
+															>
+														</div>
 													</div>
-												</div>
-												<div class="main__details-to">
-													<p class="main__details-text">до</p>
-													<div class="main__details-input">
-														<input
-															v-model.lazy="filterOpts.followers_to"
-															@change="filter($event, 'followers_to')"
-															@keydown="resolveInputKeys"
-															class="main__details-input-small"
-														>
+													<div class="main__details-to">
+														<p class="main__details-text">до</p>
+														<div class="main__details-input">
+															<input
+																v-model.lazy="filterOpts.followers_to"
+																@change="filter($event, 'followers_to')"
+																@keydown="resolveInputKeys"
+																class="main__details-input-small"
+															>
+														</div>
 													</div>
 												</div>
 											</div>
@@ -99,12 +101,13 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</transition>
 				<div class="offers__proposal">
 					<div class="offers__proposal-title">
 						<div class="offers__title-body">
 							<div class="offers__title-filter-button">
-								<button class="offers__filter-button main__title-mobile ">
+								<button class="offers__filter-button main__title-mobile "
+										  @click="displayFilters = !displayFilters">
 									<div class="offers__button-img main__title-img-mobile">
 										<picture>
 											<source srcset="../assets/img/filter.webp" type="image/webp">
@@ -239,6 +242,7 @@ export default {
 			budget_to: null,
 		},
 		searchQuery: null,
+		displayFilters: false,
 	}),
 	computed: {
 		projects() {
@@ -255,6 +259,9 @@ export default {
 		},
 		allowedFilterTypes() {
 			return Object.keys(this.filterOpts)
+		},
+		filtersOpened() {
+			return document.body.clientWidth >= 1366 || this.displayFilters
 		},
 		page() {
 			let page

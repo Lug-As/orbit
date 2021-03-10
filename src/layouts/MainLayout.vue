@@ -3,8 +3,8 @@
 		<header class="header header__blogers normal-header">
 			<div class="container">
 				<div class="header__row normal-row">
-					<div class="header__menu-mobile">
-						<span class="header__menu-burger" @click="displayMenu = !displayMenu"></span>
+					<div class="header__menu-mobile" @click="displayMenu = !displayMenu">
+						<span class="header__menu-burger"></span>
 					</div>
 					<div class="header__img">
 						<a href="/">
