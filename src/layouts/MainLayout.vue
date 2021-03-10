@@ -19,13 +19,13 @@
 						<transition name="upper">
 							<ul class="header__menu-ul" v-if="menuOpened">
 								<li class="header__menu-li ">
-									<a href="" class="header__menu-link add-li">Главная</a>
+									<a href="/" class="header__menu-link add-li">Главная</a>
 									<ul class="header__menu-drop">
 										<li class="header__menu-li ">
-											<a href="" class="header__menu-link">Блогеру</a>
+											<a href="/#instruction__bloger" class="header__menu-link">Блогеру</a>
 										</li>
 										<li class="header__menu-li">
-											<a href="" class="header__menu-link">Рекламодателю</a>
+											<a href="/#instruction" class="header__menu-link">Рекламодателю</a>
 										</li>
 									</ul>
 								</li>
@@ -164,16 +164,16 @@
 								</router-link>
 							</li>
 							<li class="footer__ul-li">
-								<a href="/" class="footer__li-link">Информация Блогеру</a>
+								<a href="/#instruction__bloger" class="footer__li-link">Информация Блогеру</a>
 							</li>
 							<li class="footer__ul-li">
-								<a href="/" class="footer__li-link">Рекламодателю</a>
+								<a href="/#instruction" class="footer__li-link">Рекламодателю</a>
 							</li>
 						</ul>
 					</div>
 					<div class="footer__rights">
 						<div class="footer__rights-contract">
-							<a href class="footer__li-link">Договор на обработку персональных данных</a>
+							<a href="/agreement" class="footer__li-link">Договор на обработку персональных данных</a>
 						</div>
 						<div class="footer__rights-right">
 							<a class="footer__li-link">Орбита 2021 /©Все права защищены!</a>
@@ -217,6 +217,10 @@ export default {
 		'$route'(val) {
 			if (val['name'] === 'ChangePassword') {
 				this.showChange = true
+			} else if (val.query['showLogin']) {
+				this.showLogin = true
+			} else if (val.query['showRegister']) {
+				this.showSign = true
 			}
 		},
 	},
@@ -241,6 +245,12 @@ export default {
 		},
 		token() {
 			return this.$route.query['token']
+		},
+		showLoginParam() {
+			return this.$route.query['showLogin']
+		},
+		showRegisterParam() {
+			return this.$route.query['showRegister']
 		},
 	},
 	methods: {
@@ -378,6 +388,10 @@ export default {
 	mounted() {
 		if (this.$route.name === 'ChangePassword') {
 			this.showChange = true
+		} else if (this.showLoginParam) {
+			this.showLogin = true
+		} else if (this.showRegisterParam) {
+			this.showSign = true
 		}
 		Vue.prototype.$notify = (text) => {
 			this.noticeText = text
