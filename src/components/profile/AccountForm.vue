@@ -282,7 +282,7 @@ export default {
 					'ad_types': this.ad_types,
 					'topics': this.topics,
 					'ages': this.ages,
-					'region': this.region,
+					'region_id': this.region,
 				}
 				this.$emit('submit', request)
 			}

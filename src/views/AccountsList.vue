@@ -286,6 +286,7 @@
 									:limit="2"
 									@pagination-change-page="changePage"
 								/>
+								<br>
 							</div>
 						</div>
 					</template>
@@ -493,7 +494,9 @@ export default {
 		},
 		priceRange(types) {
 			if (types.length === 0) return 'Договорная'
-			if (types.length === 1) return types[0].price + '₽'
+			if (types.length === 1) {
+				return types[0].price ? 'От ' + types[0].price + '₽' : 'Договорная'
+			}
 			let maxPrice = 0
 			types.forEach(type => {
 				if (type.price > maxPrice) {
@@ -510,10 +513,10 @@ export default {
 				return 'Договорная'
 			}
 			if (minPrice === null || maxPrice === null) {
-				return (minPrice || maxPrice) + '₽'
+				return 'От ' + (minPrice || maxPrice) + '₽'
 			}
 			if (minPrice === maxPrice) {
-				return minPrice + '₽'
+				return 'От ' + minPrice + '₽'
 			}
 			return 'От ' + minPrice + '₽ до ' + maxPrice + '₽'
 		},

@@ -187,7 +187,7 @@ export default {
 					'followers_from': this.followers_from,
 					'followers_to': this.followers_to,
 					'ad_types': this.ad_types,
-					'region': this.region,
+					'region_id': this.region,
 				}
 				this.$emit('submit', project)
 			}

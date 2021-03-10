@@ -18,7 +18,7 @@ const storeRequest = (request) => {
 				for (let i = 0; i < item.length; i++) {
 					formData.append(key + '[' + i + ']', item[i])
 				}
-			} else {
+			} else if (item !== null) {
 				formData.append(key, item)
 			}
 		})
