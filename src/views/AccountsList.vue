@@ -468,7 +468,7 @@ export default {
 			return {}
 		},
 		filtersOpened() {
-			return document.body.clientWidth >= 1366 || this.displayFilters
+			return screen.width >= 1366 || this.displayFilters
 		},
 	},
 	methods: {
