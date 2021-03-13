@@ -261,7 +261,7 @@ export default {
 			return Object.keys(this.filterOpts)
 		},
 		filtersOpened() {
-			return screen.width >= 1366 || this.displayFilters
+			return window.innerWidth >= 1366 || this.displayFilters
 		},
 		page() {
 			let page
