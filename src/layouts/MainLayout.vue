@@ -219,8 +219,10 @@ export default {
 				this.showChange = true
 			} else if (val.query['showLogin']) {
 				this.showLogin = true
+				this.clearQueryParam('showLogin')
 			} else if (val.query['showRegister']) {
 				this.showSign = true
+				this.clearQueryParam('showRegister')
 			}
 		},
 	},
@@ -254,6 +256,13 @@ export default {
 		},
 	},
 	methods: {
+		clearQueryParam(key) {
+			if (this.$route.query[key] !== undefined) {
+				let query = Object.assign({}, this.$route.query)
+				delete query[key]
+				this.$router.replace({query})
+			}
+		},
 		closeNotice() {
 			this.showNotice = false
 			this.noticeText = null
