@@ -69,7 +69,7 @@
 													class="main__vue-select"
 												/>
 												<small class="main__details-small">
-													Например: Еда / Отдых / Путешествия
+													Например: Авто / Туризм / Развлечения
 												</small>
 											</div>
 										</div>

@@ -61,7 +61,7 @@
 								<h3 class="bloger__body-title">О себе: </h3>
 								<p class="bloger__body-text text-padding">{{ account.about }}</p>
 							</div>
-							<div class="bloger__body-age border-body" v-if="account.ages">
+							<div class="bloger__body-age border-body" v-if="account.ages && account.ages.length">
 								<h3 class="bloger__body-title">Возрастные категории аудитории:</h3>
 								<p class="bloger__body-text">
 									{{ account.ages | slashedList('range') }}

@@ -122,9 +122,10 @@
 								<input
 									v-model.trim.lazy="searchQuery"
 									type="text"
-									placeholder="Введите поисковой запрос"
+									placeholder="Введите запрос и нажмите Enter"
 									@change="search"
 								>
+								<button class="search-icon"></button>
 							</div>
 						</div>
 					</div>
@@ -439,11 +440,53 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .offers__info-text {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	cursor: pointer;
+}
+
+.search-icon {
+	$icon_size: 46px;
+	height: $icon_size;
+	width: $icon_size;
+	position: absolute;
+	right: 0;
+	top: 0;
+	cursor: pointer;
+	display: inline-block;
+	background-image: url('../assets/img/search.png');
+	background-size: 66%;
+	background-repeat: no-repeat;
+	background-position: center;
+	border-radius: 15px;
+
+	&:focus {
+		box-shadow: 0 0 1px 1px #BEBEBE;
+
+	}
+
+	@media (max-width: 1599px) {
+		$icon_size: 40px;
+		height: $icon_size;
+		width: $icon_size;
+	}
+
+	@media (max-width: 1365px) {
+		$icon_size: 40px;
+		height: $icon_size;
+		width: $icon_size;
+		background-size: 60%;
+	}
+}
+
+.offers__proposal-input {
+	position: relative;
+
+	input {
+		padding: 10px;
+	}
 }
 </style>

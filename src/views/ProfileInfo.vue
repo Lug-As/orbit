@@ -8,8 +8,9 @@
 					<span class="profile__information-span secondary"
 							title="Ваш уникальный идентификатор">#{{ user.id }}</span>
 				</h2>
-				<span class="profile__information-title-confidentiality">Эти данные конфиденциальны. Только ты их
-                        видишь.</span>
+				<span class="profile__information-title-confidentiality">
+					Ваши данные конфиденциальны, доступ к ним есть только у вас.
+				</span>
 			</div>
 			<div class="profile__information-body">
 				<div class="profile__information-body-row">

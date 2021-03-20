@@ -2,6 +2,7 @@
 	<section class="profile">
 		<div class="container">
 			<div class="profile__tab-menu">
+				<h2 class="profile__main-title">Личный кабинет</h2>
 				<ul class="profile__tab-menu-ul">
 					<router-link
 						:to="{name: 'Profile'}"
@@ -157,6 +158,14 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.profile {
+	margin-top: 25px;
+}
 
+.profile__main-title {
+	font-family: "Montserrat-Bold", sans-serif;
+	font-size: 24px;
+	margin-bottom: 30px;
+}
 </style>

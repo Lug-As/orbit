@@ -64,7 +64,7 @@
 									{{ project.budget.toLocaleString() }}₽
 								</span>
 							</div>
-							<preloader v-if="responsesLoading" height="90" style="margin-left: 60px; margin-right: 60px;"/>
+							<preloader v-if="responsesLoading" small class="offer__btn-preloader"/>
 							<template v-else-if="notMyProject">
 								<div class="offer__body-price-button">
 									<button
@@ -168,6 +168,7 @@ export default {
 				}
 				return userAccounts
 			}
+			this.responsesLoading = false
 			return null
 		},
 		notMyProject() {
@@ -290,5 +291,10 @@ export default {
 <style scoped>
 .response_one_account_text {
 	color: #061a62;
+}
+
+.offer__btn-preloader {
+	margin-left: 60px;
+	margin-right: 60px;
 }
 </style>
