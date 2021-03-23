@@ -92,7 +92,10 @@
 											подтверди свой почтовый ящик.
 										</template>
 										<template v-else-if="userAccounts === null">
-											необходимо завести Тик-Ток аккаунт.
+											необходимо
+											<router-link :to="{name: 'ProfileAccounts'}">
+												разместить анкету блогера на сайте
+											</router-link>.
 										</template>
 									</p>
 								</div>
