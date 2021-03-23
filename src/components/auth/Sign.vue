@@ -97,9 +97,25 @@
 								<input
 									v-model="password"
 									@blur="$v.password.$touch"
-									type="password"
+									:type="showPass ? 'text' : 'password'"
 									id="psswrd"
 									required
+								>
+								<img
+									@click="showPass = false"
+									v-if="showPass"
+									class="cursor pass-visible-img"
+									src="../../assets/img/pass-hide.png"
+									title="Скрыть пароль"
+									alt=""
+								>
+								<img
+									@click="showPass = true"
+									v-else
+									class="cursor pass-visible-img"
+									src="../../assets/img/pass-eye.png"
+									title="Показать пароль"
+									alt=""
 								>
 							</div>
 							<div class="errors-box" v-if="$v.password.$error">
@@ -138,7 +154,8 @@
 						</div>
 						<div class="login__row-form-button-reg">
 							<a @click.prevent="$emit('login')" href class="login__row-form-span-log">Уже есть аккаунт?</a>
-							<a href class="login__row-form-span-log">Пользовательское соглашение</a>
+							<a target="_blank" rel="noopener" href="/agreement.pdf" class="login__row-form-span-log">Пользовательское
+								соглашение</a>
 						</div>
 					</div>
 				</form>
@@ -158,6 +175,7 @@ export default {
 		email: null,
 		password: null,
 		agree: false,
+		showPass: false,
 	}),
 	methods: {
 		submit() {

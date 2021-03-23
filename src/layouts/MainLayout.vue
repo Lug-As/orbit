@@ -201,7 +201,8 @@
 					</div>
 					<div class="footer__rights">
 						<div class="footer__rights-contract">
-							<a href="/agreement" class="footer__li-link">Договор на обработку персональных данных</a>
+							<a target="_blank" rel="noopener" href="/agreement.pdf" class="footer__li-link">Договор на
+								обработку персональных данных</a>
 						</div>
 						<div class="footer__rights-right">
 							<a class="footer__li-link">Орбита 2021 /©Все права защищены!</a>

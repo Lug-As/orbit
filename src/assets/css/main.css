@@ -3980,6 +3980,7 @@ template {
 }
 
 .login__row {
+	top: 5%;
 	background: #ffffff;
 	-webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
 	box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
@@ -4044,6 +4045,9 @@ template {
 
 .login__row-form-item-input {
 	margin-top: 10px;
+	position: relative;
+	background-color: #fff;
+	z-index: 2;
 }
 
 .login__row-form-item-input label {
@@ -7312,6 +7316,22 @@ button:disabled {
 		text-align: center;
 	}
 
+	.login__row-form-button {
+		-webkit-box-orient: vertical;
+		-webkit-box-direction: normal;
+		-ms-flex-direction: column;
+		flex-direction: column;
+	}
+
+	.login .login__row-form-button-reg:last-child,
+	.sign .login__row-form-button-reg:last-child {
+		margin-top: 15px;
+	}
+
+	.login__row-form-button-reg {
+		width: 30%;
+	}
+
 	.header__button-info-lending {
 		width: 40%;
 		margin-bottom: 120px;
@@ -7367,7 +7387,7 @@ button:disabled {
 	}
 
 	.login__row {
-		width: 75%;
+		width: 100%;
 	}
 
 	.crm__row {
@@ -8171,7 +8191,7 @@ button:disabled {
 	}
 
 	.login__row {
-		padding: 47px 60px;
+		padding: 47px;
 		border-radius: 65px;
 	}
 
@@ -8193,13 +8213,6 @@ button:disabled {
 		height: 15px;
 	}
 
-	.login__row-form-button {
-		-webkit-box-orient: vertical;
-		-webkit-box-direction: normal;
-		-ms-flex-direction: column;
-		flex-direction: column;
-	}
-
 	.login__row-form {
 		margin-top: 25px;
 	}
@@ -8210,22 +8223,17 @@ button:disabled {
 		margin-top: 0;
 	}
 
-	.login .login__row-form-button-reg:last-child,
-	.sign .login__row-form-button-reg:last-child {
-		margin-top: 15px;
-	}
-
 	.login .login__row-form-button-reg {
 		width: 50%;
 	}
 
 	.login .login__row-img,
 	.sign .login__row-img {
-		height: 216px;
-		width: 234px;
-		top: 0%;
+		height: 190px;
+		width: 204px;
+		top: 0;
 		right: -35px;
-		bottom: 0%;
+		bottom: 0;
 	}
 
 	.change .login__row-form-button-reg,

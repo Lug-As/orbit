@@ -50,9 +50,25 @@
 								<input
 									v-model="password"
 									@blur="$v.password.$touch"
-									type="password"
+									:type="showPass ? 'text' : 'password'"
 									id="psswrd"
 									required
+								>
+								<img
+									@click="showPass = false"
+									v-if="showPass"
+									class="cursor pass-visible-img"
+									src="../../assets/img/pass-hide.png"
+									title="Скрыть пароль"
+									alt=""
+								>
+								<img
+									@click="showPass = true"
+									v-else
+									class="cursor pass-visible-img"
+									src="../../assets/img/pass-eye.png"
+									title="Показать пароль"
+									alt=""
 								>
 							</div>
 							<div class="errors-box" v-if="$v.password.$error">
@@ -96,6 +112,7 @@ export default {
 	data: () => ({
 		email: null,
 		password: null,
+		showPass: false,
 	}),
 	methods: {
 		submit() {
@@ -126,7 +143,3 @@ export default {
 	},
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

@@ -236,3 +236,36 @@
 .login__row {
 	position: relative;
 }
+
+.pass-visible-img {
+	position: absolute;
+	height: 32px;
+	top: 50%;
+	transform: translateY(-50%);
+	margin-right: 5px;
+	right: 0;
+	transition: background-color .25s;
+	border-radius: 50%;
+	padding: 4px;
+
+	&:hover {
+		background-color: #eee;
+	}
+
+	@media (max-width: 1559px) {
+		margin-left: 7px;
+	}
+}
+
+.auth-loader {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 100vh;
+	background: rgba(0, 0, 0, 0.25);
+	z-index: 1000000;
+	overflow-y: auto;
+	display: flex;
+}
