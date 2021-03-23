@@ -25,7 +25,7 @@
 			</div>
 			<div class="profile__information-item-data-info" v-else>
 				<p
-					@dblclick="onEditMode"
+					@click="onEditMode"
 					class="profile__information-item-data-text cursor"
 					title="Нажмите дважды для редактирования"
 				>
@@ -73,6 +73,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		required: {
+			type: Boolean,
+			default: false,
+		},
 		email: {
 			type: Boolean,
 			default: false,
@@ -86,6 +90,9 @@ export default {
 	computed: {
 		rules() {
 			const rules = {}
+			if (this.required) {
+				rules.required = required
+			}
 			if (this.max) {
 				rules.maxLength = maxLength(this.max)
 			}
@@ -161,7 +168,6 @@ export default {
 	validations() {
 		return {
 			localVal: {
-				required,
 				...this.rules,
 			},
 		}
@@ -176,6 +182,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.profile__information-item-data {
+	@media (max-width: 767px) {
+		flex-direction: column;
+	}
+}
+
 .errors-box {
 	margin-left: 10px;
 	font-size: 14px;

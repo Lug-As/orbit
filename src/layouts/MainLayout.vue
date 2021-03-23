@@ -1,31 +1,35 @@
 <template>
 	<div>
-		<header class="header header__blogers normal-header">
+		<header class="header header__lending normal-header">
 			<div class="container">
 				<div class="header__row normal-row">
 					<div class="header__menu-mobile" @click="displayMenu = !displayMenu">
 						<span class="header__menu-burger"></span>
 					</div>
 					<div class="header__img">
-						<a href="/">
+						<router-link :to="{name: 'Main'}">
 							<picture>
 								<source srcset="../assets/img/Логотип.webp" type="image/webp">
 								<img src="../assets/img/Логотип.png" alt="">
 							</picture>
-						</a>
+						</router-link>
 					</div>
 
 					<div class="header__menu">
 						<transition name="upper">
 							<ul class="header__menu-ul" v-if="menuOpened">
 								<li class="header__menu-li ">
-									<a href="/" class="header__menu-link add-li">Главная</a>
+									<router-link :to="{name: 'Main'}" class="header__menu-link add-li">Главная</router-link>
 									<ul class="header__menu-drop">
 										<li class="header__menu-li ">
-											<a href="/#instruction__bloger" class="header__menu-link">Блогеру</a>
+											<router-link :to="{name: 'Main', hash: '#instruction__bloger'}"
+															 class="header__menu-link">Блогеру
+											</router-link>
 										</li>
 										<li class="header__menu-li">
-											<a href="/#instruction" class="header__menu-link">Рекламодателю</a>
+											<router-link :to="{name: 'Main', hash: '#instruction'}" class="header__menu-link">
+												Рекламодателю
+											</router-link>
 										</li>
 									</ul>
 								</li>
@@ -89,10 +93,34 @@
 						</div>
 					</div>
 				</div>
+				<div class="header__row-info header__row-info-lending" v-if="main">
+					<div class="header__text-info header__text-info-lending">
+						<div class="header__text header__text-lending">
+							<h2 class="header__text-title header__text-title-lending">Зарабатывай <br> в Тик-Ток с нами!</h2>
+							<p class="header__text-subtitle header__text-subtitle-lending">
+								Платформа для сотрудничества рекламодателя и блогера с целью продвижения бизнеса в интернете
+							</p>
+						</div>
+						<div class="header__button-info header__button-info-lending">
+							<router-link :to="{name: 'ProjectsList'}" class="header__button-info-lending-btn">
+								<button class="button-grand big">
+									Рекламные предложения
+								</button>
+							</router-link>
+							<router-link :to="{name: 'AccountsList'}" class="header__button-info-lending-btn">
+								<button class="button-grand-first big">
+									Наши блогеры
+								</button>
+							</router-link>
+						</div>
+					</div>
+					<div class="header__img-info">
+					</div>
+				</div>
 			</div>
 		</header>
 		<template>
-			<router-view></router-view>
+			<router-view @show-sign="showSign = true"></router-view>
 		</template>
 		<transition name="side-slide">
 			<div class="profile__notifications" v-if="showNotice" @click="closeNotice">
@@ -253,6 +281,9 @@ export default {
 		},
 		showRegisterParam() {
 			return this.$route.query['showRegister']
+		},
+		main() {
+			return this.$route.name === 'Main'
 		},
 	},
 	methods: {

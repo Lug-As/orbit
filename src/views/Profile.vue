@@ -73,7 +73,7 @@
 						</p>
 					</div>
 					<div class="profile__confirmation-button">
-						<preloader height="90" v-if="mailSending"/>
+						<preloader small v-if="mailSending"/>
 						<button
 							v-else
 							@click="resendVerification"

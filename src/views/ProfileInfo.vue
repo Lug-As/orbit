@@ -18,12 +18,14 @@
 						title="Имя"
 						:value="user.name"
 						:max="150"
+						required
 						@change="saveInfo('name', $event)"
 					/>
 					<info-item
 						title="Номер телефона"
 						:value="user.phone"
 						:phone="true"
+						required
 						@change="saveInfo('phone', $event)"
 					/>
 					<info-item
@@ -31,6 +33,7 @@
 						title="Эл. почта"
 						:value="user.email"
 						:email="true"
+						required
 						@change="saveInfo('email', $event)"
 					/>
 					<info-item
@@ -40,10 +43,6 @@
 						@change="saveInfo('telegram', $event)"
 					/>
 				</div>
-			</div>
-			<div class="profile__information-button">
-				<button class="profile__information-button-text button-grand-black">Редактировать данные</button>
-				<button class="profile__information-button-text button-grand-black">Сохранить изменения</button>
 			</div>
 		</div>
 	</div>

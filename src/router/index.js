@@ -7,6 +7,11 @@ Vue.use(VueRouter)
 
 const routes = [
 	{
+		path: '/',
+		name: 'Main',
+		component: () => import('../views/Main'),
+	},
+	{
 		path: '/accounts/:id',
 		name: 'Account',
 		component: () => import('../views/Account'),
@@ -67,6 +72,9 @@ const routes = [
 	{
 		path: '/verify-email/:id/:hash',
 		name: 'Verification',
+		meta: {
+			middleware: auth,
+		},
 		component: () => import('../views/Verification'),
 	},
 	{
@@ -88,14 +96,14 @@ const router = new VueRouter({
 	mode: 'history',
 	base: process.env.BASE_URL,
 	scrollBehavior(to, from, savedPosition) {
-		if (to.name === from.name) {
-			return false
-		}
 		if (to.hash) {
 			return {
 				selector: to.hash,
 				behavior: 'smooth',
 			}
+		}
+		if (to.name === from.name) {
+			return false
 		}
 		if (savedPosition) {
 			return savedPosition
