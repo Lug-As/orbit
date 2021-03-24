@@ -64,7 +64,9 @@
 													multiple
 													class="main__vue-select"
 													@input="filter($event, 'type')"
-												/>
+												>
+													<span slot="no-options">Ничего не найдено</span>
+												</v-select>
 											</div>
 										</div>
 										<div class="main__body-details">

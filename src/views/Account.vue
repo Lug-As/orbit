@@ -31,8 +31,13 @@
 								</h2>
 								<div class="bloger__title-text border-body">
 									<h3 class="bloger__title-nickname">{{ account.title }}</h3>
-									<a class="bloger__title-link" :href="account.reference">
-										Перейти в ток-ток аккаунт
+									<a
+										class="bloger__title-link"
+										:href="account.reference"
+										target="_blank"
+										rel="noopener"
+									>
+										Перейти в Тик-Ток аккаунт
 									</a>
 								</div>
 							</div>
@@ -94,7 +99,7 @@
 										<template
 											v-if="!user"
 										>
-											Чтобы делать предложения, войди или зарегистрируйся.
+											Чтобы делать предложения, войдите или зарегистрируйтесь.
 										</template>
 										<template
 											v-else-if="!verifyed"

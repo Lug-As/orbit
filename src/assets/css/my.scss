@@ -87,6 +87,7 @@
 
 .secondary {
 	color: #BEBEBE;
+	font-family: "Montserrat-Regular", sans-serif;
 }
 
 .cursor {
@@ -101,6 +102,11 @@
 	margin: 75px 0;
 	text-align: center;
 	color: #6c757d;
+
+	@media (max-width: 767px) {
+		font-size: 14px;
+		font-family: "Montserrat-Medium", sans-serif;
+	}
 }
 
 .reset-filters-link {
@@ -269,3 +275,16 @@
 	overflow-y: auto;
 	display: flex;
 }
+
+.header__lending_ov-hidden {
+	overflow: hidden;
+}
+
+.pagination {
+	padding-bottom: 10px;
+}
+
+
+//.main .main__offer-body:last-child {
+//    margin-bottom: 25px;
+//}

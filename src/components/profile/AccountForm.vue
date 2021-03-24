@@ -17,17 +17,17 @@
 							type="file"
 							style="display:none"
 						>
-						Загрузить фото
 						<span class="red">*</span>
+						Загрузить фото
 					</label>
 				</div>
 			</div>
 			<div class="profile__questionnaire-item">
 				<div class="profile__questionnaire-item-info">
 					<h2 class="profile__questionnaire-item-info-h2">
-						Впишите название аккаунта
-						<span class="secondary">(Без @)</span>
 						<span class="red">*</span>
+						Впишите название аккаунта Тик-Ток
+						<span class="secondary">(без @)</span>
 					</h2>
 					<input
 						v-model.trim="title"
@@ -46,8 +46,9 @@
 				</div>
 				<div class="profile__questionnaire-item-info">
 					<h2 class="profile__questionnaire-item-info-h2">
-						Тематика блога
 						<span class="red">*</span>
+						Тематика блога
+						<span class="secondary">(можно выбрать несколько)</span>
 					</h2>
 					<v-select
 						label="name"
@@ -57,7 +58,9 @@
 						:reduce="opt => opt.id"
 						multiple
 						class="main__vue-select ac-proj-form__select"
-					/>
+					>
+						<span slot="no-options">Ничего не найдено</span>
+					</v-select>
 					<p class="red account_form__error" v-if="$v.topics.$error">
 						<template v-if="!$v.topics.required">
 							Поле обязательно для заполнения
@@ -66,8 +69,9 @@
 				</div>
 				<div class="profile__questionnaire-item-info">
 					<h2 class="profile__questionnaire-item-info-h2">
-						Виды рекламы
 						<span class="red">*</span>
+						Виды рекламы
+						<span class="secondary">(можно выбрать несколько)</span>
 					</h2>
 					<v-select
 						label="name"
@@ -77,7 +81,9 @@
 						:reduce="opt => opt.id"
 						multiple
 						class="main__vue-select ac-proj-form__select"
-					/>
+					>
+						<span slot="no-options">Ничего не найдено</span>
+					</v-select>
 					<p class="red account_form__error" v-if="$v.ad_types.$error && !$v.ad_types.required">
 						<template v-if="!$v.ad_types.required">
 							Поле обязательно для заполнения
@@ -86,7 +92,8 @@
 				</div>
 				<div class="profile__questionnaire-item-info" v-if="ad_types.length">
 					<h2 class="profile__questionnaire-item-info-h2">
-						Цена на виды рекламы <span class="secondary">(в руб.)</span>
+						Стоимость на виды рекламы
+						<span class="secondary">(в руб.)</span>
 					</h2>
 					<div
 						v-for="(type, idx) in ad_types"
@@ -152,7 +159,9 @@
 						:reduce="opt => opt.id"
 						multiple
 						class="main__vue-select ac-proj-form__select"
-					/>
+					>
+						<span slot="no-options">Ничего не найдено</span>
+					</v-select>
 				</div>
 				<div class="profile__questionnaire-item-info">
 					<h2 class="profile__questionnaire-item-info-h2">Субъект РФ</h2>
@@ -172,6 +181,7 @@
 								{{ name }}
 							</template>
 						</template>
+						<span slot="no-options">Ничего не найдено</span>
 					</v-select>
 				</div>
 				<div class="profile__questionnaire-item-button-create">

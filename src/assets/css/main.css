@@ -69,7 +69,7 @@ section {
 
 body {
 	margin: 0;
-	font-family: "Montserrat-Regular", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+	font-family: "Montserrat-Medium", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
 	"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 	font-size: 1rem;
 	font-weight: 400;
@@ -1690,7 +1690,7 @@ template {
 }
 
 .normal-footer {
-	margin-top: 200px;
+	margin-top: 180px;
 }
 
 .bloger__row {
@@ -1868,6 +1868,7 @@ template {
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
+	flex-direction: column;
 	padding-top: 23px;
 	padding-bottom: 15px;
 }
@@ -1963,7 +1964,7 @@ template {
 .bloger__massage {
 	position: fixed;
 	top: 0;
-	bottom: 0;
+	left: 0;
 	height: 100%;
 	background: rgba(0, 0, 0, 0.25);
 	z-index: 9999;
@@ -1995,7 +1996,7 @@ template {
 	border-radius: 50px;
 	width: 50%;
 	padding: 60px;
-	margin: auto;
+	/*margin: auto;*/
 	z-index: 10000;
 }
 
@@ -2844,8 +2845,9 @@ template {
 	font-family: "Montserrat-Medium";
 	font-size: 25px;
 	line-height: 30px;
-	-webkit-text-decoration-line: underline;
-	text-decoration-line: underline;
+	/*-webkit-text-decoration-line: underline;*/
+	/*text-decoration-line: underline;*/
+	border-bottom: 1px solid #404040;
 	color: #000000;
 	cursor: pointer;
 }
@@ -3026,7 +3028,8 @@ template {
 }
 
 .profile__questionnaire-accounts-item-info img {
-	margin-right: 10px;
+	margin-right: 12px;
+	width: 44px;
 }
 
 .profile__questionnaire-accounts-item-info-title-link {
@@ -3829,7 +3832,9 @@ template {
 }
 
 .team__row-item-text-info-p a {
-	color: black;
+	color: #061a62;
+	text-decoration: underline;
+	/*font-family: "Montserrat-Bold", sans-serif;*/
 }
 
 @-webkit-keyframes pulse {
@@ -4586,6 +4591,8 @@ template {
 }
 
 .button-grand-black {
+	text-align: center;
+	display: inline-block;
 	cursor: pointer;
 	padding: 13px 16px;
 	color: white;
@@ -5546,10 +5553,6 @@ button:disabled {
 
 	.profile__questionnaire-accounts-item-number-span {
 		font-size: 25px;
-	}
-
-	.profile__questionnaire-accounts-item-info img {
-		width: 44px;
 	}
 
 	.profile__offer-body-avatar img {
@@ -7437,6 +7440,10 @@ button:disabled {
 		border-radius: 0 0 90px 90px;
 	}
 
+	.profile__questionnaire-create-button, .profile__questionnaire-item-info-h2, .profile__questionnaire-item-button {
+		font-size: 17px;
+	}
+
 	.header__log-row {
 		margin-top: -10px;
 	}
@@ -7555,6 +7562,10 @@ button:disabled {
 		border: none;
 	}
 
+	.main .main__offer-body:last-child {
+		margin-bottom: 25px;
+	}
+
 	.main .main__offer-background-img {
 		height: 232px;
 		width: 232px;
@@ -7624,8 +7635,12 @@ button:disabled {
 		border-radius: 90px 90px 0 0;
 	}
 
+	.team {
+		margin-bottom: 125px;
+	}
+
 	.normal-footer {
-		margin-top: 100px;
+		margin-top: 90px;
 	}
 
 	.footer__menu-ul {
@@ -8357,6 +8372,19 @@ button:disabled {
 		border-radius: 0 0 50px 50px;
 	}
 
+	.header__img img {
+		width: 190px;
+	}
+
+	.profile__questionnaire-accounts-item-info-title-link,
+	.profile__questionnaire-accounts-item-info-p,
+	.profile__questionnaire-accounts-item-info-p,
+	.profile__questionnaire-accounts-item-info-li,
+	.profile__questionnaire-accounts-item-info-p,
+	.profile__questionnaire-accounts-item-avatar-delete {
+		font-size: 16px;
+	}
+
 	.normal-header {
 		border-radius: 0 0 30px 30px;
 	}
@@ -8413,12 +8441,6 @@ button:disabled {
 	.header__li-left-drop li,
 	.header__log-ul li {
 		cursor: pointer;
-	}
-
-	.header__img {
-		-webkit-box-ordinal-group: 2;
-		-ms-flex-order: 1;
-		order: 1;
 	}
 
 	.header .normal-row {
@@ -9165,8 +9187,8 @@ button:disabled {
 
 	.team__row-item {
 		margin-bottom: 0;
-		padding-top: 20px;
-		padding-bottom: 20px;
+		padding-top: 15px;
+		padding-bottom: 15px;
 	}
 
 	.team__row-item-text-info-p {
@@ -9176,6 +9198,7 @@ button:disabled {
 
 	.team__row-item-img {
 		width: 85%;
+		padding: 10px;
 	}
 
 	.team__row-item-img img {
@@ -9336,6 +9359,10 @@ button:disabled {
 		top: 60px;
 	}
 
+	.profile__questionnaire-accounts-item-info img {
+		display: none;
+	}
+
 	.bloger__alert-h2 {
 		font-size: 13px;
 		line-height: 20px;
@@ -9374,7 +9401,7 @@ button:disabled {
 		order: 0;
 	}
 
-	.normal-row .header__img {
+	.normal-row .header__img:not(.header__img_main) {
 		display: none;
 	}
 
@@ -9389,6 +9416,22 @@ button:disabled {
 }
 
 @media (max-width: 479px) {
+	.header__img {
+		-webkit-box-ordinal-group: 2;
+		-ms-flex-order: 1;
+		order: 1;
+		width: 100%;
+		text-align: center;
+	}
+
+	.profile__questionnaire-create-button, .profile__questionnaire-item-info-h2, .profile__questionnaire-item-button {
+		font-size: 15.8px;
+	}
+
+	.profile__questionnaire-item-info-h2 .secondary {
+		display: block;
+	}
+
 	.header__menu-li a {
 		font-size: 15px;
 	}
@@ -9772,8 +9815,8 @@ button:disabled {
 	}
 
 	.team__row-item-img img {
-		width: 243px;
-		height: 243px;
+		width: 203px;
+		height: 203px;
 	}
 
 	.team__row-item-img {
@@ -9797,7 +9840,7 @@ button:disabled {
 	}
 
 	.team__row-item-img::before {
-		width: 280px;
+		width: 233px;
 	}
 
 	.instruction__row-body-text {

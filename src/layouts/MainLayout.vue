@@ -1,12 +1,12 @@
 <template>
 	<div>
-		<header class="header header__lending normal-header">
+		<header class="header header__lending normal-header" :class="{'header__lending_ov-hidden': main}">
 			<div class="container">
 				<div class="header__row normal-row">
 					<div class="header__menu-mobile" @click="displayMenu = !displayMenu">
 						<span class="header__menu-burger"></span>
 					</div>
-					<div class="header__img">
+					<div class="header__img" :class="{'header__img_main': main}">
 						<router-link :to="{name: 'Main'}">
 							<picture>
 								<source srcset="../assets/img/Логотип.webp" type="image/webp">
@@ -14,7 +14,6 @@
 							</picture>
 						</router-link>
 					</div>
-
 					<div class="header__menu">
 						<transition name="upper">
 							<ul class="header__menu-ul" v-if="menuOpened">
@@ -399,7 +398,11 @@ export default {
 					if (response.data.token) {
 						const token = String(response.data.token).trim()
 						tokenService.setToken(token)
-						location.reload()
+						this.showSign = false
+						this.$notify('Вы успешно зарегистрированы!')
+						this.$router.push({
+							name: 'Profile',
+						})
 					} else {
 						throw new Error
 					}

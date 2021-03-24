@@ -9,8 +9,8 @@
 			<div class="profile__offer-item profile__questionnaire-item">
 				<div class="profile__questionnaire-item-info">
 					<h2 class="profile__questionnaire-item-info-h2">
-						Заголовок предложения
 						<span class="red">*</span>
+						Заголовок предложения
 					</h2>
 					<input
 						v-model.trim="name"
@@ -29,8 +29,8 @@
 				</div>
 				<div class="profile__questionnaire-item-info">
 					<h2 class="profile__questionnaire-item-info-h2">
-						Описание предложения
 						<span class="red">*</span>
+						Описание предложения
 					</h2>
 					<textarea
 						v-model.trim="text"
@@ -48,9 +48,9 @@
 				</div>
 				<div class="profile__questionnaire-item-info">
 					<h2 class="profile__questionnaire-item-info-h2">
+						<span class="red">*</span>
 						Бюджет
 						<span class="secondary">(в руб.)</span>
-						<span class="red">*</span>
 					</h2>
 					<input
 						v-model.number="budget"
@@ -73,7 +73,7 @@
 					</p>
 				</div>
 				<div class="profile__questionnaire-item-info">
-					<h2 class="profile__questionnaire-item-info-h2">Вид рекламы</h2>
+					<h2 class="profile__questionnaire-item-info-h2">Вид рекламы <span class="secondary">(можно выбрать несколько)</span></h2>
 					<v-select
 						label="name"
 						v-model="ad_types"
@@ -81,7 +81,9 @@
 						:reduce="opt => opt.id"
 						multiple
 						class="main__vue-select ac-proj-form__select"
-					/>
+					>
+						<span slot="no-options">Ничего не найдено</span>
+					</v-select>
 				</div>
 				<div class="profile__questionnaire-item-info">
 					<h2 class="profile__questionnaire-item-info-h2">
@@ -103,6 +105,7 @@
 								{{ name }}
 							</template>
 						</template>
+						<span slot="no-options">Ничего не найдено</span>
 					</v-select>
 					<span class="profile__offer-item-info-span">Заполните поле, если ваша реклама привязана к
                                 региону.</span>

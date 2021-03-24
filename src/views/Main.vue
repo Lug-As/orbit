@@ -15,7 +15,7 @@
 									Бесплатно
 								</h2>
 								<p class="benefits__row-body-item-info-title-p">
-									Орбита не берет комиссию со сделки
+									Орбита не берет комиссию со сделки.
 								</p>
 							</div>
 							<div class="benefits__row-body-item-info">
@@ -23,7 +23,7 @@
 									Конфиденциально
 								</h2>
 								<p class="benefits__row-body-item-info-title-p">
-									Ваши контакты получают только те пользователи, чьи предложения Вам стали интересны
+									Ваши контакты получают только те пользователи, чьи предложения Вам стали интересны.
 								</p>
 							</div>
 						</div>
@@ -33,7 +33,7 @@
 									Выгодно
 								</h2>
 								<p class="benefits__row-body-item-info-title-p">
-									Цены услуг блогеров прозрачны, а бюджет заявки рекламодателя заранее известен
+									Цены услуг блогеров прозрачны, а бюджет заявки рекламодателя заранее известен.
 								</p>
 							</div>
 							<div class="benefits__row-body-item-info">
@@ -61,7 +61,7 @@
 									Взаимно
 								</h2>
 								<p class="benefits__row-body-item-info-title-p">
-									Предлагайте другим блогерам взаимопиар и увеличивайте свои аудитории
+									Предлагайте другим блогерам взаимопиар и увеличивайте свои аудитории.
 								</p>
 							</div>
 						</div>
@@ -276,77 +276,88 @@
 				</div>
 				<div class="team__row">
 					<div class="team__row-item">
-						<div class="team__row-item-img">
-							<picture>
-								<source srcset="../assets/img/Марк.webp" type="image/webp">
-								<img src="../assets/img/Марк.png" alt=""></picture>
-						</div>
+						<a target="_blank" rel="noopener" href="https://www.instagram.com/markberozkin/">
+							<div class="team__row-item-img">
+								<picture>
+									<source srcset="../assets/img/Марк.webp" type="image/webp">
+									<img src="../assets/img/Марк.png" alt="">
+								</picture>
+							</div>
+						</a>
 						<div class="team__row-item-text">
 							<div class="team__row-item-text-title">
-								<h2 class="team__row-item-text-title-h2">Марк Берёзкин </h2>
+								<h2 class="team__row-item-text-title-h2">Марк Берёзкин</h2>
 							</div>
 							<div class="team__row-item-text-info">
 								<p class="team__row-item-text-info-p">
-									Инстаграм: <a target="_blank" rel="noopener"
-													  href="https://www.instagram.com/markberozkin/">@markberozkin</a>,
-									“CEO,
-									основатель проекта”
+									Instagram: <a target="_blank" rel="noopener"
+													  href="https://www.instagram.com/markberozkin/">@markberozkin</a><br>
+									CEO и основатель проекта
 								</p>
 							</div>
 						</div>
 					</div>
 					<div class="team__row-item">
-						<div class="team__row-item-img">
-							<picture>
-								<source srcset="../assets/img/Богдан.webp" type="image/webp">
-								<img src="../assets/img/Богдан.png" alt=""></picture>
-						</div>
+						<a target="_blank" rel="noopener" href="https://www.instagram.com/mr_guitarix/">
+							<div class="team__row-item-img">
+								<picture>
+									<source srcset="../assets/img/Богдан.webp" type="image/webp">
+									<img src="../assets/img/Богдан.png" alt="">
+								</picture>
+							</div>
+						</a>
 						<div class="team__row-item-text">
 							<div class="team__row-item-text-title">
 								<h2 class="team__row-item-text-title-h2">Скалиуш Богдан</h2>
 							</div>
 							<div class="team__row-item-text-info">
 								<p class="team__row-item-text-info-p">
-									Инстаграм: <a target="_blank" rel="noopener"
-													  href="https://www.instagram.com/mr_guitarix/">@mr_guitarix</a>, Project-Manager
+									Instagram: <a target="_blank" rel="noopener"
+													  href="https://www.instagram.com/mr_guitarix/">@mr_guitarix</a><br>
+									Project-Manager
 								</p>
 							</div>
 						</div>
 					</div>
 					<div class="team__row-item">
-						<div class="team__row-item-img">
-							<picture>
-								<source srcset="../assets/img/Артем.webp" type="image/webp">
-								<img src="../assets/img/Артем.png" alt=""></picture>
-						</div>
+						<a target="_blank" rel="noopener" href="https://www.instagram.com/lug_as/">
+							<div class="team__row-item-img">
+								<picture>
+									<source srcset="../assets/img/Артем.webp" type="image/webp">
+									<img src="../assets/img/Артем.png" alt=""></picture>
+							</div>
+						</a>
 						<div class="team__row-item-text">
 							<div class="team__row-item-text-title">
 								<h2 class="team__row-item-text-title-h2">Скалиуш Артём</h2>
 							</div>
 							<div class="team__row-item-text-info">
 								<p class="team__row-item-text-info-p">
-									Инстаграм: <a target="_blank" rel="noopener"
-													  href="https://www.instagram.com/lug_as/">@lug_as</a>,
+									Instagram: <a target="_blank" rel="noopener"
+													  href="https://www.instagram.com/lug_as/">@lug_as</a><br>
 									разработчик проекта
 								</p>
 							</div>
 						</div>
 					</div>
 					<div class="team__row-item">
-						<div class="team__row-item-img">
-							<picture>
-								<source srcset="../assets/img/Коля.webp" type="image/webp">
-								<img src="../assets/img/Коля.png" alt=""></picture>
-						</div>
+						<a target="_blank" rel="noopener" href="https://www.instagram.com/kolimedovkin_/">
+							<div class="team__row-item-img">
+								<picture>
+									<source srcset="../assets/img/Коля.webp" type="image/webp">
+									<img src="../assets/img/Коля.png" alt="">
+								</picture>
+							</div>
+						</a>
 						<div class="team__row-item-text">
 							<div class="team__row-item-text-title">
 								<h2 class="team__row-item-text-title-h2">Николай Медовкин</h2>
 							</div>
 							<div class="team__row-item-text-info">
 								<p class="team__row-item-text-info-p">
-									Инстаграм: <a target="_blank" rel="noopener"
-													  href="https://www.instagram.com/kolimedovkin_/">@kolimedovkin_</a>, дизайнер
-									проекта
+									Instagram: <a target="_blank" rel="noopener"
+													  href="https://www.instagram.com/kolimedovkin_/">@kolimedovkin_</a><br>
+									дизайнер проекта
 								</p>
 							</div>
 						</div>

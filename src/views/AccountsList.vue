@@ -67,7 +67,9 @@
 													multiple
 													@input="filter($event, 'topic')"
 													class="main__vue-select"
-												/>
+												>
+													<span slot="no-options">Ничего не найдено</span>
+												</v-select>
 												<small class="main__details-small">
 													Например: Авто / Туризм / Развлечения
 												</small>
@@ -84,7 +86,9 @@
 													multiple
 													class="main__vue-select"
 													@input="filter($event, 'type')"
-												/>
+												>
+													<span slot="no-options">Ничего не найдено</span>
+												</v-select>
 											</div>
 										</div>
 										<div class="main__body-details">
@@ -160,7 +164,9 @@
 													multiple
 													class="main__vue-select"
 													@input="filter($event, 'age')"
-												/>
+												>
+													<span slot="no-options">Ничего не найдено</span>
+												</v-select>
 											</div>
 										</div>
 										<div class="main__body-details">
@@ -184,6 +190,7 @@
 															{{ name }}
 														</template>
 													</template>
+													<span slot="no-options">Ничего не найдено</span>
 												</v-select>
 											</div>
 										</div>
@@ -294,7 +301,6 @@
 									:limit="2"
 									@pagination-change-page="changePage"
 								/>
-								<br>
 							</div>
 						</div>
 					</template>

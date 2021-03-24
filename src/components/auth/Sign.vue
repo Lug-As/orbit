@@ -134,8 +134,8 @@
 					</div>
 					<div class="login__row-form-conform">
 						<input id="check" type="checkbox" v-model="agree">
-						<label for="check" class="login__row-form-conform-label"> Я согласен на обработку персональных
-							данных
+						<label for="check" class="login__row-form-conform-label">
+							Я согласен на обработку персональных данных и прочёл пользовательское соглашение
 						</label>
 						<div class="errors-box" v-if="$v.agree.$error">
 							<p class="red">

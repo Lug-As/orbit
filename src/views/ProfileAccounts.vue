@@ -100,10 +100,10 @@
 											<template v-if="!request.checked">
 												<img src="../assets/img/clock.png" alt="">
 												<p class="profile__questionnaire-accounts-item-info-p">
-													Для того, чтобы подтвердить аккаунт, вам необходимо написать в директ Тик-Ток
-													аккаунта (<a href="https://www.tiktok.com/@danya_milokhin"
-																	 target="_blank">@orbita</a>)
-													такой текст: "Привет, подтверди меня на сайте orbitaa.ru"
+													Чтобы подтвердить, что Вы - владелец аккаунта, Вам необходимо подписаться на наш
+													аккаунт в TikTok
+													(<a href="https://www.tiktok.com/@danya_milokhin" target="_blank" rel="noopener">@orbita</a>).
+													Если Вы уже подписаны, мы напишем Вам в direct в течение 60-ти минут.
 												</p>
 											</template>
 											<template v-else-if="request.is_canceled">
@@ -122,9 +122,14 @@
 									</div>
 								</div>
 								<div class="profile__questionnaire-accounts-buttons">
-									<button class="profile__questionnaire-accounts-button button-grand-black">Перейти в
-										тик-ток аккаунт
-									</button>
+									<a
+										:href="request.reference"
+										target="_blank"
+										rel="noopener"
+										class="profile__questionnaire-accounts-button button-grand-black"
+									>
+										Перейти в тик-ток аккаунт
+									</a>
 									<button
 										@click="deleteRequest(request.id)"
 										class="profile__questionnaire-accounts-button button-grand-transparent"
@@ -246,8 +251,8 @@
 				</div>
 			</div>
 			<template v-else>
-			<p class="empty-result-text">У вас пока нет подтвержденных аккаунтов</p>
-		</template>
+				<p class="empty-result-text">У вас пока нет подтвержденных аккаунтов</p>
+			</template>
 		</div>
 	</div>
 </template>
@@ -349,7 +354,7 @@ export default {
 				.then(() => {
 					this.toggleCreateMode()
 					this.loadRequests()
-					this.$notify('Благодарим за создание! Ваша заявка будет рассмотрена администраторами в течение 24 часов! Подтвердите аккаунт, чтобы он появился на сайте!')
+					this.$notify('Благодарим за создание! Подтвердите аккаунт, чтобы он появился на сайте!')
 				})
 				.catch(e => {
 					let displayError = true

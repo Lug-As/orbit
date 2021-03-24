@@ -86,7 +86,7 @@
 									<p class="bloger__button-text">
 										Чтобы оставлять отклики,
 										<template v-if="!user">
-											войди или зарегистрируйся.
+											войдите или зарегистрируйтесь.
 										</template>
 										<template v-else-if="!verifyed">
 											подтверди свой почтовый ящик.
@@ -94,8 +94,8 @@
 										<template v-else-if="userAccounts === null">
 											необходимо
 											<router-link :to="{name: 'ProfileAccounts'}">
-												разместить анкету блогера на сайте
-											</router-link>.
+												разместить анкету блогера на сайте.
+											</router-link>
 										</template>
 									</p>
 								</div>
