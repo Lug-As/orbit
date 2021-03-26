@@ -37,6 +37,9 @@
 						</div>
 						<div class="bloger__comment-button">
 							<button class="bloger__button-border">Предложить выполнение задачи</button>
+							<h2 class="bloger__title-text bloger__added-text" v-if="addedText">
+								{{ addedText }}
+							</h2>
 						</div>
 					</form>
 				</div>
@@ -55,6 +58,11 @@ export default {
 			type: Boolean,
 			default: false,
 			required: false,
+		},
+		addedText: {
+			type: String,
+			required: false,
+			default: '',
 		},
 	},
 	data: () => ({

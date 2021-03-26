@@ -1,11 +1,15 @@
 <template>
-	<div>
+	<div @click="onBodyClick">
 		<header class="header header__lending normal-header" :class="{'header__lending_ov-hidden': main}">
 			<div class="container">
 				<div class="header__row normal-row">
-					<div class="header__menu-mobile" @click="displayMenu = !displayMenu">
+					<button
+						@click="displayMenu = !displayMenu"
+						id="menu-burger"
+						class="header__menu-mobile"
+					>
 						<span class="header__menu-burger"></span>
-					</div>
+					</button>
 					<div class="header__img" :class="{'header__img_main': main}">
 						<router-link :to="{name: 'Main'}">
 							<picture>
@@ -14,15 +18,18 @@
 							</picture>
 						</router-link>
 					</div>
-					<div class="header__menu">
+					<div class="header__menu" id="header__menu">
 						<transition name="upper">
 							<ul class="header__menu-ul" v-if="menuOpened">
 								<li class="header__menu-li ">
 									<router-link :to="{name: 'Main'}" class="header__menu-link add-li">Главная</router-link>
 									<ul class="header__menu-drop">
 										<li class="header__menu-li ">
-											<router-link :to="{name: 'Main', hash: '#instruction__bloger'}"
-															 class="header__menu-link">Блогеру
+											<router-link
+												:to="{name: 'Main', hash: '#instruction__bloger'}"
+												class="header__menu-link"
+											>
+												Блогеру
 											</router-link>
 										</li>
 										<li class="header__menu-li">
@@ -200,11 +207,12 @@
 					</div>
 					<div class="footer__rights">
 						<div class="footer__rights-contract">
-							<a target="_blank" rel="noopener" href="/agreement.pdf" class="footer__li-link">Договор на
-								обработку персональных данных</a>
+							<a target="_blank" rel="noopener" href="/agreement.pdf" class="footer__li-link">
+								Договор на обработку персональных данных
+							</a>
 						</div>
 						<div class="footer__rights-right">
-							<a class="footer__li-link">Орбита 2021 /©Все права защищены!</a>
+							<a class="footer__li-link">Орбита 2021 / ©Все права защищены.</a>
 						</div>
 					</div>
 				</div>
@@ -251,6 +259,13 @@ export default {
 			} else if (val.query['showRegister']) {
 				this.showSign = true
 				this.clearQueryParam('showRegister')
+			} else if (val.query['signed']) {
+				if (this.user) {
+					this.onSigned()
+				} else {
+					this.$onUserLoad.hook(this.onSigned)
+				}
+				this.clearQueryParam('signed')
 			}
 		},
 	},
@@ -298,11 +313,29 @@ export default {
 			this.showNotice = false
 			this.noticeText = null
 		},
+		onBodyClick(ev) {
+			if (this.displayMenu && !ev.target.closest('#header__menu') && !ev.target.closest('#menu-burger')) {
+				this.displayMenu = false
+			}
+		},
 		logout() {
 			if (confirm('Вы точно хотите выйти из учетной записи?')) {
 				tokenService.clearToken()
-				location.reload()
+				if (this.$route.name !== 'Main') {
+					this.$router.push({
+						name: 'Main',
+					})
+				}
+				setTimeout(() => {
+					this.$router.go(0)
+				}, 25)
 			}
+		},
+		onSigned() {
+			this.$router.push({
+				name: 'Profile',
+			})
+			this.$notify('Вы успешно зарегистрированы! Пожалуйста подтвердите свою почту!')
 		},
 		change(data) {
 			this.loading = true
@@ -365,7 +398,7 @@ export default {
 					if (response.data.token) {
 						const token = String(response.data.token).trim()
 						tokenService.setToken(token)
-						location.reload()
+						this.$router.go(0)
 					} else {
 						throw new Error
 					}
@@ -395,17 +428,19 @@ export default {
 			this.loading = true
 			authService.register(userData)
 				.then(response => {
-					if (response.data.token) {
-						const token = String(response.data.token).trim()
-						tokenService.setToken(token)
-						this.showSign = false
-						this.$notify('Вы успешно зарегистрированы!')
-						this.$router.push({
-							name: 'Profile',
-						})
-					} else {
+					if (!response.data.token) {
 						throw new Error
 					}
+					const token = String(response.data.token).trim()
+					tokenService.setToken(token)
+					this.$router.replace({
+						name: this.$route.name,
+						query: {
+							...this.$route.query,
+							'signed': 'true',
+						},
+					})
+					this.$router.go(0)
 				})
 				.catch(e => {
 					let display = true

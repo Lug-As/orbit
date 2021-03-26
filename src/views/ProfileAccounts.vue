@@ -71,8 +71,12 @@
 											>
 												{{ request.name }}
 											</h2>
-											<a :href="request.reference"
-												class="profile__questionnaire-accounts-item-info-title-link">
+											<a
+												:href="request.reference"
+												target="_blank"
+												rel="noopener"
+												class="profile__questionnaire-accounts-item-info-title-link"
+											>
 												Перейти в Тик-Ток аккаунт
 											</a>
 										</div>
@@ -100,10 +104,10 @@
 											<template v-if="!request.checked">
 												<img src="../assets/img/clock.png" alt="">
 												<p class="profile__questionnaire-accounts-item-info-p">
-													Чтобы подтвердить, что Вы - владелец аккаунта, Вам необходимо подписаться на наш
-													аккаунт в TikTok
-													(<a href="https://www.tiktok.com/@danya_milokhin" target="_blank" rel="noopener">@orbita</a>).
-													Если Вы уже подписаны, мы напишем Вам в direct в течение 60-ти минут.
+													Чтобы подтвердить, что Вы - владелец аккаунта, Вам необходимо написать в direct
+													нашего аккаунта в TikTok
+													(<a href="https://www.tiktok.com/@orbitaa.ru" target="_blank" rel="noopener">@orbitaa.ru</a>):
+													«Привет, хочу сотрудничать с Орбитой».
 												</p>
 											</template>
 											<template v-else-if="request.is_canceled">

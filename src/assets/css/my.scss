@@ -40,13 +40,13 @@
 
 .upper {
 	&-enter-active {
-		transition-duration: .18s;
-		transition-timing-function: ease;
+		transition-duration: .16s;
+		transition-timing-function: ease-in-out;
 	}
 
 	&-leave-active {
-		transition-duration: .18s;
-		transition-timing-function: ease-in;
+		transition-duration: .16s;
+		transition-timing-function: ease-in-out;
 	}
 
 	&-enter-to, &-leave {
@@ -55,7 +55,7 @@
 	}
 
 	&-enter, &-leave-to {
-		transform: translateY(20%) scaleY(.9);
+		transform: translateY(20%) scaleY(.7);
 		transform-origin: bottom;
 		opacity: 0;
 	}
@@ -248,7 +248,7 @@
 	height: 32px;
 	top: 50%;
 	transform: translateY(-50%);
-	margin-right: 5px;
+	margin-right: 7px;
 	right: 0;
 	transition: background-color .25s;
 	border-radius: 50%;
@@ -283,8 +283,3 @@
 .pagination {
 	padding-bottom: 10px;
 }
-
-
-//.main .main__offer-body:last-child {
-//    margin-bottom: 25px;
-//}

@@ -95,43 +95,14 @@
 						Стоимость на виды рекламы
 						<span class="secondary">(в руб.)</span>
 					</h2>
-					<div
+					<type-price
 						v-for="(type, idx) in ad_types"
-						class="account_form__type_price"
-					>
-						<label
-							:for="'type-price-' + idx"
-							class="account_form__price_label"
-						>
-							{{ allTypes.find(t => t.id === type.id).name }}
-						</label>
-						<input
-							:id="'type-price-' + idx"
-							v-model.number="ad_types[idx].price"
-							@keydown="resolveInputKeys"
-							@blur="$v.ad_types.$each[idx].price.$touch"
-							placeholder="Цена"
-							class="profile__details-input-small main__details-input-small account_form__price_input"
-						>
-						<span class="account_form__price_rub">₽</span>
-						<label title="Выбрано, если цена не заполнена.">
-							<input
-								:checked="!ad_types[idx].price"
-								@click.prevent
-								type="checkbox"
-							>
-							Договорная
-						</label>
-						<p class="red account_form__error" v-if="$v.ad_types.$each[idx].price.$error">
-							<template v-if="!$v.ad_types.$each[idx].price.minValue">
-								Цена должна быть больше 0
-							</template>
-							<template v-if="!$v.ad_types.$each[idx].price.maxValue">
-								Цена должна быть меньше
-								{{ ($v.ad_types.$each[idx].price.$params.maxValue.max + 1).toLocaleString() }}
-							</template>
-						</p>
-					</div>
+						:type="type"
+						:types_list="allTypes"
+						:selected_types="ad_types"
+						:idx="idx"
+						:$v="$v"
+					/>
 				</div>
 				<div class="profile__questionnaire-item-info">
 					<h2 class="profile__questionnaire-item-info-h2">
@@ -201,12 +172,14 @@
 
 <script>
 import {integer, maxLength, maxValue, minValue, required} from 'vuelidate/lib/validators'
+import TypePrice from '@/components/profile/TypePrice'
 
 const MAX_FILE_SIZE = 5000000
 const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/jpg']
 
 export default {
 	name: 'AccountForm',
+	components: {TypePrice},
 	data: () => ({
 		title: null,
 		about: null,
@@ -314,11 +287,11 @@ export default {
 		uploadImage(ev) {
 			const file = ev.target.files[0]
 			if (file) {
-				if (file.size > MAX_FILE_SIZE) {
-					return alert('Размер файла не должен превышать ' + Math.floor(MAX_FILE_SIZE / 1000 / 1000) + ' МБ')
-				}
 				if (!ALLOWED_MIME_TYPES.includes(file.type)) {
 					return alert('Картинка должна быть в этих форматах ' + ALLOWED_MIME_TYPES.join(', '))
+				}
+				if (file.size > MAX_FILE_SIZE) {
+					return alert('Размер файла не должен превышать ' + Math.floor(MAX_FILE_SIZE / 1000 / 1000) + ' МБ')
 				}
 				this.image = file
 			}
@@ -337,7 +310,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .account_form {
 	&__error {
 		margin: 10px 0 0;
@@ -353,12 +326,6 @@ export default {
 		&_label {
 			font-size: 17px;
 			margin-left: 10px;
-		}
-
-		&_rub {
-			display: none;
-			font-size: 20px;
-			margin: 0 8px;
 		}
 	}
 }
