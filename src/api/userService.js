@@ -11,6 +11,15 @@ export default {
 		})
 	},
 	async putUserInfo(type, value) {
+		if (type === 'image') {
+			const formData = new FormData()
+			formData.append(type, value)
+			return axios.post(UserPath, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+			})
+		}
 		return axios.post(UserPath, {
 			[type]: value,
 		})

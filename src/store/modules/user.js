@@ -9,19 +9,21 @@ class User {
 	phone
 	verifyed
 	telegram
+	image
 
-	constructor(id, name, email, phone, verifyed, telegram) {
+	constructor(id, name, email, phone, verifyed, telegram, image = null) {
 		this.id = id
 		this.name = name
 		this.email = email
 		this.phone = phone
 		this.verifyed = verifyed
 		this.telegram = telegram
+		this.image = image
 	}
 
 	static createFromApiData(apiData) {
 		return new this(
-			apiData.id, apiData.name, apiData.email, apiData.phone, apiData.verifyed, apiData.telegram,
+			apiData.id, apiData.name, apiData.email, apiData.phone, apiData.verifyed, apiData.telegram, apiData.image,
 		)
 	}
 }
@@ -30,6 +32,7 @@ export default {
 	state: {
 		user: null,
 		userLoading: true,
+		userImageLoading: false,
 	},
 	getters: {
 		user(state) {
@@ -37,6 +40,9 @@ export default {
 		},
 		userLoading(state) {
 			return state.userLoading
+		},
+		userImageLoading(state) {
+			return state.userImageLoading
 		},
 		authCheck(state) {
 			return state.user !== null || (state.userLoading && tokenService.isTokenSet())
@@ -54,6 +60,12 @@ export default {
 		},
 		stopUserLoading(state) {
 			state.userLoading = false
+		},
+		startUserImageLoading(state) {
+			state.userImageLoading = true
+		},
+		stopUserImageLoading(state) {
+			state.userImageLoading = false
 		},
 	},
 	actions: {
@@ -84,7 +96,9 @@ export default {
 		async saveUserInfo({commit}, payload = {
 			type, value,
 		}) {
+			commit('startUserImageLoading')
 			await userService.putUserInfo(payload.type, payload.value)
+			commit('stopUserImageLoading')
 		},
 	},
 }

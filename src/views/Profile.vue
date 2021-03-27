@@ -25,17 +25,18 @@
 						</div>
 					</router-link>
 					<li
-						@mouseenter="showProfileMenu"
-						@mouseleave="hideProfileMenu"
-						@click="hideProfileMenu"
+						v-click-outside="hideMobileMenu"
+						@mouseenter="showDesktopMenu"
+						@mouseleave="hideDesktopMenu"
+						@click="toggleMobileMenu"
 						class="profile__tab-menu-ul-li profile__tab-menu-ul-li-last"
 						:class="{
-							'profile__tab-menu-ul-li-hover': displayProfileMenu,
+							'profile__tab-menu-ul-li-hover': displayMenu,
 						}"
 					>
 						<span class="profile__tab-menu-li-link black-arrow">Разместить</span>
 						<transition name="fade">
-							<ul class="profile__tab-menu-ul-drop" v-if="displayProfileMenu">
+							<ul class="profile__tab-menu-ul-drop" @click="hideDesktopMenu" v-if="displayMenu">
 								<router-link
 									:to="{name: 'ProfileAccounts'}"
 									custom
@@ -104,13 +105,17 @@
 <script>
 import Preloader from '@/components/Preloader'
 import verificationService from '@/api/verificationService'
+import vClickOutside from 'v-click-outside'
 
 export default {
 	name: 'Profile',
 	data: () => ({
 		mailSending: false,
-		displayProfileMenu: false,
+		displayMenu: false,
 	}),
+	directives: {
+		clickOutside: vClickOutside.directive,
+	},
 	components: {Preloader},
 	computed: {
 		user() {
@@ -122,16 +127,32 @@ export default {
 		noticesCount() {
 			return this.$store.getters.noticesPagination.total
 		},
+		isDesktop() {
+			return document.body.clientWidth >= 1366
+		},
+		isMobile() {
+			return !this.isDesktop
+		},
 	},
 	methods: {
-		showProfileMenu() {
-			setTimeout(() => {
-				this.displayProfileMenu = true
-			}, 5)
+		showDesktopMenu() {
+			if (this.isDesktop) {
+				this.displayMenu = true
+			}
 		},
-		hideProfileMenu() {
-			if (this.displayProfileMenu) {
-				this.displayProfileMenu = false
+		hideDesktopMenu() {
+			if (this.isDesktop) {
+				this.displayMenu = false
+			}
+		},
+		toggleMobileMenu() {
+			if (this.isMobile) {
+				this.displayMenu = !this.displayMenu
+			}
+		},
+		hideMobileMenu() {
+			if (this.isMobile) {
+				this.displayMenu = false
 			}
 		},
 		resendVerification() {
@@ -142,7 +163,7 @@ export default {
 				})
 				.catch(e => {
 					if (e.response && e.response.status === 429) {
-						alert('Вы слишком часто просите переотправить вам подтверждение. Повторите попытку позже.')
+						alert('Вы слишком часто просите переотправить Вам подтверждение. Повторите попытку позже.')
 					}
 				})
 				.finally(() => {

@@ -55,7 +55,8 @@
 								<li class="header__menu-li-left">
 									<router-link :to="{name: 'Profile'}" class="header__menu-left-link"
 													 title="Перейти в личный кабинет">
-										<picture>
+										<img v-if="!userImageLoading && user && user.image" :src="user.image" alt="">
+										<picture v-else>
 											<source srcset="../assets/img/noneimg.webp" type="image/webp">
 											<img src="../assets/img/noneimg.png" alt="">
 										</picture>
@@ -266,6 +267,11 @@ export default {
 					this.$onUserLoad.hook(this.onSigned)
 				}
 				this.clearQueryParam('signed')
+			} else if (val.query['image_loaded']) {
+				setTimeout(() => {
+					this.$notify('Новая картинка успешно загружена!')
+					this.clearQueryParam('image_loaded')
+				}, 700)
 			}
 		},
 	},
@@ -278,6 +284,9 @@ export default {
 		},
 		user() {
 			return this.$store.getters.user
+		},
+		userImageLoading() {
+			return this.$store.getters.userImageLoading
 		},
 		expires() {
 			return this.$route.query['expires']

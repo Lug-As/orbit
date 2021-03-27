@@ -27,7 +27,7 @@
 				<p
 					@click="onEditMode"
 					class="profile__information-item-data-text cursor"
-					title="Нажмите дважды для редактирования"
+					title="Нажмите для редактирования"
 				>
 					<template v-if="this.phone">
 						{{ value | phone }}

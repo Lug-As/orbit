@@ -43,7 +43,37 @@
 						@change="saveInfo('telegram', $event)"
 					/>
 				</div>
+				<div class="profile__questionnaire-avatar-info-wrap">
+					<div
+						v-show="!userImageLoading"
+						class="profile__questionnaire-avatar profile__questionnaire-avatar-info"
+					>
+						<div class="profile__questionnaire-img profile__questionnaire-img-info cursor"
+							  @click="$refs['imageinput'].click()">
+							<img v-if="src" :src="src" alt="">
+							<img v-else-if="user.image" :src="user.image" alt="">
+							<picture v-else>
+								<source srcset="../assets/img/noneimg.webp" type="image/webp">
+								<img src="../assets/img/noneimg.png" alt="">
+							</picture>
+						</div>
+						<div class="profile__questionnaire-load profile__questionnaire-load-info">
+							<label class="profile__questionnaire-load-button profile__questionnaire-load-button-info">
+								<input
+									ref="imageinput"
+									@change="uploadImage"
+									type="file"
+									style="display:none"
+								>
+								Загрузить фото
+							</label>
+						</div>
+					</div>
+					<preloader v-show="userImageLoading" height="200"/>
+				</div>
 			</div>
+			<p class="profile__questionnaire-helper-text secondary">Нажмите на любое из полей, чтобы отредактировать
+				его.</p>
 		</div>
 	</div>
 </template>
@@ -52,10 +82,18 @@
 import InfoItem from '@/components/profile/InfoItem'
 import Preloader from '@/components/Preloader'
 
+const MAX_FILE_SIZE = 5000000
+const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/jpg']
+
 export default {
 	name: 'ProfileInfo',
 	title: 'Мои данные',
 	components: {Preloader, InfoItem},
+	data: () => ({
+		image: null,
+		src: null,
+		reader: null,
+	}),
 	computed: {
 		user() {
 			return this.$store.getters.user
@@ -63,9 +101,43 @@ export default {
 		userLoading() {
 			return this.$store.getters.userLoading
 		},
+		userImageLoading() {
+			return this.$store.getters.userImageLoading
+		},
+	},
+	watch: {
+		image(file) {
+			if (file) {
+				this.reader.readAsDataURL(file)
+				this.saveInfo('image', file, () => {
+					this.$router.push({
+						name: this.$route.name,
+						query: {
+							...this.$route.query,
+							'image_loaded': 'true',
+						},
+					})
+					this.$router.go(0)
+				})
+			} else {
+				this.src = ''
+			}
+		},
 	},
 	methods: {
-		saveInfo(type, value) {
+		uploadImage(ev) {
+			const file = ev.target.files[0]
+			if (file) {
+				if (!ALLOWED_MIME_TYPES.includes(file.type)) {
+					return alert('Картинка должна быть в этих форматах ' + ALLOWED_MIME_TYPES.join(', '))
+				}
+				if (file.size > MAX_FILE_SIZE) {
+					return alert('Размер файла не должен превышать ' + Math.floor(MAX_FILE_SIZE / 1000 / 1000) + ' МБ')
+				}
+				this.image = file
+			}
+		},
+		saveInfo(type, value, hook = null) {
 			let passEmail = true
 			const oldVal = this.user[type]
 			if (type === 'email') {
@@ -77,10 +149,14 @@ export default {
 					type, value,
 				})
 					.then(() => {
-						this.$notify('Новые данные сохранены!')
+						if (hook) {
+							hook()
+						} else {
+							this.$notify('Новые данные сохранены!')
+						}
 						if (type === 'email') {
 							setTimeout(() => {
-								location.reload()
+								this.$router.go(0)
 							}, 800)
 						}
 					})
@@ -107,6 +183,12 @@ export default {
 				this.$refs['emailinput'].freshData()
 			}
 		},
+	},
+	mounted() {
+		this.reader = new FileReader()
+		this.reader.onloadend = () => {
+			this.src = this.reader.result
+		}
 	},
 }
 </script>
