@@ -24,40 +24,50 @@
 							<span v-if="noticesCount" class="profile__tab-menu-li-span">{{ noticesCount }}</span>
 						</div>
 					</router-link>
-					<li class="profile__tab-menu-ul-li profile__tab-menu-ul-li-last">
+					<li
+						@mouseenter="showProfileMenu"
+						@mouseleave="hideProfileMenu"
+						@click="hideProfileMenu"
+						class="profile__tab-menu-ul-li profile__tab-menu-ul-li-last"
+						:class="{
+							'profile__tab-menu-ul-li-hover': displayProfileMenu,
+						}"
+					>
 						<span class="profile__tab-menu-li-link black-arrow">Разместить</span>
-						<ul class="profile__tab-menu-ul-drop">
-							<router-link
-								:to="{name: 'ProfileAccounts'}"
-								custom
-								v-slot="{navigate, isActive}"
-							>
-								<li
-									@click="navigate"
-									class="profile__tab-menu-ul-li profile__tab-menu-ul-li-drop"
-									:class="{
+						<transition name="fade">
+							<ul class="profile__tab-menu-ul-drop" v-if="displayProfileMenu">
+								<router-link
+									:to="{name: 'ProfileAccounts'}"
+									custom
+									v-slot="{navigate, isActive}"
+								>
+									<li
+										@click="navigate"
+										class="profile__tab-menu-ul-li profile__tab-menu-ul-li-drop"
+										:class="{
 										'choice': isActive,
 									}"
+									>
+										<span class="profile__tab-menu-li-link">Анкету блогера</span>
+									</li>
+								</router-link>
+								<router-link
+									:to="{name: 'ProfileProjects'}"
+									custom
+									v-slot="{navigate, isActive}"
 								>
-									<span class="profile__tab-menu-li-link">Анкету блогера</span>
-								</li>
-							</router-link>
-							<router-link
-								:to="{name: 'ProfileProjects'}"
-								custom
-								v-slot="{navigate, isActive}"
-							>
-								<li
-									@click="navigate"
-									class="profile__tab-menu-ul-li profile__tab-menu-ul-li-drop"
-									:class="{
+									<li
+										@click="navigate"
+										class="profile__tab-menu-ul-li profile__tab-menu-ul-li-drop"
+										:class="{
 										'choice': isActive,
 									}"
-								>
-									<span class="profile__tab-menu-li-link">Рекламное предложение</span>
-								</li>
-							</router-link>
-						</ul>
+									>
+										<span class="profile__tab-menu-li-link">Рекламное предложение</span>
+									</li>
+								</router-link>
+							</ul>
+						</transition>
 					</li>
 				</ul>
 			</div>
@@ -99,6 +109,7 @@ export default {
 	name: 'Profile',
 	data: () => ({
 		mailSending: false,
+		displayProfileMenu: false,
 	}),
 	components: {Preloader},
 	computed: {
@@ -113,6 +124,16 @@ export default {
 		},
 	},
 	methods: {
+		showProfileMenu() {
+			setTimeout(() => {
+				this.displayProfileMenu = true
+			}, 5)
+		},
+		hideProfileMenu() {
+			if (this.displayProfileMenu) {
+				this.displayProfileMenu = false
+			}
+		},
 		resendVerification() {
 			this.mailSending = true
 			verificationService.resendEmailVerification()

@@ -18,11 +18,13 @@
 
 .slide-up-down {
 	&-enter-active {
+		transition-property: all;
 		transition-duration: .35s;
 		transition-timing-function: ease-in;
 	}
 
 	&-leave-active {
+		transition-property: all;
 		transition-duration: .35s;
 		transition-timing-function: ease;
 	}
@@ -40,11 +42,13 @@
 
 .upper {
 	&-enter-active {
+		transition-property: all;
 		transition-duration: .16s;
 		transition-timing-function: ease-in-out;
 	}
 
 	&-leave-active {
+		transition-property: all;
 		transition-duration: .16s;
 		transition-timing-function: ease-in-out;
 	}
