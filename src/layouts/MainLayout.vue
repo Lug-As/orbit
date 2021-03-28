@@ -20,11 +20,20 @@
 					</div>
 					<div class="header__menu" id="header__menu">
 						<transition name="upper">
-							<ul class="header__menu-ul" v-if="menuOpened">
+							<ul
+								v-if="menuOpened"
+								class="header__menu-ul"
+							>
 								<li class="header__menu-li ">
-									<router-link :to="{name: 'Main'}" class="header__menu-link add-li">Главная</router-link>
+									<router-link
+										:to="{name: 'Main'}"
+										@click.native="displayMenu = false"
+										class="header__menu-link add-li"
+									>
+										Главная
+									</router-link>
 									<ul class="header__menu-drop">
-										<li class="header__menu-li ">
+										<li class="header__menu-li">
 											<router-link
 												:to="{name: 'Main', hash: '#instruction__bloger'}"
 												class="header__menu-link"
@@ -33,17 +42,31 @@
 											</router-link>
 										</li>
 										<li class="header__menu-li">
-											<router-link :to="{name: 'Main', hash: '#instruction'}" class="header__menu-link">
+											<router-link
+												:to="{name: 'Main', hash: '#instruction'}"
+												class="header__menu-link"
+											>
 												Рекламодателю
 											</router-link>
 										</li>
 									</ul>
 								</li>
 								<li class="header__menu-li">
-									<router-link :to="{name: 'AccountsList'}" class="header__menu-link">Блогеры</router-link>
+									<router-link
+										@click.native="displayMenu = false"
+										:to="{name: 'AccountsList'}"
+										class="header__menu-link"
+									>
+										Блогеры
+									</router-link>
 								</li>
 								<li class="header__menu-li">
-									<router-link :to="{name: 'ProjectsList'}" class="header__menu-link">Рекламные предложения
+									<router-link
+										@click.native="displayMenu = false"
+										:to="{name: 'ProjectsList'}"
+										class="header__menu-link"
+									>
+										Рекламные предложения
 									</router-link>
 								</li>
 							</ul>
@@ -127,7 +150,10 @@
 			</div>
 		</header>
 		<template>
-			<router-view @show-sign="showSign = true"></router-view>
+			<router-view
+				@show-sign="showSign = true"
+				@show-login="showLogin = true"
+			></router-view>
 		</template>
 		<transition name="side-slide">
 			<div class="profile__notifications" v-if="showNotice" @click="closeNotice">

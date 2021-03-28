@@ -96,15 +96,18 @@
 										<img src="../assets/img/Иллюстрация.png" alt="">
 									</picture>
 									<p class="bloger__button-text">
+										Чтобы делать предложения,
 										<template
 											v-if="!user"
 										>
-											Чтобы делать предложения, войдите или зарегистрируйтесь.
+											<a href="/" @click.prevent="$emit('show-login')">войдите</a>
+											или
+											<a href="/" @click.prevent="$emit('show-sign')">зарегистрируйтесь.</a>
 										</template>
 										<template
 											v-else-if="!verifyed"
 										>
-											Чтобы делать предложения, подтверди свой почтовый ящик.
+											подтверди свой почтовый ящик.
 										</template>
 									</p>
 								</div>

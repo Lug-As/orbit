@@ -371,5 +371,6 @@
 <script>
 export default {
 	name: 'Main',
+	title: 'Главная',
 }
 </script>

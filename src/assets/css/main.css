@@ -1951,7 +1951,7 @@ template {
 }
 
 .bloger__button-text {
-	font-family: "Montserrat-Medium";
+	font-family: "Montserrat-Medium", sans-serif;
 	font-size: 15px;
 	line-height: 18px;
 	color: #ff0000;
@@ -6511,14 +6511,15 @@ button:disabled {
 	}
 
 	.bloger__button-confirmation {
-		position: absolute;
-		top: 0;
-		left: -101%;
+		/*position: absolute;*/
+		/*top: 0;*/
+		/*left: -101%;*/
 	}
 
 	.bloger__button-confirmation img {
-		width: 32px;
-		margin-left: 16px;
+		/*width: 32px;*/
+		/*margin-left: 16px;*/
+		display: none;
 	}
 
 	.bloger__button-text {
@@ -7520,11 +7521,39 @@ button:disabled {
 	.add-li::before {
 		top: 10px;
 	}
+
+	.bloger__button-confirmation {
+		margin-left: 0;
+	}
+
+	.bloger__button-text {
+		width: 100%;
+		text-align: center;
+		margin-left: 0;
+		margin-top: 30px;
+		margin-bottom: 10px;
+		/*font-size: 14px;*/
+		font-family: "Montserrat-Bold", sans-serif;
+	}
+
+	.profile__information-item {
+		padding-right: 20px;
+		padding-left: 20px;
+	}
+
+	.profile__information-item-title-text {
+		padding-right: 20px;
+	}
 }
 
 @media (max-width: 999px) {
+
 	.header__blogers {
 		border-radius: 0 0 90px 90px;
+	}
+
+	.bloger__button-text {
+		padding: 0 20px;
 	}
 
 	.profile__questionnaire-create-button, .profile__questionnaire-item-info-h2, .profile__questionnaire-item-button {
@@ -7870,6 +7899,7 @@ button:disabled {
 		flex-direction: row;
 		-ms-flex-pack: distribute;
 		justify-content: space-around;
+		flex-wrap: wrap;
 	}
 
 	.bloger__button-black {
@@ -7878,10 +7908,6 @@ button:disabled {
 
 	.bloger__button {
 		width: 41%;
-	}
-
-	.bloger__button-text {
-		display: none;
 	}
 
 	.text-padding {
@@ -8966,11 +8992,6 @@ button:disabled {
 		font-size: 15px;
 	}
 
-	.profile__information-item {
-		padding-right: 20px;
-		padding-left: 20px;
-	}
-
 	.profile__information-title-confidentiality {
 		font-size: 12px;
 	}
@@ -9529,6 +9550,10 @@ button:disabled {
 		display: none;
 	}
 
+	.bloger__button-text {
+		font-size: 13px;
+	}
+
 	.bloger__alert-h2 {
 		font-size: 13px;
 		line-height: 20px;
@@ -9611,7 +9636,7 @@ button:disabled {
 	}
 
 	.header__sign-row {
-		margin-left: 7px;
+		margin-left: 5px;
 	}
 
 	.button-grand {
