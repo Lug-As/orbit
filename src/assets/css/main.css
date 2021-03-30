@@ -808,6 +808,7 @@ template {
 	padding: 3px;
 	width: 56px;
 	height: 56px;
+	object-fit: cover;
 }
 
 .header__li-nickname {
