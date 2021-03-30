@@ -4,44 +4,49 @@
 			<div
 				v-if="showModal"
 				class="bloger__massage"
-				@click.self="closeModal()"
 			>
-				<div class="bloger__massage-row">
+				<div
+					@click.self="closeModal()"
+					class="bloger__massage-container"
+				>
+					<div class="bloger__massage-row">
 					<span
 						class="bloger__massage-close"
 						@click="closeModal()"
 					>&times;</span>
-					<div class="bloger__massage-alert">
-						<h2 class="bloger__alert-h2">
-							Все сообщения модерируются. За распространение некорректных предложений, или предложений
-							неподходящих для нашего сервиса мы вправе отключать пользователей.
-							<span class="bloger__alert-span">Будьте корректны!</span>
-						</h2>
-					</div>
-					<form class="bloger__massage-comment" @submit.prevent="handleForm">
-						<slot></slot>
-						<div class="bloger__massage-title">
-							<h2 class="bloger__title-text">Оставь комментарий по поводу задачи</h2>
+						<div class="bloger__massage-alert">
+							<h2 class="bloger__alert-h2">
+								Все сообщения модерируются. За распространение некорректных предложений, или предложений
+								неподходящих для нашего сервиса мы вправе отключать пользователей.
+								<span class="bloger__alert-span">Будьте корректны!</span>
+							</h2>
 						</div>
-						<div class="bloger__comment-text">
+						<form class="bloger__massage-comment" @submit.prevent="handleForm">
+							<slot></slot>
+							<div class="bloger__massage-title">
+								<h2 class="bloger__title-text">Оставь комментарий по поводу задачи</h2>
+							</div>
+							<div class="bloger__comment-text">
 							<textarea
 								v-model.trim="offerText"
 								class="bloger__text-area"
+								rows="7"
 							></textarea>
-							<span
-								:class="{
+								<span
+									:class="{
 									'red': !this.$v.offerText.maxLength,
 								}"
-							>{{ this.offerText.length }}/{{ this.$v.offerText.$params.maxLength.max }}</span>
-							<p v-if="errorMsg.length" class="red">{{ errorMsg }}</p>
-						</div>
-						<div class="bloger__comment-button">
-							<button class="bloger__button-border">Предложить выполнение задачи</button>
-							<h2 class="bloger__title-text bloger__added-text" v-if="addedText">
-								{{ addedText }}
-							</h2>
-						</div>
-					</form>
+								>{{ this.offerText.length }}/{{ this.$v.offerText.$params.maxLength.max }}</span>
+								<p v-if="errorMsg.length" class="red">{{ errorMsg }}</p>
+							</div>
+							<div class="bloger__comment-button">
+								<button class="bloger__button-border">Предложить выполнение задачи</button>
+								<h2 class="bloger__title-text bloger__added-text" v-if="addedText">
+									{{ addedText }}
+								</h2>
+							</div>
+						</form>
+					</div>
 				</div>
 			</div>
 		</transition>
