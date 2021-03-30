@@ -8850,6 +8850,7 @@ button:disabled {
 
 	.offers__proposal-item-button-row {
 		position: relative;
+		border-top: none;
 	}
 
 	.offers__title-price {
