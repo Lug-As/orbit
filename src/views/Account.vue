@@ -85,7 +85,7 @@
 									Предложить работу
 								</button>
 								<a :href="account.reference" class="bloger__button-black button-grand-transparent">
-									Перейти в ток-ток аккаунт
+									Перейти в Тик-Ток аккаунт
 								</a>
 								<div
 									v-if="!verifyed"

@@ -86,7 +86,9 @@
 									<p class="bloger__button-text">
 										Чтобы оставлять отклики,
 										<template v-if="!user">
-											войдите или зарегистрируйтесь.
+											<a href="/" @click.prevent="$emit('show-login')">войдите</a>
+											или
+											<a href="/" @click.prevent="$emit('show-sign')">зарегистрируйтесь.</a>
 										</template>
 										<template v-else-if="!verifyed">
 											подтверди свой почтовый ящик.

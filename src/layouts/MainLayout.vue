@@ -293,6 +293,13 @@ export default {
 					this.$onUserLoad.hook(this.onSigned)
 				}
 				this.clearQueryParam('signed')
+			} else if (val.query['logged_in']) {
+				if (this.user) {
+					this.onLoggedIn()
+				} else {
+					this.$onUserLoad.hook(this.onLoggedIn)
+				}
+				this.clearQueryParam('logged_in')
 			} else if (val.query['image_loaded']) {
 				setTimeout(() => {
 					this.$notify('Новая картинка успешно загружена!')
@@ -372,6 +379,13 @@ export default {
 			})
 			this.$notify('Вы успешно зарегистрированы! Пожалуйста подтвердите свою почту!')
 		},
+		onLoggedIn() {
+			if (this.$route.name === 'Main') {
+				this.$router.push({
+					name: 'Profile',
+				})
+			}
+		},
 		change(data) {
 			this.loading = true
 			authService.change({
@@ -433,6 +447,13 @@ export default {
 					if (response.data.token) {
 						const token = String(response.data.token).trim()
 						tokenService.setToken(token)
+						this.$router.replace({
+							name: this.$route.name,
+							query: {
+								...this.$route.query,
+								'logged_in': 'true',
+							},
+						})
 						this.$router.go(0)
 					} else {
 						throw new Error
