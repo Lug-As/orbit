@@ -231,6 +231,7 @@
 
 <script>
 import Preloader from '@/components/Preloader'
+import resolveInputKeys from '@/helpers/mixins/resolveInputKeys'
 
 export default {
 	name: 'ProjectsList',
@@ -265,21 +266,6 @@ export default {
 		},
 		filtersOpened() {
 			return window.innerWidth >= 1366 || this.displayFilters
-		},
-		page() {
-			let page
-			if (this.$route.query['page']) {
-				page = Math.abs(parseInt(this.$route.query['page']))
-				if (page === 1) {
-					this.clearQueryParam('page')
-				}
-			} else {
-				page = 1
-			}
-			if (page === 0 || !Number.isInteger(page)) {
-				page = 1
-			}
-			return page
 		},
 		selectedFilters() {
 			return Object.keys(this.$route.query)
@@ -343,16 +329,6 @@ export default {
 				behavior: 'smooth',
 			})
 		},
-		resolveInputKeys(ev) {
-			const allowedKeyCodes = [8, 46, 37, 38, 39, 40, 116, 13]
-			if (!allowedKeyCodes.includes(ev.keyCode)) {
-				const key = ev.key
-				if (!Number.isInteger(parseInt(key))) {
-					ev.returnValue = false
-					if (ev.preventDefault) ev.preventDefault()
-				}
-			}
-		},
 		filter(ev, filterType) {
 			if (this.allowedFilterTypes.includes(filterType)) {
 				let query, addData
@@ -395,13 +371,6 @@ export default {
 				},
 			})
 		},
-		clearQueryParam(key) {
-			if (this.$route.query[key] !== undefined) {
-				let query = Object.assign({}, this.$route.query)
-				delete query[key]
-				this.$router.replace({query})
-			}
-		},
 		reloadPage(addQuery, savePrevQuery = true) {
 			const query = savePrevQuery ? this.$route.query : {}
 			return this.$router.push({
@@ -439,6 +408,9 @@ export default {
 		this.$store.dispatch('loadTypes')
 			.then(() => this.freshOpts())
 	},
+	mixins: [
+		resolveInputKeys,
+	],
 }
 </script>
 

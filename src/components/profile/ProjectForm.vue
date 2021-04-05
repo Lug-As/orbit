@@ -73,7 +73,8 @@
 					</p>
 				</div>
 				<div class="profile__questionnaire-item-info">
-					<h2 class="profile__questionnaire-item-info-h2">Вид рекламы <span class="secondary">(можно выбрать несколько)</span></h2>
+					<h2 class="profile__questionnaire-item-info-h2">Вид рекламы <span class="secondary">(можно выбрать несколько)</span>
+					</h2>
 					<v-select
 						label="name"
 						v-model="ad_types"
@@ -160,6 +161,7 @@
 
 <script>
 import {integer, maxLength, maxValue, minValue, required} from 'vuelidate/lib/validators'
+import resolveInputKeys from '@/helpers/mixins/resolveInputKeys'
 
 export default {
 	name: 'ProjectForm',
@@ -199,16 +201,6 @@ export default {
 			this.$v.$touch()
 			return !this.$v.$invalid
 		},
-		resolveInputKeys(ev) {
-			const allowedKeyCodes = [8, 46, 37, 38, 39, 40, 116, 13]
-			if (!allowedKeyCodes.includes(ev.keyCode)) {
-				const key = ev.key
-				if (!Number.isInteger(parseInt(key))) {
-					ev.returnValue = false
-					if (ev.preventDefault) ev.preventDefault()
-				}
-			}
-		},
 	},
 	validations: {
 		name: {
@@ -230,9 +222,8 @@ export default {
 		this.$store.dispatch('loadTypes')
 		this.$store.dispatch('loadRegions')
 	},
+	mixins: [
+		resolveInputKeys,
+	],
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

@@ -315,6 +315,7 @@
 
 <script>
 import Preloader from '@/components/Preloader'
+import resolveInputKeys from '@/helpers/mixins/resolveInputKeys'
 
 export default {
 	name: 'AccountsList',
@@ -399,21 +400,6 @@ export default {
 			}
 			return opts
 		},
-		page() {
-			let page
-			if (this.$route.query['page']) {
-				page = Math.abs(parseInt(this.$route.query['page']))
-				if (page === 1) {
-					this.clearQueryParam('page')
-				}
-			} else {
-				page = 1
-			}
-			if (page === 0 || !Number.isInteger(page)) {
-				page = 1
-			}
-			return page
-		},
 		wasFiltered() {
 			let was = false
 			this.allowedFilterTypes.forEach((key) => {
@@ -491,13 +477,6 @@ export default {
 				behavior: 'smooth',
 			})
 		},
-		clearQueryParam(key) {
-			if (this.$route.query[key] !== undefined) {
-				let query = Object.assign({}, this.$route.query)
-				delete query[key]
-				this.$router.replace({query})
-			}
-		},
 		reloadPage(addQuery, savePrevQuery = true) {
 			const query = savePrevQuery ? this.$route.query : {}
 			return this.$router.push({
@@ -515,9 +494,9 @@ export default {
 			if (types.length === 1) {
 				return types[0].price ? 'От ' + types[0].price + '₽' : 'Договорная'
 			}
-			let maxPrice = 0
+			let maxPrice = null
 			types.forEach(type => {
-				if (type.price > maxPrice) {
+				if (!maxPrice || type.price > maxPrice) {
 					maxPrice = type.price
 				}
 			})
@@ -601,16 +580,6 @@ export default {
 				})
 			}
 		},
-		resolveInputKeys(ev) {
-			const allowedKeyCodes = [8, 46, 37, 38, 39, 40, 116, 13]
-			if (!allowedKeyCodes.includes(ev.keyCode)) {
-				const key = ev.key
-				if (!Number.isInteger(parseInt(key))) {
-					ev.returnValue = false
-					if (ev.preventDefault) ev.preventDefault()
-				}
-			}
-		},
 		clearFilters() {
 			this.reloadPage({}, false)
 		},
@@ -652,6 +621,9 @@ export default {
 			.then(() => this.freshOpts())
 	},
 	components: {Preloader},
+	mixins: [
+		resolveInputKeys,
+	],
 }
 </script>
 

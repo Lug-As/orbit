@@ -13,6 +13,8 @@ import cutText from './helpers/filters/cutText'
 import phoneNumber from './helpers/filters/phoneNumber'
 import inputMask from './helpers/directives/inputMask'
 import titleMixin from './helpers/mixins/titleMixin'
+import getPaginationPage from './helpers/mixins/getPaginationPage'
+import clearQueryParam from './helpers/mixins/clearQueryParam'
 import {ApiBaseUrl} from './api/info'
 import './assets/css/main.css'
 import 'vue-select/dist/vue-select.css'
@@ -31,6 +33,8 @@ Vue.filter('phone', phoneNumber)
 Vue.filter('cut', cutText)
 Vue.filter('slashedList', slashedList)
 Vue.mixin(titleMixin)
+Vue.mixin(getPaginationPage)
+Vue.mixin(clearQueryParam)
 
 axios.defaults.baseURL = ApiBaseUrl
 

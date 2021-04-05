@@ -133,21 +133,6 @@ export default {
 		isMobile() {
 			return !this.isDesktop
 		},
-		page() {
-			let page
-			if (this.$route.query['page']) {
-				page = Math.abs(parseInt(this.$route.query['page']))
-				if (page === 1) {
-					this.clearQueryParam('page')
-				}
-			} else {
-				page = 1
-			}
-			if (page === 0 || !Number.isInteger(page)) {
-				page = 1
-			}
-			return page
-		},
 	},
 	methods: {
 		showDesktopMenu() {
@@ -184,13 +169,6 @@ export default {
 				.finally(() => {
 					this.mailSending = false
 				})
-		},
-		clearQueryParam(key) {
-			if (this.$route.query[key] !== undefined) {
-				let query = Object.assign({}, this.$route.query)
-				delete query[key]
-				this.$router.replace({query})
-			}
 		},
 		loadNotices() {
 			if (this.user.verifyed) {

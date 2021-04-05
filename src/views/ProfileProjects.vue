@@ -123,21 +123,6 @@ export default {
 		projectLoading() {
 			return this.$store.getters.projectLoading
 		},
-		page() {
-			let page
-			if (this.$route.query['page']) {
-				page = Math.abs(parseInt(this.$route.query['page']))
-				if (page === 1) {
-					this.clearQueryParam('page')
-				}
-			} else {
-				page = 1
-			}
-			if (page === 0 || !Number.isInteger(page)) {
-				page = 1
-			}
-			return page
-		},
 	},
 	methods: {
 		toggleCreateMode() {
@@ -164,13 +149,6 @@ export default {
 		deleteProject(id) {
 			if (confirm('Вы точно хотите удалить рекламное предложение? Восстановить его будет невозможно.')) {
 				this.$store.dispatch('deleteProject', id)
-			}
-		},
-		clearQueryParam(key) {
-			if (this.$route.query[key] !== undefined) {
-				let query = Object.assign({}, this.$route.query)
-				delete query[key]
-				this.$router.replace({query})
 			}
 		},
 		changePage(page = 1) {

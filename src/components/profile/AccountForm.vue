@@ -274,16 +274,6 @@ export default {
 			this.$v.$touch()
 			return this.valid
 		},
-		resolveInputKeys(ev) {
-			const allowedKeyCodes = [8, 46, 37, 38, 39, 40, 116, 13]
-			if (!allowedKeyCodes.includes(ev.keyCode)) {
-				const key = ev.key
-				if (!Number.isInteger(parseInt(key))) {
-					ev.returnValue = false
-					if (ev.preventDefault) ev.preventDefault()
-				}
-			}
-		},
 		uploadImage(ev) {
 			const file = ev.target.files[0]
 			if (file) {

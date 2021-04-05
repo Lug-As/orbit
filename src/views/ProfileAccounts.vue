@@ -300,32 +300,10 @@ export default {
 		userLoading() {
 			return this.$store.getters.userLoading
 		},
-		page() {
-			let page
-			if (this.$route.query['page']) {
-				page = Math.abs(parseInt(this.$route.query['page']))
-				if (page === 1) {
-					this.clearQueryParam('page')
-				}
-			} else {
-				page = 1
-			}
-			if (page === 0 || !Number.isInteger(page)) {
-				page = 1
-			}
-			return page
-		},
 	},
 	methods: {
 		toggleCreateMode() {
 			this.createMode = !this.createMode
-		},
-		clearQueryParam(key) {
-			if (this.$route.query[key] !== undefined) {
-				let query = Object.assign({}, this.$route.query)
-				delete query[key]
-				this.$router.replace({query})
-			}
 		},
 		deleteAccount(id) {
 			if (confirm('Вы точно хотите удалить аккаунт? Восстановить его будет невозможно.')) {
