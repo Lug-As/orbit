@@ -39,7 +39,7 @@
 							class="profile__questionnaire-accounts-body"
 						>
 							<template v-if="request.is_approved">
-								<h2>Поздравляю</h2>
+								<h2>Поздравляем!</h2>
 								<p>Ваш аккаунт <strong>{{ request.name }}</strong> успешно подтвержден и помещен на сайт.</p>
 								<button
 									@click="deleteRequest(request.id, true)"
@@ -132,7 +132,7 @@
 										rel="noopener"
 										class="profile__questionnaire-accounts-button button-grand-black"
 									>
-										Перейти в тик-ток аккаунт
+										Перейти в Тик-Ток аккаунт
 									</a>
 									<button
 										@click="deleteRequest(request.id)"
@@ -199,8 +199,12 @@
 												{{ account.title }}
 											</h2>
 										</router-link>
-										<a :href="account.reference"
-											class="profile__questionnaire-accounts-item-info-title-link">
+										<a
+											:href="account.reference"
+											target="_blank"
+											rel="noopener"
+											class="profile__questionnaire-accounts-item-info-title-link"
+										>
 											Перейти в Тик-Ток аккаунт
 										</a>
 									</div>
@@ -240,9 +244,14 @@
 								</div>
 							</div>
 							<div class="profile__questionnaire-accounts-buttons">
-								<button class="profile__questionnaire-accounts-button button-grand-black">Перейти в
-									тик-ток аккаунт
-								</button>
+								<a
+									:href="account.reference"
+									target="_blank"
+									rel="noopener"
+									class="profile__questionnaire-accounts-button button-grand-black"
+								>
+									Перейти в Тик-Ток аккаунт
+								</a>
 								<button
 									class="profile__questionnaire-accounts-button button-grand-transparent"
 									@click="deleteAccount(account.id)"

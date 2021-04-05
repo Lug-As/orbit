@@ -2,13 +2,13 @@
 	<div class="profile__notification profile__contant tab-2">
 		<preloader v-if="noticesLoading"/>
 		<div v-else-if="notices && notices.length" class="profile__notification-row">
-			<div
+			<template
 				v-for="notice in notices"
-				class="profile__notification-body"
 			>
 				<profile-response-notice v-if="notice.type === 'responses'" :notice="notice"/>
 				<profile-offer-notice v-else-if="notice.type === 'offers'" :notice="notice"/>
-			</div>
+				<profile-request-notice v-else-if="notice.type === 'requests'" :notice="notice"/>
+			</template>
 		</div>
 		<template v-else>
 			<p class="empty-result-text">У вас пока нет уведомлений</p>
@@ -27,10 +27,11 @@
 import Preloader from '@/components/Preloader'
 import ProfileOfferNotice from '@/components/profile/ProfileOfferNotice'
 import ProfileResponseNotice from '@/components/profile/ProfileResponseNotice'
+import ProfileRequestNotice from '@/components/profile/ProfileRequestNotice'
 
 export default {
 	name: 'ProfileNotices',
-	components: {ProfileResponseNotice, ProfileOfferNotice, Preloader},
+	components: {ProfileRequestNotice, ProfileResponseNotice, ProfileOfferNotice, Preloader},
 	title: 'Уведомления',
 	computed: {
 		notices() {

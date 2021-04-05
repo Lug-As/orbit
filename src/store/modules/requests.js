@@ -36,7 +36,7 @@ export default {
 	},
 	actions: {
 		async loadRequests({commit}, {
-			page = 1
+			page = 1,
 		}) {
 			commit('startRequestsLoading')
 			const response = await requestsService.getRequests(page),
@@ -60,6 +60,6 @@ export default {
 		},
 		async createRequest({commit}, request) {
 			await requestsService.sendRequest(request)
-		}
+		},
 	},
 }

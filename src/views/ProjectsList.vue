@@ -137,7 +137,7 @@
 							<div class="offers__proposal-offers">
 								<div
 									v-for="project in projects"
-									:key="projects.id"
+									:key="project.id"
 									class="offers__proposal-body"
 								>
 									<div class="offers__proposal-body-title">

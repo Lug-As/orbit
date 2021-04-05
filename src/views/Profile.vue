@@ -133,6 +133,21 @@ export default {
 		isMobile() {
 			return !this.isDesktop
 		},
+		page() {
+			let page
+			if (this.$route.query['page']) {
+				page = Math.abs(parseInt(this.$route.query['page']))
+				if (page === 1) {
+					this.clearQueryParam('page')
+				}
+			} else {
+				page = 1
+			}
+			if (page === 0 || !Number.isInteger(page)) {
+				page = 1
+			}
+			return page
+		},
 	},
 	methods: {
 		showDesktopMenu() {
@@ -177,6 +192,13 @@ export default {
 				this.$router.replace({query})
 			}
 		},
+		loadNotices() {
+			if (this.user.verifyed) {
+				this.$store.dispatch('loadNotices', {
+					page: this.$route.name === 'ProfileNotices' ? this.page : 1,
+				})
+			}
+		},
 	},
 	mounted() {
 		if (this.$route.query['reload']) {
@@ -186,14 +208,10 @@ export default {
 			}, 400)
 		}
 		if (this.user) {
-			if (this.user.verifyed) {
-				this.$store.dispatch('loadNotices', {page: 1})
-			}
+			this.loadNotices()
 		} else {
 			this.$onUserLoad.hook(() => {
-				if (this.user.verifyed) {
-					this.$store.dispatch('loadNotices', {page: 1})
-				}
+				this.loadNotices()
 			})
 		}
 	},
