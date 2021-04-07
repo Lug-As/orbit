@@ -75,7 +75,7 @@
 			</div>
 			<div class="profile__questionnaire-accounts-buttons">
 				<a
-					:href="notice.reference"
+					:href="'https://www.tiktok.com/' + notice.name"
 					target="_blank"
 					rel="noopener"
 					class="profile__questionnaire-accounts-button button-grand-black"
