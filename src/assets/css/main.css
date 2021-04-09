@@ -4245,60 +4245,6 @@ template {
 	display: flex;
 }
 
-.preloader {
-	background: #061a62;
-	bottom: 0;
-	left: 0;
-	position: fixed;
-	right: 0;
-	top: 0;
-	z-index: 99999999;
-}
-
-.preloader__container {
-	height: 100%;
-	width: 100%;
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-	-webkit-box-pack: center;
-	-ms-flex-pack: center;
-	justify-content: center;
-	-webkit-box-align: center;
-	-ms-flex-align: center;
-	align-items: center;
-}
-
-.preloader__img {
-	position: relative;
-}
-
-.no-webp .preloader__img::before {
-	background: url("../img/rocketPreloader.png") top/cover no-repeat;
-}
-
-.preloader__img::before {
-	content: "";
-	height: 540px;
-	width: 540px;
-	position: absolute;
-	left: -13px;
-	top: -20px;
-	z-index: 999;
-	-webkit-animation: rotateRocket 2s linear infinite;
-	animation: rotateRocket 2s linear infinite;
-}
-
-.preloader__img img {
-	-webkit-transition: all 0.4s;
-	-o-transition: all 0.4s;
-	transition: all 0.4s;
-	z-index: 9999;
-	padding: 50px;
-	border: 1px solid white;
-	border-radius: 50%;
-}
-
 .visible {
 	visibility: visible;
 	opacity: 1;
@@ -6011,18 +5957,6 @@ button:disabled {
 	.change__complete-img img {
 		height: 79px;
 		width: 116px;
-	}
-
-	.preloader__img img {
-		height: 370px;
-		width: 370px;
-	}
-
-	.preloader__img::before {
-		height: 400px;
-		width: 400px;
-		left: -14px;
-		top: -11px;
 	}
 
 	.crm__row {
@@ -8408,19 +8342,6 @@ button:disabled {
 		width: 300px;
 	}
 
-	.preloader__img img {
-		height: 263px;
-		width: 263px;
-		padding: 30px;
-	}
-
-	.preloader__img::before {
-		height: 290px;
-		width: 290px;
-		left: -13px;
-		top: -13px;
-	}
-
 	.crm__row {
 		border-radius: 15px;
 		width: 80%;
@@ -9457,18 +9378,6 @@ button:disabled {
 		width: 90%;
 	}
 
-	.preloader__img img {
-		height: 230px;
-		width: 230px;
-	}
-
-	.preloader__img::before {
-		height: 250px;
-		width: 250px;
-		left: -11px;
-		top: -10px;
-	}
-
 	.crm__row {
 		width: 90%;
 		padding-top: 15px;
@@ -10156,18 +10065,6 @@ button:disabled {
 		width: 240px;
 	}
 
-	.preloader__img img {
-		height: 170px;
-		width: 170px;
-	}
-
-	.preloader__img::before {
-		height: 185px;
-		width: 185px;
-		left: -10px;
-		top: -10px;
-	}
-
 	.error-page__row-title-text-h2 {
 		font-size: 100px;
 	}
@@ -10334,10 +10231,6 @@ button:disabled {
 
 .webp .forget .login__row-img {
 	background: url(../img/fogetpas.webp) top/cover no-repeat;
-}
-
-.webp .preloader__img::before {
-	background: url(../img/rocketPreloader.webp) top/cover no-repeat;
 }
 
 .webp .error-page::before {
