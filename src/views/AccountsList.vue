@@ -496,13 +496,13 @@ export default {
 			}
 			let maxPrice = null
 			types.forEach(type => {
-				if (!maxPrice || type.price > maxPrice) {
+				if (maxPrice === null || type.price > maxPrice) {
 					maxPrice = type.price
 				}
 			})
 			let minPrice = maxPrice
 			types.forEach(type => {
-				if (type.price < minPrice) {
+				if (type.price !== null && type.price < minPrice) {
 					minPrice = type.price
 				}
 			})
