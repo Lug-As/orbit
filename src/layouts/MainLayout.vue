@@ -282,10 +282,8 @@ export default {
 				this.showChange = true
 			} else if (val.query['showLogin']) {
 				this.showLogin = true
-				this.clearQueryParam('showLogin')
 			} else if (val.query['showRegister']) {
 				this.showSign = true
-				this.clearQueryParam('showRegister')
 			} else if (val.query['signed']) {
 				if (this.user) {
 					this.onSigned()
@@ -305,6 +303,20 @@ export default {
 					this.$notify('Новая картинка успешно загружена!')
 					this.clearQueryParam('image_loaded')
 				}, 700)
+			}
+		},
+		showLogin(val) {
+			if (val) {
+				this.addQueryParam('showLogin')
+			} else {
+				this.clearQueryParam('showLogin')
+			}
+		},
+		showSign(val) {
+			if (val) {
+				this.addQueryParam('showRegister')
+			} else {
+				this.clearQueryParam('showRegister')
 			}
 		},
 	},

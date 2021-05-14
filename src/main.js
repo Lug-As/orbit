@@ -15,6 +15,7 @@ import inputMask from './helpers/directives/inputMask'
 import titleMixin from './helpers/mixins/titleMixin'
 import getPaginationPage from './helpers/mixins/getPaginationPage'
 import clearQueryParam from './helpers/mixins/clearQueryParam'
+import addQueryParam from './helpers/mixins/addQueryParam'
 import {ApiBaseUrl} from './api/info'
 import './assets/css/main.css'
 import 'vue-select/dist/vue-select.css'
@@ -35,6 +36,7 @@ Vue.filter('slashedList', slashedList)
 Vue.mixin(titleMixin)
 Vue.mixin(getPaginationPage)
 Vue.mixin(clearQueryParam)
+Vue.mixin(addQueryParam)
 
 axios.defaults.baseURL = ApiBaseUrl
 
