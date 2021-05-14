@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import Vuelidate from 'vuelidate'
+import VueYandexMetrika from 'vue-yandex-metrika'
 import vClickOutside from 'v-click-outside'
 import vSelect from 'vue-select'
 import router from './router'
@@ -26,6 +27,15 @@ Vue.config.productionTip = false
 
 Vue.use(Vuelidate)
 Vue.use(vClickOutside)
+Vue.use(VueYandexMetrika, {
+	id: 78212137,
+	router,
+	clickmap: true,
+	trackLinks: true,
+	accurateTrackBounce: true,
+	webvisor: true,
+	env: process.env.NODE_ENV
+})
 Vue.component('v-select', vSelect)
 Vue.component('pagination', PaginationCmp)
 Vue.directive('mask', inputMask)
