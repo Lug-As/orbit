@@ -31,18 +31,21 @@ Vue.use(vClickOutside)
 Vue.use(VueYandexMetrika, {
 	id: 78212137,
 	router,
-	clickmap: true,
-	trackLinks: true,
-	accurateTrackBounce: true,
-	webvisor: true,
 	env: process.env.NODE_ENV,
+	options: {
+		clickmap: true,
+		trackLinks: true,
+		accurateTrackBounce: true,
+		webvisor: true,
+	},
 })
 Vue.use(VueGtm, {
 	id: 'GTM-M6SNGXM',
 	vueRouter: router,
 	debug: false,
 	defer: true,
-});
+})
+
 Vue.component('v-select', vSelect)
 Vue.component('pagination', PaginationCmp)
 Vue.directive('mask', inputMask)
