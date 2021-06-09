@@ -49,7 +49,7 @@ export default {
 					e = document.getElementsByTagName('script')[0]
 					e.parentNode.insertBefore(n, e)
 				}
-				ttq.load('C2QTSJ23E7AKK4Q99BB0')
+				ttq.load('C2SB6CSAPG3USQUUQCGG')
 				ttq.page()
 			}(window, document, 'ttq')
 		},
