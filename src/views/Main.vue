@@ -119,8 +119,6 @@
 								</div>
 							</div>
 						</div>
-
-
 					</div>
 				</div>
 			</div>
@@ -320,7 +318,7 @@
 						</div>
 					</div>
 					<div class="team__row-item">
-						<a target="_blank" rel="noopener" href="https://www.instagram.com/lug_as/">
+						<a target="_blank" rel="noopener" href="https://www.instagram.com/web.witcher/">
 							<div class="team__row-item-img">
 								<picture>
 									<source srcset="../assets/img/Артем.webp" type="image/webp">
@@ -334,7 +332,7 @@
 							<div class="team__row-item-text-info">
 								<p class="team__row-item-text-info-p">
 									Instagram: <a target="_blank" rel="noopener"
-													  href="https://www.instagram.com/lug_as/">@lug_as</a><br>
+													  href="https://www.instagram.com/web.witcher/">@web.witcher</a><br>
 									разработчик проекта
 								</p>
 							</div>
